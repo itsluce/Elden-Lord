@@ -16,7 +16,7 @@
 AEldenLordCharacter::AEldenLordCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -35,6 +35,10 @@ AEldenLordCharacter::AEldenLordCharacter()
 	GetMesh()->SetGenerateOverlapEvents(true);
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	MainWeapon=CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
+	MainWeapon->SetupAttachment(GetMesh(), FName("Hand_RSocket"));
+	MainWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	// bIsWaitingForSecondPress = false;
 	// FirstPressTime = 0.0f;

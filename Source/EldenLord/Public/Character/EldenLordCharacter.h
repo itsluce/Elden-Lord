@@ -9,7 +9,6 @@
 #include "EldenLordCharacter.generated.h"
 
 class UEldenOverlay;
-class AWeapon;
 class USpringArmComponent;
 class UCameraComponent;
 
@@ -86,6 +85,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UEldenOverlay* EldenOverlay;
 
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TObjectPtr<USkeletalMeshComponent> MainWeapon;
+
 private:
 	/*
 	 * Camera
@@ -145,6 +147,7 @@ private:
 	bool TriggerNextAttack;
 	FName AttackSectionNames[3];
 	int32 CurrentComboIndex;
+
 public:
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
