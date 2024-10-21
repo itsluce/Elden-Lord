@@ -35,8 +35,11 @@ AEldenLordCharacter::AEldenLordCharacter()
 	GetMesh()->SetGenerateOverlapEvents(true);
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	// GetCharacterMovement()->RotationRate = FRotator(0.f, 400.f, 0.f);
+	// GetCharacterMovement()->bConstrainToPlane = true;
+	// GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
-	MainWeapon=CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
+	MainWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	MainWeapon->SetupAttachment(GetMesh(), FName("Hand_RSocket"));
 	MainWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
@@ -46,6 +49,7 @@ AEldenLordCharacter::AEldenLordCharacter()
 	CurrentComboIndex = 0;
 	AttackSectionNames[0] = "Attack1";
 	AttackSectionNames[1] = "Attack2";
+
 	AttackSectionNames[2] = "Attack3";
 }
 
@@ -86,6 +90,7 @@ void AEldenLordCharacter::GetHit_Implementation(const FVector& ImpactPoint, AAct
 		ActionState = EActionState::EAS_HitReaction;
 	}
 }
+
 
 void AEldenLordCharacter::InitializeOverlay()
 {

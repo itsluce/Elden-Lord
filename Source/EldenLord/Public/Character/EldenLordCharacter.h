@@ -6,6 +6,7 @@
 #include "BaseCharacter.h"
 #include "Item/Item.h"
 #include "CharacterTypes.h"
+#include "Interface/EnemyInterface.h"
 #include "EldenLordCharacter.generated.h"
 
 class UEldenOverlay;

@@ -8,6 +8,7 @@
 #include "Components/AttributeComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "EldenLord/EldenLord.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HUD/HealthBarComponent.h"
 #include "Item/Weapon/Weapon.h"
@@ -97,14 +98,14 @@ void AEnemy::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("State: %hhd"), EnemyState));
+		// GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("State: %hhd"), EnemyState));
 	}
 	if (EldenOverlay)
 	{
 		const int32 SoulsCount = Attributes->SetSoulsCount(Attributes->GetSoulsCount());
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(5, 5.f, FColor::Green, FString::Printf(TEXT("SoulsCount: %d"), SoulsCount));
+			// GEngine->AddOnScreenDebugMessage(5, 5.f, FColor::Green, FString::Printf(TEXT("SoulsCount: %d"), SoulsCount));
 		}
 		EldenOverlay->SetSouls(SoulsCount);
 	}
@@ -117,6 +118,17 @@ void AEnemy::Tick(float DeltaTime)
 	{
 		CheckPatrolTarget();
 	}
+}
+
+void AEnemy::HighlightActor()
+{
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(custom_depth_red);
+}
+
+void AEnemy::UnHighlightActor()
+{
+	GetMesh()->SetRenderCustomDepth(false);
 }
 
 void AEnemy::CheckCombatTarget()
@@ -341,7 +353,7 @@ void AEnemy::Die()
 		const int32 SoulsCount = Attributes->SetSoulsCount(Attributes->GetSoulsCount());
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(8, 5.f, FColor::Purple, FString::Printf(TEXT("SoulsCount: %d"), SoulsCount));
+			// GEngine->AddOnScreenDebugMessage(8, 5.f, FColor::Purple, FString::Printf(TEXT("SoulsCount: %d"), SoulsCount));
 		}
 		EldenOverlay->SetSouls(SoulsCount);
 	}

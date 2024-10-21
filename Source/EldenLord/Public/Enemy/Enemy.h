@@ -6,6 +6,7 @@
 #include "Character/BaseCharacter.h"
 
 #include "Character/CharacterTypes.h"
+#include "Interface/EnemyInterface.h"
 #include "Enemy.generated.h"
 
 class UEldenOverlay;
@@ -13,7 +14,7 @@ class UPawnSensingComponent;
 class UHealthBarComponent;
 
 UCLASS()
-class ELDENLORD_API AEnemy : public ABaseCharacter
+class ELDENLORD_API AEnemy : public ABaseCharacter, public IEnemyInterface
 {
 	GENERATED_BODY()
 
@@ -33,8 +34,15 @@ public:
 	// </Actor>
 
 	// <IHitInterface>
-	virtual void GetHit_Implementation(const FVector& ImpactPoint,AActor*Hitter) override;
+	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
 	// </IHitInterface>
+
+	/*
+	 * highlight enemy
+	 */
+	virtual void HighlightActor() override;
+	virtual void UnHighlightActor() override;
+
 protected:
 	/** <AActor> */
 	virtual void BeginPlay() override;
@@ -47,21 +55,22 @@ protected:
 	virtual void AttackEnd() override;
 	virtual void HandleDamage(float DamageAmount) override;
 	/** </ABaseCharacter> */
-	
+
 
 	UPROPERTY(BlueprintReadOnly)
 	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 	UPROPERTY(VisibleAnywhere)
 	UEldenOverlay* EldenOverlay;
+
 private:
 	// AI Behavior
 	void CheckCombatTarget();
 	void CheckPatrolTarget();
-	
+
 	UPROPERTY(VisibleAnywhere)
 	UPawnSensingComponent* SensingComponent;
-	
+
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* HealthBarWidget;
 
@@ -95,17 +104,16 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float DeathLifeSpan = 10.f;
-	
+
 public:
-	
+
 protected:
 	bool InTargetRange(AActor* Target, double Radius);
 	void MoveToTarget(AActor* Target);
 	UFUNCTION()
 	void PawnSeen(APawn* SeenPawn);
 	AActor* ChoosePatrolTarget();
-		
-	
+
 private:
 	/*
 	 * AI behavior
@@ -129,7 +137,6 @@ private:
 	void StartAttackTimer();
 	void ClearAttackTimer();
 
-	
 
 	/**
 	 * Navigation
