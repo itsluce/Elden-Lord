@@ -15,7 +15,7 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	// PrimaryActorTick.bStartWithTickEnabled = true;
 	// GetMesh()->bReceivesDecals = false;
-	
+
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
 }
@@ -40,10 +40,12 @@ void ABaseCharacter::PlayHitSound(const FVector& ImpactPoint)
 		UGameplayStatics::PlaySoundAtLocation(this, HitSound, ImpactPoint);
 	}
 }
+
 void ABaseCharacter::QuitGame()
 {
 	UKismetSystemLibrary::QuitGame(GetWorld(), GetWorld()->GetFirstPlayerController(), EQuitPreference::Quit, true);
 }
+
 void ABaseCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
 	PlayHitSound(ImpactPoint);
@@ -115,7 +117,6 @@ void ABaseCharacter::Die()
 {
 	Tags.Add(TEXT("Dead"));
 	PlayDeathMontage();
-	
 }
 
 void ABaseCharacter::DisableCollision()
@@ -199,19 +200,19 @@ void ABaseCharacter::DirectionalHitReact(const FVector& ImpactPoint)
 	}
 
 	FName Section("FromBack");
-	
-		if (Theta >= -45.f && Theta < 45.f)
-		{
-			Section = FName("FromFront");
-		}
-		else if (Theta >= -135.f && Theta < -45.f)
-		{
-			Section = FName("FromLeft");
-		}
-		else if (Theta >= 45.f && Theta < 135.f)
-		{
-			Section = FName("FromRight");
-		}
+
+	if (Theta >= -45.f && Theta < 45.f)
+	{
+		Section = FName("FromFront");
+	}
+	else if (Theta >= -135.f && Theta < -45.f)
+	{
+		Section = FName("FromLeft");
+	}
+	else if (Theta >= 45.f && Theta < 135.f)
+	{
+		Section = FName("FromRight");
+	}
 
 	// if (GEngine)
 	// {
@@ -272,4 +273,9 @@ void ABaseCharacter::SetWeaponCollision(ECollisionEnabled::Type CollisionEnabled
 		EquipWeapon1->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
 		EquipWeapon1->IgnoreActors.Empty();
 	}
+}
+
+UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }

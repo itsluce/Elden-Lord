@@ -3,16 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interface/HitInterface.h"
 #include "BaseCharacter.generated.h"
 
+class UAttributeSet;
+class UAbilitySystemComponent;
 enum EDeathPose : int;
 class UAttributeComponent;
 class AWeapon;
 
 UCLASS()
-class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface
+class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollision(ECollisionEnabled::Type CollisionEnabled);
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 
 protected:
 	virtual void BeginPlay() override;
@@ -98,6 +104,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category=VFX)
 	UParticleSystem* HitParticles;
+
+	UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeSet> AttributeSet;
 
 public:
 	FORCEINLINE EDeathPose GetDeathPose() const { return DeathPose; }

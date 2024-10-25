@@ -3,7 +3,10 @@
 
 #include "Enemy/Enemy.h"
 
+#include "AbilitySystemComponent.h"
 #include "AIController.h"
+#include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/EldenAttributeSet.h"
 #include "Character/EldenLordCharacter.h"
 #include "Components/AttributeComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -37,6 +40,10 @@ AEnemy::AEnemy()
 	SensingComponent->SightRadius = 4000.f;
 	SensingComponent->SetPeripheralVisionAngle(45.f);
 
+	AbilitySystemComponent = CreateDefaultSubobject<UEldenAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);
+
+	AttributeSet->CreateDefaultSubobject<UEldenAttributeSet>("AttributeSet");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationPitch = false;
