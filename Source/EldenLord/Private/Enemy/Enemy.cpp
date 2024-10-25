@@ -42,8 +42,9 @@ AEnemy::AEnemy()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UEldenAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
-	AttributeSet->CreateDefaultSubobject<UEldenAttributeSet>("AttributeSet");
+	AttributeSet = CreateDefaultSubobject<UEldenAttributeSet>("AttributeSet");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationPitch = false;
@@ -98,6 +99,8 @@ void AEnemy::BeginPlay()
 
 	if (SensingComponent)
 		SensingComponent->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
+
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 }
 
 void AEnemy::Tick(float DeltaTime)

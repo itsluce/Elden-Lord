@@ -11,8 +11,9 @@ AEldenPlayerState::AEldenPlayerState()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UEldenAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
-	AttributeSet->CreateDefaultSubobject<UEldenAttributeSet>("AttributeSet");
+	AttributeSet = CreateDefaultSubobject<UEldenAttributeSet>("AttributeSet");
 	
 	NetUpdateFrequency = 100.f;
 }

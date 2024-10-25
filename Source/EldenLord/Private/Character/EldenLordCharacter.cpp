@@ -3,6 +3,7 @@
 
 #include "Character/EldenLordCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "EldenDbug.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AttributeComponent.h"
@@ -12,6 +13,7 @@
 #include "HUD/EldenHUD.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/EldenPlayerState.h"
 
 AEldenLordCharacter::AEldenLordCharacter()
 {
@@ -89,6 +91,31 @@ void AEldenLordCharacter::GetHit_Implementation(const FVector& ImpactPoint, AAct
 	{
 		ActionState = EActionState::EAS_HitReaction;
 	}
+}
+
+void AEldenLordCharacter::InitAbilityActorInfo()
+{
+	AEldenPlayerState* EldenPlayerState = GetPlayerState<AEldenPlayerState>();
+	check(EldenPlayerState);
+	EldenPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(EldenPlayerState,this);
+	AbilitySystemComponent = EldenPlayerState->GetAbilitySystemComponent();
+	AttributeSet = EldenPlayerState->GetAttributeSet();
+}
+
+void AEldenLordCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	// Init ability actor info for the server
+	InitAbilityActorInfo();
+}
+
+void AEldenLordCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	
+	// Init ability actor info for the server
+	InitAbilityActorInfo();
 }
 
 

@@ -28,6 +28,9 @@ public:
 	                         class AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
 
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+
 protected:
 	virtual void BeginPlay() override;
 	/*
@@ -90,6 +93,9 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> MainWeapon;
 
 private:
+	
+	void InitAbilityActorInfo();
+	
 	/*
 	 * Camera
 	 */
