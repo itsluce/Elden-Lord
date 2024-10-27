@@ -1,0 +1,31 @@
+// luce copyright
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "UObject/NoExportTypes.h"
+#include "EldenWidgetController.generated.h"
+
+class UAttributeSet;
+class UAbilitySystemComponent;
+/**
+ * 
+ */
+UCLASS()
+class ELDENLORD_API UEldenWidgetController : public UObject
+{
+	GENERATED_BODY()
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<APlayerController> PlayerController;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<APlayerState> PlayerState;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UAttributeSet> AttributeSet;
+};
