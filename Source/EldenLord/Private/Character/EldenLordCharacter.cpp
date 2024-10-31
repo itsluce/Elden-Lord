@@ -13,6 +13,7 @@
 #include "HUD/EldenHUD.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/EldenController.h"
 #include "Player/EldenPlayerState.h"
 
 AEldenLordCharacter::AEldenLordCharacter()
@@ -97,15 +98,24 @@ void AEldenLordCharacter::InitAbilityActorInfo()
 {
 	AEldenPlayerState* EldenPlayerState = GetPlayerState<AEldenPlayerState>();
 	check(EldenPlayerState);
-	EldenPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(EldenPlayerState,this);
+	EldenPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(EldenPlayerState, this);
 	AbilitySystemComponent = EldenPlayerState->GetAbilitySystemComponent();
 	AttributeSet = EldenPlayerState->GetAttributeSet();
+
+	if (AEldenController* EldenController = Cast<AEldenController>(GetController()))
+	{
+		if (AEldenHUD* EldenHUD = Cast<AEldenHUD>(EldenController->GetHUD()))
+		{
+			EldenHUD->InitOverlay(EldenController,EldenPlayerState,AbilitySystemComponent,AttributeSet);
+		}
+		
+	}
 }
 
 void AEldenLordCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	
+
 	// Init ability actor info for the server
 	InitAbilityActorInfo();
 }
@@ -113,7 +123,7 @@ void AEldenLordCharacter::PossessedBy(AController* NewController)
 void AEldenLordCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
-	
+
 	// Init ability actor info for the server
 	InitAbilityActorInfo();
 }

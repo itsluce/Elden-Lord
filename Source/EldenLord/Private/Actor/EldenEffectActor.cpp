@@ -42,6 +42,8 @@ void AEldenEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 
 		UEldenAttributeSet* MutableEldenAttributeSet = const_cast<UEldenAttributeSet*>(EldenAttributeSet);
 		MutableEldenAttributeSet->SetHealth(EldenAttributeSet->GetHealth() + 25.f);
+		MutableEldenAttributeSet->SetMana(EldenAttributeSet->GetMana() - 25.f);
+		MutableEldenAttributeSet->SetStamina(EldenAttributeSet->GetStamina() - 50.f);
 		Destroy();
 	}
 }

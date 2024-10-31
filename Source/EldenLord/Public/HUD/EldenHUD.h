@@ -6,6 +6,10 @@
 #include "GameFramework/HUD.h"
 #include "EldenHUD.generated.h"
 
+class UAttributeSet;
+class UAbilitySystemComponent;
+class UOverlayEldenWidgetController;
+struct FWidgetControllerParams;
 class UEldenUserWidget;
 class UEldenOverlay;
 /**
@@ -19,17 +23,26 @@ public:
 
 	UPROPERTY()
 	TObjectPtr<UEldenUserWidget>  OverlayWidget;
-	
+
+	UOverlayEldenWidgetController * GetOverlayEldenWidgetController(const FWidgetControllerParams WCParams);
 	// UPROPERTY()
 	// TObjectPtr<UEldenOverlay>  EldenOverlay;
+	
+	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
 
 protected:
-	virtual void BeginPlay() override;
 
 private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UEldenUserWidget> OverlayWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<UOverlayEldenWidgetController> OverlayEldenWidgetController;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UOverlayEldenWidgetController> OverlayEldenWidgetControllerClass;
+	
 public:
 	// FORCEINLINE UEldenOverlay* GetEldenOverlay() const { return EldenOverlay; }
 };

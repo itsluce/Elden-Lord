@@ -27,8 +27,11 @@ void AEldenController::BeginPlay()
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
 		GetLocalPlayer());
-	checkf(Subsystem, TEXT("Subsystem"));
-	Subsystem->AddMappingContext(EldenContext, 0);
+	if (Subsystem)
+	{
+		Subsystem->AddMappingContext(EldenContext, 0);
+	}
+	
 	// bShowMouseCursor = true;
 	// FInputModeGameOnly InputModeData;
 	// SetInputMode(InputModeData);
