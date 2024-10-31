@@ -121,23 +121,23 @@ void AEldenLordCharacter::OnRep_PlayerState()
 
 void AEldenLordCharacter::InitializeOverlay()
 {
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
-
-	if (PlayerController)
-	{
-		AEldenHUD* EldenHUD = Cast<AEldenHUD>(PlayerController->GetHUD());
-		if (EldenHUD)
-		{
-			EldenOverlay = EldenHUD->GetEldenOverlay();
-			if (EldenOverlay && Attributes)
-			{
-				EldenOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
-				EldenOverlay->SetStaminaBarPercent(1.f);
-				EldenOverlay->SetGolds(0);
-				EldenOverlay->SetSouls(0);
-			}
-		}
-	}
+	// APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	//
+	// if (PlayerController)
+	// {
+	// 	AEldenHUD* EldenHUD = Cast<AEldenHUD>(PlayerController->GetHUD());
+	// 	if (EldenHUD)
+	// 	{
+	// 		EldenOverlay = EldenHUD->GetEldenOverlay();
+	// 		if (EldenOverlay && Attributes)
+	// 		{
+	// 			EldenOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+	// 			EldenOverlay->SetStaminaBarPercent(1.f);
+	// 			EldenOverlay->SetGolds(0);
+	// 			EldenOverlay->SetSouls(0);
+	// 		}
+	// 	}
+	// }
 }
 
 void AEldenLordCharacter::MoveForward(float Value)

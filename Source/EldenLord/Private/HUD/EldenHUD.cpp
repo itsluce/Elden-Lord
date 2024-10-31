@@ -2,7 +2,7 @@
 
 
 #include "HUD/EldenHUD.h"
-
+#include "UI/Widget/EldenUserWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "HUD/EldenOverlay.h"
 
@@ -11,14 +11,6 @@ void AEldenHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UWorld* World = GetWorld();
-	if (World)
-	{
-		APlayerController* Controller = World->GetFirstPlayerController();
-		if (Controller && EldenOverlayClass)
-		{
-			EldenOverlay = CreateWidget<UEldenOverlay>(Controller, EldenOverlayClass);
-			EldenOverlay->AddToViewport();
-		}
-	}
+	UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), OverlayWidgetClass);
+	Widget->AddToViewport();
 }
