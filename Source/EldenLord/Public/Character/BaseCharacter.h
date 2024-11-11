@@ -30,6 +30,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void InitAbilityActorInfo();
+
+	
 	void SpawnHitBlood(const FVector& ImpactPoint);
 	void PlayHitSound(const FVector& ImpactPoint);
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;

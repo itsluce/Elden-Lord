@@ -44,6 +44,7 @@ public:
 	virtual void UnHighlightActor() override;
 
 protected:
+	virtual void InitAbilityActorInfo() override;
 	/** <AActor> */
 	virtual void BeginPlay() override;
 	/** </AActor> */

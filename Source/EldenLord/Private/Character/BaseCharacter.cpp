@@ -25,6 +25,10 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ABaseCharacter::InitAbilityActorInfo()
+{
+}
+
 void ABaseCharacter::SpawnHitBlood(const FVector& ImpactPoint)
 {
 	if (HitParticles && GetWorld())

@@ -73,10 +73,10 @@ void AEldenController::Look(const FInputActionValue& InputActionValue)
 {
 	const float Value = InputActionValue.Get<float>();
 
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(8, 5.f, FColor::Purple, FString::Printf(TEXT("InputActionValue: %f"), Value));
-	}
+	// if (GEngine)
+	// {
+	// 	GEngine->AddOnScreenDebugMessage(8, 5.f, FColor::Purple, FString::Printf(TEXT("InputActionValue: %f"), Value));
+	// }
 
 	AddPitchInput(Value);
 }

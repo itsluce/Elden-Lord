@@ -100,7 +100,7 @@ void AEnemy::BeginPlay()
 	if (SensingComponent)
 		SensingComponent->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 
-	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	InitAbilityActorInfo();
 }
 
 void AEnemy::Tick(float DeltaTime)
@@ -139,6 +139,12 @@ void AEnemy::HighlightActor()
 void AEnemy::UnHighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
+}
+
+void AEnemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UEldenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
 
 void AEnemy::CheckCombatTarget()

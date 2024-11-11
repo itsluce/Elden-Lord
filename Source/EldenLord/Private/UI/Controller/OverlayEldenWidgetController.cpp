@@ -3,6 +3,7 @@
 
 #include "UI/Controller/OverlayEldenWidgetController.h"
 
+#include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "AbilitySystem/EldenAttributeSet.h"
 
 void UOverlayEldenWidgetController::BroadcastInitValues()
@@ -11,10 +12,10 @@ void UOverlayEldenWidgetController::BroadcastInitValues()
 
 	OnHealthChanged.Broadcast(EldenAttributeSet->GetHealth());
 	OnMaxHealthChanged.Broadcast(EldenAttributeSet->GetMaxHealth());
-	
+
 	OnManaChanged.Broadcast(EldenAttributeSet->GetMana());
 	OnMaxManaChanged.Broadcast(EldenAttributeSet->GetMaxMana());
-	
+
 	OnStaminaChanged.Broadcast(EldenAttributeSet->GetStamina());
 	OnMaxStaminaChanged.Broadcast(EldenAttributeSet->GetMaxStamina());
 }
@@ -27,16 +28,33 @@ void UOverlayEldenWidgetController::BindCallbacksToDependencies()
 		EldenAttributeSet->GetHealthAttribute()).AddUObject(this, &UOverlayEldenWidgetController::HealthChanged);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		EldenAttributeSet->GetMaxHealthAttribute()).AddUObject(this, &UOverlayEldenWidgetController::MaxHealthChanged);
-	
+
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		EldenAttributeSet->GetManaAttribute()).AddUObject(this, &UOverlayEldenWidgetController::ManaChanged);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		EldenAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayEldenWidgetController::MaxManaChanged);
-	
+
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		EldenAttributeSet->GetStaminaAttribute()).AddUObject(this, &UOverlayEldenWidgetController::StaminaChanged);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EldenAttributeSet->GetMaxStaminaAttribute()).AddUObject(this, &UOverlayEldenWidgetController::MaxStaminaChanged);
+		                        EldenAttributeSet->GetMaxStaminaAttribute()).
+	                        AddUObject(this, &UOverlayEldenWidgetController::MaxStaminaChanged);
+
+	Cast<UEldenAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[this](const FGameplayTagContainer& AssetTags)
+		{
+			for (const FGameplayTag Tag : AssetTags)
+			{
+				FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+				const bool bMatchTag = Tag.MatchesTag(MessageTag);
+				if (bMatchTag)
+				{
+					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+					MessageWidgetRow.Broadcast(*Row);
+				}
+			}
+		}
+	);
 }
 
 void UOverlayEldenWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const

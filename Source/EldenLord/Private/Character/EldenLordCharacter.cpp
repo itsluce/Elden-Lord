@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "EldenDbug.h"
+#include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AttributeComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -99,6 +100,7 @@ void AEldenLordCharacter::InitAbilityActorInfo()
 	AEldenPlayerState* EldenPlayerState = GetPlayerState<AEldenPlayerState>();
 	check(EldenPlayerState);
 	EldenPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(EldenPlayerState, this);
+	Cast<UEldenAbilitySystemComponent>(EldenPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	AbilitySystemComponent = EldenPlayerState->GetAbilitySystemComponent();
 	AttributeSet = EldenPlayerState->GetAttributeSet();
 

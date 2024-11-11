@@ -33,7 +33,7 @@ class ELDENLORD_API AEldenEffectActor : public AActor
 public:
 	AEldenEffectActor();
 	virtual void Tick(float DeltaTime) override;
-
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -72,5 +72,8 @@ protected:
 
 
 	TMap<FActiveGameplayEffectHandle,UAbilitySystemComponent*> ActiveEffectHandles;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
+	float ActorLevel = 1.f;
 private:
 };
