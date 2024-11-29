@@ -123,6 +123,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category= "Attributs")
 	TSubclassOf<UGameplayEffect> DefaultSecondaryAttribute;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category= "Attributs")
+	TSubclassOf<UGameplayEffect> DefaultVitalAttribute;
+
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributeClass, float Level) const;
 
 	void InitializeDefaultAttribute() const;

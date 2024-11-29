@@ -276,6 +276,7 @@ void ABaseCharacter::InitializeDefaultAttribute() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttribute, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttribute, 1.f);
+	ApplyEffectToSelf(DefaultVitalAttribute, 1.f);
 }
 
 void ABaseCharacter::Tick(float DeltaTime)

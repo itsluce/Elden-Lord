@@ -10,9 +10,7 @@
 
 UEldenAttributeSet::UEldenAttributeSet()
 {
-	InitHealth(50.f);
-	InitMana(10.f);
-	InitStamina(100.f);
+
 }
 
 void UEldenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
