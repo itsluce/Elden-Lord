@@ -11,23 +11,38 @@
 UEldenAttributeSet::UEldenAttributeSet()
 {
 	InitHealth(50.f);
-	InitMaxHealth(100.f);
 	InitMana(10.f);
-	InitMaxMana(100.f);
 	InitStamina(100.f);
-	InitMaxStamina(100.f);
 }
 
 void UEldenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Health, COND_None, REPNOTIFY_Always);
+	// Primary Attribute
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Strength, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Resilience, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Vigor, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
+	
+	// Secondary Attribute
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Armor, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, ArmorPenetration, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, BlockChance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, CriticalHitChance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, CriticalHitDamage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, CriticalHitResistance, COND_None, REPNOTIFY_Always);
+
+	// Vital Attribute
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Health, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
 }
 
 void UEldenAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -118,4 +133,54 @@ void UEldenAttributeSet::OnRep_Stamina(const FGameplayAttributeData OldStamina) 
 void UEldenAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData OldMaxStamina) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, MaxStamina, OldMaxStamina)
+}
+
+void UEldenAttributeSet::OnRep_Strength(const FGameplayAttributeData OldStrength) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Strength, OldStrength)
+}
+
+void UEldenAttributeSet::OnRep_Intelligence(const FGameplayAttributeData OldIntelligence) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Intelligence, OldIntelligence)
+}
+
+void UEldenAttributeSet::OnRep_Resilience(const FGameplayAttributeData OldResilience) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Resilience, OldResilience)
+}
+
+void UEldenAttributeSet::OnRep_Vigor(const FGameplayAttributeData OldVigor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Vigor, OldVigor)
+}
+
+void UEldenAttributeSet::OnRep_Armor(const FGameplayAttributeData OldArmor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Armor, OldArmor)
+}
+
+void UEldenAttributeSet::OnRep_ArmorPenetration(const FGameplayAttributeData OldArmorPenetration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, ArmorPenetration, OldArmorPenetration)
+}
+
+void UEldenAttributeSet::OnRep_BlockChance(const FGameplayAttributeData OldBlockChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, BlockChance, OldBlockChance)
+}
+
+void UEldenAttributeSet::OnRep_CriticalHitChance(const FGameplayAttributeData OldCriticalHitChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, CriticalHitChance, OldCriticalHitChance)
+}
+
+void UEldenAttributeSet::OnRep_CriticalHitDamage(const FGameplayAttributeData OldCriticalHitDamage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, CriticalHitDamage, OldCriticalHitDamage)
+}
+
+void UEldenAttributeSet::OnRep_CriticalHitResistance(const FGameplayAttributeData OldCriticalHitResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, CriticalHitResistance, OldCriticalHitResistance)
 }

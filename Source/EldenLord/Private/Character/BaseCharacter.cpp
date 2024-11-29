@@ -3,6 +3,7 @@
 
 #include "Character/BaseCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "Character/CharacterTypes.h"
 #include "Components/AttributeComponent.h"
 #include "Components/BoxComponent.h"
@@ -258,6 +259,22 @@ FVector ABaseCharacter::GetRotationWarpTarget()
 		return CombatTarget->GetActorLocation();
 	}
 	return FVector();
+}
+
+void ABaseCharacter::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributeClass, float Level) const
+{
+	checkf(IsValid(GetAbilitySystemComponent()), TEXT("You must initialize a valid GetAbilitySystemComponent"));
+	checkf(DefaultAttributeClass, TEXT("You must initialize a valid DefaultAttribute"));
+	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(
+		DefaultAttributeClass, Level, ContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), GetAbilitySystemComponent());
+}
+
+void ABaseCharacter::InitializeDefaultAttribute() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttribute, 1.f);
+	ApplyEffectToSelf(DefaultSecondaryAttribute, 1.f);
 }
 
 void ABaseCharacter::Tick(float DeltaTime)

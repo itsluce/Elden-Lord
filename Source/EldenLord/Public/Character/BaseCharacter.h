@@ -8,6 +8,7 @@
 #include "Interface/HitInterface.h"
 #include "BaseCharacter.generated.h"
 
+class UGameplayEffect;
 class UAttributeSet;
 class UAbilitySystemComponent;
 enum EDeathPose : int;
@@ -32,7 +33,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
 
-	
+
 	void SpawnHitBlood(const FVector& ImpactPoint);
 	void PlayHitSound(const FVector& ImpactPoint);
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
@@ -113,6 +114,16 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category= "Attributs")
+	TSubclassOf<UGameplayEffect>DefaultPrimaryAttribute;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category= "Attributs")
+	TSubclassOf<UGameplayEffect>DefaultSecondaryAttribute;
+
+	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect>DefaultAttributeClass,float Level) const;
+
+	void InitializeDefaultAttribute() const;
 
 public:
 	FORCEINLINE EDeathPose GetDeathPose() const { return DeathPose; }

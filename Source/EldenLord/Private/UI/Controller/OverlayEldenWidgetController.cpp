@@ -25,20 +25,49 @@ void UOverlayEldenWidgetController::BindCallbacksToDependencies()
 	const UEldenAttributeSet* EldenAttributeSet = CastChecked<UEldenAttributeSet>(AttributeSet);
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EldenAttributeSet->GetHealthAttribute()).AddUObject(this, &UOverlayEldenWidgetController::HealthChanged);
+		EldenAttributeSet->GetHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnHealthChanged.Broadcast(Data.NewValue);
+		}
+	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EldenAttributeSet->GetMaxHealthAttribute()).AddUObject(this, &UOverlayEldenWidgetController::MaxHealthChanged);
+		EldenAttributeSet->GetMaxHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxHealthChanged.Broadcast(Data.NewValue);
+		}
+	);
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EldenAttributeSet->GetManaAttribute()).AddUObject(this, &UOverlayEldenWidgetController::ManaChanged);
+		EldenAttributeSet->GetManaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnManaChanged.Broadcast(Data.NewValue);
+		}
+	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EldenAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayEldenWidgetController::MaxManaChanged);
+		EldenAttributeSet->GetMaxManaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxManaChanged.Broadcast(Data.NewValue);
+		}
+	);
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EldenAttributeSet->GetStaminaAttribute()).AddUObject(this, &UOverlayEldenWidgetController::StaminaChanged);
+		EldenAttributeSet->GetStaminaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnStaminaChanged.Broadcast(Data.NewValue);
+		}
+	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		                        EldenAttributeSet->GetMaxStaminaAttribute()).
-	                        AddUObject(this, &UOverlayEldenWidgetController::MaxStaminaChanged);
+		EldenAttributeSet->GetMaxStaminaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxStaminaChanged.Broadcast(Data.NewValue);
+		}
+	);
 
 	Cast<UEldenAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
 		[this](const FGameplayTagContainer& AssetTags)
@@ -55,34 +84,4 @@ void UOverlayEldenWidgetController::BindCallbacksToDependencies()
 			}
 		}
 	);
-}
-
-void UOverlayEldenWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
-{
-	OnHealthChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayEldenWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data) const
-{
-	OnMaxHealthChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayEldenWidgetController::ManaChanged(const FOnAttributeChangeData& Data) const
-{
-	OnManaChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayEldenWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data) const
-{
-	OnMaxManaChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayEldenWidgetController::StaminaChanged(const FOnAttributeChangeData& Data) const
-{
-	OnStaminaChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayEldenWidgetController::MaxStaminaChanged(const FOnAttributeChangeData& Data) const
-{
-	OnMaxStaminaChanged.Broadcast(Data.NewValue);
 }
