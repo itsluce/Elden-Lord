@@ -130,6 +130,13 @@ void AEldenLordCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 AEldenLordCharacter::GetPlayerLevel()
+{
+	const AEldenPlayerState* EldenPlayerState = GetPlayerState<AEldenPlayerState>();
+	check(EldenPlayerState);
+	return EldenPlayerState->GetPlayerLevel();
+}
+
 
 void AEldenLordCharacter::InitializeOverlay()
 {

@@ -147,6 +147,11 @@ void AEnemy::InitAbilityActorInfo()
 	Cast<UEldenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
 
+int32 AEnemy::GetPlayerLevel()
+{
+	return Level;
+}
+
 void AEnemy::CheckCombatTarget()
 {
 	if (IsOutsideCombatRadius())

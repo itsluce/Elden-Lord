@@ -83,6 +83,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Vigor, Category= "Primary Attributes")
 	FGameplayAttributeData Vigor;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Vigor);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Mind, Category= "Primary Attributes")
+	FGameplayAttributeData Mind;
+	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Mind);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Endurance, Category= "Primary Attributes")
+	FGameplayAttributeData Endurance;
+	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Endurance);
 
 	/*
 	 * Secondary Attributes
@@ -111,6 +119,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_CriticalHitResistance, Category= "Secondary Attributes")
 	FGameplayAttributeData CriticalHitResistance;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, CriticalHitResistance);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_HealthRegeneration, Category= "Secondary Attributes")
+	FGameplayAttributeData HealthRegeneration;
+	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, HealthRegeneration);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_MaxHealth, Category= "Secondary Attributes")
 	FGameplayAttributeData MaxHealth;
@@ -174,6 +186,12 @@ public:
 	void OnRep_Vigor(const FGameplayAttributeData OldVigor) const;
 
 	UFUNCTION()
+	void OnRep_Mind(const FGameplayAttributeData OldMind) const;
+
+	UFUNCTION()
+	void OnRep_Endurance(const FGameplayAttributeData OldEndurance) const;
+
+	UFUNCTION()
 	void OnRep_Armor(const FGameplayAttributeData OldArmor) const;
 	
 	UFUNCTION()
@@ -190,6 +208,9 @@ public:
 	
 	UFUNCTION()
 	void OnRep_CriticalHitResistance(const FGameplayAttributeData OldCriticalHitResistance) const;
+	
+	UFUNCTION()
+	void OnRep_HealthRegeneration(const FGameplayAttributeData OldHealthRegeneration) const;
 
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;

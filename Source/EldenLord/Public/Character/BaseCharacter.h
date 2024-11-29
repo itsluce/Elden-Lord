@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Interface/CombatInterface.h"
 #include "Interface/HitInterface.h"
 #include "BaseCharacter.generated.h"
 
@@ -16,7 +17,8 @@ class UAttributeComponent;
 class AWeapon;
 
 UCLASS()
-class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface, public IAbilitySystemInterface
+class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface, public IAbilitySystemInterface,
+                                     public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -116,12 +118,12 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category= "Attributs")
-	TSubclassOf<UGameplayEffect>DefaultPrimaryAttribute;
-	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category= "Attributs")
-	TSubclassOf<UGameplayEffect>DefaultSecondaryAttribute;
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttribute;
 
-	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect>DefaultAttributeClass,float Level) const;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category= "Attributs")
+	TSubclassOf<UGameplayEffect> DefaultSecondaryAttribute;
+
+	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributeClass, float Level) const;
 
 	void InitializeDefaultAttribute() const;
 

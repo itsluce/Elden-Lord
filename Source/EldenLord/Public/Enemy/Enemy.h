@@ -64,6 +64,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UEldenOverlay* EldenOverlay;
 
+	virtual int32 GetPlayerLevel() override;
+
 private:
 	// AI Behavior
 	void CheckCombatTarget();
@@ -106,14 +108,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float DeathLifeSpan = 10.f;
 
-public:
-
 protected:
 	bool InTargetRange(AActor* Target, double Radius);
 	void MoveToTarget(AActor* Target);
 	UFUNCTION()
 	void PawnSeen(APawn* SeenPawn);
 	AActor* ChoosePatrolTarget();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	int32 Level = 1;
 
 private:
 	/*
