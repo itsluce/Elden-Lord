@@ -6,7 +6,7 @@
 
 FEldenGameplayTags FEldenGameplayTags::GameplayTags;
 
-void FEldenGameplayTags::InitializedNativeGameplayTags()
+void FEldenGameplayTags::InitializeNativeGameplayTags()
 {
 	/*
 	 * Primary Attributes

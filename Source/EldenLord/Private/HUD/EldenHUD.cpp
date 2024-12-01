@@ -5,6 +5,7 @@
 #include "UI/Widget/EldenUserWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "HUD/EldenOverlay.h"
+#include "UI/Controller/AttributeMenuWidgetController.h"
 #include "UI/Controller/OverlayEldenWidgetController.h"
 
 
@@ -16,15 +17,27 @@ UOverlayEldenWidgetController* AEldenHUD::GetOverlayEldenWidgetController(const 
 			UOverlayEldenWidgetController>(this, OverlayEldenWidgetControllerClass);
 		OverlayEldenWidgetController->SetWidgetControllerParams(WCParams);
 		OverlayEldenWidgetController->BindCallbacksToDependencies();
-		return OverlayEldenWidgetController;
 	}
 	return OverlayEldenWidgetController;
+}
+
+UAttributeMenuWidgetController* AEldenHUD::GetAttributeMenuWidgetController(const FWidgetControllerParams WCParams)
+{
+	if (AttributeMenuWidgetController == nullptr)
+	{
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(
+			this, AttributeMenuWidgetControllerClass);
+		AttributeMenuWidgetController->SetWidgetControllerParams(WCParams);
+		AttributeMenuWidgetController->BindCallbacksToDependencies();
+	}
+	return AttributeMenuWidgetController;
 }
 
 void AEldenHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
 {
 	checkf(OverlayWidgetClass, TEXT("Overlay widget class"));
 	checkf(OverlayEldenWidgetControllerClass, TEXT("Overlay widget Controller class"));
+	checkf(AttributeMenuWidgetControllerClass, TEXT("Attribute Menu widget Controller class"));
 
 	UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), OverlayWidgetClass);
 	OverlayWidget = Cast<UEldenUserWidget>(Widget);

@@ -11,9 +11,9 @@
 struct FEldenGameplayTags
 {
 public:
-	static const FEldenGameplayTags& Get() { return GameplayTags; }
-	static void InitializedNativeGameplayTags();
-	
+	static const FEldenGameplayTags& Get() { return GameplayTags;}
+	static void InitializeNativeGameplayTags();
+
 	FGameplayTag Attributes_Primary_Vigor;
 	FGameplayTag Attributes_Primary_Mind;
 	FGameplayTag Attributes_Primary_Endurance;

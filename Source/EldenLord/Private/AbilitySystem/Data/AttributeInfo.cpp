@@ -7,15 +7,17 @@ FEldenAttributeInfo UAttributeInfo::FindAttributeInfoForTag(const FGameplayTag& 
 {
 	for (const FEldenAttributeInfo& Info : AttributeInformation)
 	{
-		if (Info.AttributeTag == AttributeTag)
+		if (Info.AttributeTag.MatchesTagExact(AttributeTag))
 		{
 			return Info;
 		}
 	}
-	if (bLogNotFound)
+
+	if (!bLogNotFound)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Attribute not found (%s) on Attribute Info (%s)"), *AttributeTag.ToString(),
-		       *GetNameSafe(this));
+		UE_LOG(LogTemp, Error, TEXT("Can't find Info for AttributeTag [%s] on AttributeInfo [%s]."),
+		       *AttributeTag.ToString(), *GetNameSafe(this));
 	}
+
 	return FEldenAttributeInfo();
 }

@@ -15,5 +15,5 @@ void UEldenAssetManager::StartInitialLoading()
 {
 	Super::StartInitialLoading();
 
-	FEldenGameplayTags::InitializedNativeGameplayTags();
+	FEldenGameplayTags::InitializeNativeGameplayTags();
 }

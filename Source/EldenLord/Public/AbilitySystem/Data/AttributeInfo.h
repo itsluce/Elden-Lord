@@ -35,8 +35,8 @@ class ELDENLORD_API UAttributeInfo : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	FEldenAttributeInfo FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound) const;
-
+	FEldenAttributeInfo FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound = false) const;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FEldenAttributeInfo> AttributeInformation;
 };
