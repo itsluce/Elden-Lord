@@ -4,13 +4,33 @@
 #include "AbilitySystem/EldenAttributeSet.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "EldenGameplayTags.h"
 #include "GameFramework/Character.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 
 UEldenAttributeSet::UEldenAttributeSet()
 {
+	const FEldenGameplayTags& GameplayTags = FEldenGameplayTags::Get();
 
+	// Primary Attribute
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Vigor,GetVigorAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Mind,GetMindAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Endurance,GetEnduranceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Strength,GetStrengthAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Intelligence,GetIntelligenceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Resilience,GetResilienceAttribute);
+	
+	// Secondary Attribute
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxHealth,GetMaxHealthAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxMana,GetMaxManaAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxStamina,GetMaxStaminaAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_Armor,GetArmorAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_ArmorPenetration,GetArmorPenetrationAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_BlockChance,GetBlockChanceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitChance,GetCriticalHitChanceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitDamage,GetCriticalHitDamageAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitResistance,GetCriticalHitResistanceAttribute);
 }
 
 void UEldenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

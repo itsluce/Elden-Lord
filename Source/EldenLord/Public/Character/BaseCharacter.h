@@ -9,6 +9,7 @@
 #include "Interface/HitInterface.h"
 #include "BaseCharacter.generated.h"
 
+class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
 class UAbilitySystemComponent;
@@ -130,6 +131,12 @@ protected:
 
 	void InitializeDefaultAttribute() const;
 
+	void AddCharacterAbilities() const;
+private:
+
+	UPROPERTY(EditAnywhere,Category=Abilities)
+	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
+	
 public:
 	FORCEINLINE EDeathPose GetDeathPose() const { return DeathPose; }
 };

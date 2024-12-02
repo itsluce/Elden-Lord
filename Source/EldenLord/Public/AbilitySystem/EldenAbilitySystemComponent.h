@@ -20,6 +20,9 @@ class ELDENLORD_API UEldenAbilitySystemComponent : public UAbilitySystemComponen
 public:
 	void AbilityActorInfoSet();
 	FEffectAssetTags EffectAssetTags;
+
+	void AddCharacterAttributes(const TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities);
+	
 protected:
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec,
 	                   FActiveGameplayEffectHandle ActiveEffectHandle);

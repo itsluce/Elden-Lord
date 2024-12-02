@@ -8,6 +8,16 @@
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
+	UEldenAttributeSet* AS = CastChecked<UEldenAttributeSet>(AttributeSet);
+	for (auto& Pair : AS->TagToAttribute)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
+			[this, Pair](const FOnAttributeChangeData& Data)
+			{
+				BroadcastAttributeInfo(Pair.Key,Pair.Value());
+			}
+		);
+	}
 }
 
 void UAttributeMenuWidgetController::BroadcastInitValues()
@@ -16,8 +26,16 @@ void UAttributeMenuWidgetController::BroadcastInitValues()
 
 	check(AttributeInfo);
 
-	FEldenAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(
-		FEldenGameplayTags::Get().Attributes_Primary_Mind);
-	Info.AttributeValue = AS->GetMind();
+	for (auto& Pair : AS->TagToAttribute)
+	{
+		BroadcastAttributeInfo(Pair.Key,Pair.Value());
+	}
+}
+
+void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag,
+	const FGameplayAttribute& Attribute) const
+{
+	FEldenAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
+	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);
 	AttributeInfoDelegate.Broadcast(Info);
 }

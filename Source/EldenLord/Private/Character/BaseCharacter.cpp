@@ -4,6 +4,7 @@
 #include "Character/BaseCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "Character/CharacterTypes.h"
 #include "Components/AttributeComponent.h"
 #include "Components/BoxComponent.h"
@@ -277,6 +278,13 @@ void ABaseCharacter::InitializeDefaultAttribute() const
 	ApplyEffectToSelf(DefaultPrimaryAttribute, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttribute, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttribute, 1.f);
+}
+
+void ABaseCharacter::AddCharacterAbilities() const
+{
+	if (!HasAuthority())return;
+	UEldenAbilitySystemComponent* ASC = Cast<UEldenAbilitySystemComponent>(AbilitySystemComponent);
+	ASC->AddCharacterAttributes(StartUpAbilities);
 }
 
 void ABaseCharacter::Tick(float DeltaTime)

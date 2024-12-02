@@ -13,6 +13,7 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+
 USTRUCT()
 struct FEffectProperties
 {
@@ -49,6 +50,9 @@ struct FEffectProperties
 	ACharacter* TargetCharacter = nullptr;
 };
 
+template <class T>
+using TStaticFuncPointer = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 /**
  * 
  */
@@ -63,6 +67,8 @@ public:
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+
+	TMap<FGameplayTag, TStaticFuncPointer<FGameplayAttribute()>> TagToAttribute;
 
 	/*
 	 * Primary Attributes
@@ -83,11 +89,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Vigor, Category= "Primary Attributes")
 	FGameplayAttributeData Vigor;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Vigor);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Mind, Category= "Primary Attributes")
 	FGameplayAttributeData Mind;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Mind);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Endurance, Category= "Primary Attributes")
 	FGameplayAttributeData Endurance;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Endurance);
@@ -95,7 +101,7 @@ public:
 	/*
 	 * Secondary Attributes
 	 */
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Armor, Category= "Secondary Attributes")
 	FGameplayAttributeData Armor;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Armor);
@@ -107,19 +113,19 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_BlockChance, Category= "Secondary Attributes")
 	FGameplayAttributeData BlockChance;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, BlockChance);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_CriticalHitChance, Category= "Secondary Attributes")
 	FGameplayAttributeData CriticalHitChance;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, CriticalHitChance);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_CriticalHitDamage, Category= "Secondary Attributes")
 	FGameplayAttributeData CriticalHitDamage;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, CriticalHitDamage);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_CriticalHitResistance, Category= "Secondary Attributes")
 	FGameplayAttributeData CriticalHitResistance;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, CriticalHitResistance);
-	
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_HealthRegeneration, Category= "Secondary Attributes")
 	FGameplayAttributeData HealthRegeneration;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, HealthRegeneration);
@@ -135,7 +141,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_MaxStamina, Category= "Secondary Attributes")
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, MaxStamina)
-	
+
 	/*
 	 * vital Attributes
 	 */
@@ -193,22 +199,22 @@ public:
 
 	UFUNCTION()
 	void OnRep_Armor(const FGameplayAttributeData OldArmor) const;
-	
+
 	UFUNCTION()
 	void OnRep_ArmorPenetration(const FGameplayAttributeData OldArmorPenetration) const;
-	
+
 	UFUNCTION()
 	void OnRep_BlockChance(const FGameplayAttributeData OldBlockChance) const;
-	
+
 	UFUNCTION()
 	void OnRep_CriticalHitChance(const FGameplayAttributeData OldCriticalHitChance) const;
-	
+
 	UFUNCTION()
 	void OnRep_CriticalHitDamage(const FGameplayAttributeData OldCriticalHitDamage) const;
-	
+
 	UFUNCTION()
 	void OnRep_CriticalHitResistance(const FGameplayAttributeData OldCriticalHitResistance) const;
-	
+
 	UFUNCTION()
 	void OnRep_HealthRegeneration(const FGameplayAttributeData OldHealthRegeneration) const;
 
