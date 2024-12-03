@@ -9,7 +9,8 @@
 AEldenProjectile::AEldenProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
+	bReplicates = true;
+	
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	SetRootComponent(Sphere);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -34,5 +35,4 @@ void AEldenProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                        const FHitResult& SweepResult)
 {
-	
 }

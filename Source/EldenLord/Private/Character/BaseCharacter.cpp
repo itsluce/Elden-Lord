@@ -262,6 +262,12 @@ FVector ABaseCharacter::GetRotationWarpTarget()
 	return FVector();
 }
 
+FVector ABaseCharacter::GetCombatSocketLocation()
+{
+	checkf(MainWeapon,TEXT("MainWeapon"))
+	return MainWeapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 void ABaseCharacter::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributeClass, float Level) const
 {
 	checkf(IsValid(GetAbilitySystemComponent()), TEXT("You must initialize a valid GetAbilitySystemComponent"));

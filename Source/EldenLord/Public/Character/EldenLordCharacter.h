@@ -99,9 +99,6 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UEldenOverlay* EldenOverlay;
 
-	UPROPERTY(EditAnywhere, Category="Combat")
-	TObjectPtr<USkeletalMeshComponent> MainWeapon;
-
 private:
 	
 	virtual void InitAbilityActorInfo() override;

@@ -76,6 +76,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category=Weapon)
 	AWeapon* EquipWeapon1;
 
+	UPROPERTY(EditAnywhere, Category="Combat")
+	TObjectPtr<USkeletalMeshComponent> MainWeapon;
+
+	UPROPERTY(EditAnywhere, Category=Combat)
+	FName WeaponTipSocketName;
+
+	virtual FVector GetCombatSocketLocation() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UAttributeComponent* Attributes;
 
@@ -132,11 +140,11 @@ protected:
 	void InitializeDefaultAttribute() const;
 
 	void AddCharacterAbilities() const;
-private:
 
-	UPROPERTY(EditAnywhere,Category=Abilities)
+private:
+	UPROPERTY(EditAnywhere, Category=Abilities)
 	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
-	
+
 public:
 	FORCEINLINE EDeathPose GetDeathPose() const { return DeathPose; }
 };
