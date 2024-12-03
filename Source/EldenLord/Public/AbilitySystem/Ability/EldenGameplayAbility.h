@@ -13,5 +13,9 @@ UCLASS()
 class ELDENLORD_API UEldenGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	FGameplayTag StartUpInputTag;
 };

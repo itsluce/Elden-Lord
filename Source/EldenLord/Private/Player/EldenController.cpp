@@ -3,8 +3,12 @@
 
 #include "Player/EldenController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "Input/EldenInputComponent.h"
 #include "Interface/EnemyInterface.h"
 
 AEldenController::AEldenController()
@@ -31,7 +35,7 @@ void AEldenController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(EldenContext, 0);
 	}
-	
+
 	// bShowMouseCursor = true;
 	// FInputModeGameOnly InputModeData;
 	// SetInputMode(InputModeData);
@@ -42,16 +46,6 @@ void AEldenController::BeginPlay()
 	// InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	// InputModeData.SetHideCursorDuringCapture(false);
 	// SetInputMode(InputModeData);
-}
-
-void AEldenController::SetupInputComponent()
-{
-	Super::SetupInputComponent();
-
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEldenController::Move);
-	EnhancedInputComponent->BindAction(LookAxis, ETriggerEvent::Triggered, this, &AEldenController::Look);
-	EnhancedInputComponent->BindAction(TurnAxis, ETriggerEvent::Triggered, this, &AEldenController::Turn);
 }
 
 void AEldenController::Move(const FInputActionValue& InputActionValue)
@@ -79,6 +73,25 @@ void AEldenController::Look(const FInputActionValue& InputActionValue)
 	// }
 
 	AddPitchInput(Value);
+}
+
+void AEldenController::Turn(const FInputActionValue& InputActionValue)
+{
+	const float Value = InputActionValue.Get<float>();
+	AddYawInput(Value);
+}
+
+void AEldenController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	UEldenInputComponent* EldenInputComponent = Cast<UEldenInputComponent>(InputComponent);
+
+	EldenInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEldenController::Move);
+	EldenInputComponent->BindAction(LookAxis, ETriggerEvent::Triggered, this, &AEldenController::Look);
+	EldenInputComponent->BindAction(TurnAxis, ETriggerEvent::Triggered, this, &AEldenController::Turn);
+	EldenInputComponent->BindAbilitiesAction(InputConfig, this, &ThisClass::AbilityInputTagPressed,
+	                                         &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void AEldenController::CursorTrace()
@@ -139,8 +152,29 @@ void AEldenController::CursorTrace()
 	}
 }
 
-void AEldenController::Turn(const FInputActionValue& InputActionValue)
+void AEldenController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	const float Value = InputActionValue.Get<float>();
-	AddYawInput(Value);
+	
+}
+
+void AEldenController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (GetASC() == nullptr)return;
+	GetASC()->AbilityInputTagReleased(InputTag);
+}
+
+void AEldenController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	if (GetASC() == nullptr)return;
+	GetASC()->AbilityInputTagHeld(InputTag);
+}
+
+UEldenAbilitySystemComponent* AEldenController::GetASC()
+{
+	if (EldenAbilitySystemComponent == nullptr)
+	{
+		EldenAbilitySystemComponent = Cast<UEldenAbilitySystemComponent>(
+			UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return EldenAbilitySystemComponent;
 }
