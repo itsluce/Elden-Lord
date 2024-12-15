@@ -21,8 +21,5 @@ void UEldenLordAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	Super::NativeUpdateAnimation(DeltaTime);
 	if (CharacterMovement)
 	{
-		CharacterState = EldenLordCharacter->GetCharacterState();
-		ActionState = EldenLordCharacter->GetActionState();
-		DeathPose = EldenLordCharacter->GetDeathPose();
 	}
 }
