@@ -20,6 +20,9 @@ protected:
 	                             const FGameplayAbilityActivationInfo ActivationInfo,
 	                             const FGameplayEventData* TriggerEventData) override;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UFUNCTION(BlueprintCallable, Category="ProjectileSpell")
+	void SpawnProjectile(const FVector& ProjectileTargetLocation);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AEldenProjectile> ProjectileClass;
 };

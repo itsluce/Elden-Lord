@@ -12,16 +12,21 @@ void UEldenProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Han
                                             const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
 
-	const bool bIsServer = HasAuthority(&ActivationInfo);
+void UEldenProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
+{
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer)return;
 
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (CombatInterface)
 	{
 		FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
-
+		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+		
 		FTransform SpawnTransform;
+		SpawnTransform.SetRotation(Rotation.Quaternion());
 		SpawnTransform.SetLocation(SocketLocation);
 
 		AEldenProjectile* Projectile = GetWorld()->SpawnActorDeferred<AEldenProjectile>(

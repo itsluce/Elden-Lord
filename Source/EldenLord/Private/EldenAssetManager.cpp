@@ -2,6 +2,8 @@
 
 
 #include "EldenAssetManager.h"
+
+#include "AbilitySystemGlobals.h"
 #include "EldenGameplayTags.h"
 
 UEldenAssetManager& UEldenAssetManager::Get()
@@ -16,4 +18,5 @@ void UEldenAssetManager::StartInitialLoading()
 	Super::StartInitialLoading();
 
 	FEldenGameplayTags::InitializeNativeGameplayTags();
+	UAbilitySystemGlobals::Get().InitGlobalData();
 }
