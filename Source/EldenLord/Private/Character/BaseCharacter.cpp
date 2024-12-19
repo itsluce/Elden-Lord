@@ -9,6 +9,7 @@
 #include "Components/AttributeComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "EldenLord/EldenLord.h"
 #include "Item/Weapon/Weapon.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -19,6 +20,8 @@ ABaseCharacter::ABaseCharacter()
 	// GetMesh()->bReceivesDecals = false;
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 }
 
 void ABaseCharacter::BeginPlay()

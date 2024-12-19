@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Character/BaseCharacter.h"
-
-#include "Character/CharacterTypes.h"
+#include "UI/Controller/OverlayEldenWidgetController.h"
 #include "Interface/EnemyInterface.h"
 #include "Enemy.generated.h"
 
+class UWidgetComponent;
 class UEldenOverlay;
 class UPawnSensingComponent;
 class UHealthBarComponent;
@@ -26,19 +26,21 @@ public:
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttribbuteChangedSignature OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttribbuteChangedSignature OnMaxHealthChanged;
+
 protected:
 	virtual void InitAbilityActorInfo() override;
-	/** <AActor> */
 	virtual void BeginPlay() override;
-	/** </AActor> */
-
-	/** <ABaseCharacter> */
-	
-	/** </ABaseCharacter> */
-
 
 	virtual int32 GetPlayerLevel() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	int32 Level = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 };

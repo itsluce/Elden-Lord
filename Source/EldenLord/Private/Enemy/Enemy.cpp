@@ -18,6 +18,7 @@
 #include "Navigation/PathFollowingComponent.h"
 #include "Perception/PawnSensingComponent.h"
 #include "HUD/EldenOverlay.h"
+#include "UI/Widget/EldenUserWidget.h"
 
 AEnemy::AEnemy()
 {
@@ -40,6 +41,9 @@ AEnemy::AEnemy()
 
 	AttributeSet = CreateDefaultSubobject<UEldenAttributeSet>("AttributeSet");
 
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -51,6 +55,29 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
+
+	if(UEldenUserWidget* EldenUserWidget = Cast<UEldenUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		EldenUserWidget->SetWidgetController(this);
+	}
+
+	if (UEldenAttributeSet* EldenAS = Cast<UEldenAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(EldenAS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(EldenAS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+	OnHealthChanged.Broadcast(EldenAS->GetHealth());
+	OnMaxHealthChanged.Broadcast(EldenAS->GetMaxHealth());
+	}
 }
 
 void AEnemy::HighlightActor()
@@ -68,6 +95,8 @@ void AEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UEldenAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	InitializeDefaultAttribute();
 }
 
 int32 AEnemy::GetPlayerLevel()
