@@ -10,6 +10,7 @@
 #include "Components/SphereComponent.h"
 #include "EldenLord/EldenLord.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Interface/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 
 AEldenProjectile::AEldenProjectile()
@@ -55,7 +56,8 @@ void AEldenProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                        const FHitResult& SweepResult)
 {
-	DirectionalHitReact(SweepResult.ImpactPoint);
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(OtherActor);
+	CombatInterface->Execute_GetHitReactAngle(OtherActor,SweepResult.ImpactPoint);
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation(), FRotator::ZeroRotator);
 	LoopingSoundComponent->Stop();

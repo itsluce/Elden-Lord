@@ -35,7 +35,7 @@ protected:
 
 private:
 
-	float AEldenProjectile::DirectionalHitReact(const FVector& ImpactPoint);
+	float DirectionalHitReact(const FVector& ImpactPoint);
 	
 	bool bHit = false;
 
