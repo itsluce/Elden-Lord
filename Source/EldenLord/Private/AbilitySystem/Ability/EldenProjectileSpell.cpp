@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "EldenGameplayTags.h"
 #include "Actor/EldenProjectile.h"
 #include "Interface/CombatInterface.h"
 
@@ -26,7 +27,7 @@ void UEldenProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 	{
 		FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
 		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
-		
+
 		FTransform SpawnTransform;
 		SpawnTransform.SetRotation(Rotation.Quaternion());
 		SpawnTransform.SetLocation(SocketLocation);
@@ -39,11 +40,17 @@ void UEldenProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn
 		);
 
-		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
-		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceASC->MakeEffectContext());
+		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(
+			GetAvatarActorFromActorInfo());
+		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(
+			DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
 
-		Projectile->DamageEffectSpecHandle = SpecHandle;
+		FEldenGameplayTags GameplayTags = FEldenGameplayTags::Get();
+		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
 		
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, ScaledDamage);
+		Projectile->DamageEffectSpecHandle = SpecHandle;
+
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 }

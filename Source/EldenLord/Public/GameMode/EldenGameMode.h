@@ -7,6 +7,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "EldenGameMode.generated.h"
 
+class UCharacterClassInfo;
 class UInputMappingContext;
 /**
  * 
@@ -18,5 +19,7 @@ class ELDENLORD_API AEldenGameMode : public AGameModeBase
 
 public:
 	AEldenGameMode();
-
+	
+	UPROPERTY(EditDefaultsOnly, Category="Character Class Defaults")
+	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
 };

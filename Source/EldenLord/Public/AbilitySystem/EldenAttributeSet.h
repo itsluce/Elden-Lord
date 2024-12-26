@@ -159,9 +159,16 @@ public:
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Stamina)
 
 	/*
+	 * Meta Attributes
+	 */
+	
+	UPROPERTY(BlueprintReadOnly,Category="Meta Attribtes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, IncomingDamage)
+
+	/*
 	 * End Attributes
 	 */
-
 
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData OldHealth) const;

@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "CharacterClassInfo.generated.h"
 
+class UGameplayAbility;
 class UGameplayEffect;
 
 UENUM(BlueprintType)
@@ -23,6 +24,12 @@ struct FCharacterClassDefaultInfo
 
 	UPROPERTY(EditDefaultsOnly, Category="Class Default")
 	TSubclassOf<UGameplayEffect> PrimaryAttribute;
+
+	UPROPERTY(EditDefaultsOnly, Category="Class Default")
+	TSubclassOf<UGameplayEffect> SecondaryAttribute;
+
+	UPROPERTY(EditDefaultsOnly, Category="Class Default")
+	TSubclassOf<UGameplayEffect> VitalAttribute;
 };
 
 /**
@@ -38,10 +45,7 @@ public:
 	TMap<ECharacterClass, FCharacterClassDefaultInfo> CharacterClassInformation;
 
 	UPROPERTY(EditDefaultsOnly, Category="Common Class Default")
-	TSubclassOf<UGameplayEffect> SecondaryAttribute;
-
-	UPROPERTY(EditDefaultsOnly, Category="Common Class Default")
-	TSubclassOf<UGameplayEffect> VitalAttribute;
-
-	FCharacterClassDefaultInfo GetClassDefaultInfo(ECharacterClass CharacterClass);
+	TArray<TSubclassOf<UGameplayAbility>> CommonAbility;
+	
+	FCharacterClassDefaultInfo GetClassDefaultInfo (ECharacterClass CharacterClass);
 };

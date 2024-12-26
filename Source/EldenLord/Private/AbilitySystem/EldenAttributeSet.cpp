@@ -14,23 +14,23 @@ UEldenAttributeSet::UEldenAttributeSet()
 	const FEldenGameplayTags& GameplayTags = FEldenGameplayTags::Get();
 
 	// Primary Attribute
-	TagToAttribute.Add(GameplayTags.Attributes_Primary_Vigor,GetVigorAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Primary_Mind,GetMindAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Primary_Endurance,GetEnduranceAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Primary_Strength,GetStrengthAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Primary_Intelligence,GetIntelligenceAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Primary_Resilience,GetResilienceAttribute);
-	
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Vigor, GetVigorAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Mind, GetMindAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Endurance, GetEnduranceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Strength, GetStrengthAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Intelligence, GetIntelligenceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Resilience, GetResilienceAttribute);
+
 	// Secondary Attribute
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxHealth,GetMaxHealthAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxMana,GetMaxManaAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxStamina,GetMaxStaminaAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_Armor,GetArmorAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_ArmorPenetration,GetArmorPenetrationAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_BlockChance,GetBlockChanceAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitChance,GetCriticalHitChanceAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitDamage,GetCriticalHitDamageAttribute);
-	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitResistance,GetCriticalHitResistanceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxHealth, GetMaxHealthAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxMana, GetMaxManaAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_MaxStamina, GetMaxStaminaAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_Armor, GetArmorAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_ArmorPenetration, GetArmorPenetrationAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_BlockChance, GetBlockChanceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitChance, GetCriticalHitChanceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitDamage, GetCriticalHitDamageAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Secondary_CriticalHitResistance, GetCriticalHitResistanceAttribute);
 }
 
 void UEldenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -45,7 +45,7 @@ void UEldenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Vigor, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Mind, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Endurance, COND_None, REPNOTIFY_Always);
-	
+
 	// Secondary Attribute
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Armor, COND_None, REPNOTIFY_Always);
@@ -124,6 +124,36 @@ void UEldenAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+	}
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	}
+	if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
+	{
+		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
+	}
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		const float LocalIncomingDamage = GetIncomingDamage();
+		SetIncomingDamage(0.f);
+		if (LocalIncomingDamage > 0.f)
+		{
+			const float NewHealth = GetHealth() - LocalIncomingDamage;
+			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+
+			const bool bFatal = NewHealth <= 0.f;
+			if (!bFatal)
+			{
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FEldenGameplayTags::Get().Effect_HitReact);
+				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			}
+		}
+	}
 }
 
 void UEldenAttributeSet::OnRep_Health(const FGameplayAttributeData OldHealth) const

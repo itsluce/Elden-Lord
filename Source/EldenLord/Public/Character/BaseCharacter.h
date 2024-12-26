@@ -29,6 +29,7 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
@@ -66,7 +67,7 @@ protected:
 
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributeClass, float Level) const;
 
-	void InitializeDefaultAttribute() const;
+	virtual void InitializeDefaultAttribute() const;
 
 	void AddCharacterAbilities() const;
 
@@ -74,6 +75,8 @@ private:
 	UPROPERTY(EditAnywhere, Category=Abilities)
 	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
 
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> HitReactMontage;
 public:
 	
 };

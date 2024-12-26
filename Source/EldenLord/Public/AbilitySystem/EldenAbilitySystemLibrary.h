@@ -6,6 +6,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "EldenAbilitySystemLibrary.generated.h"
 
+class UAbilitySystemComponent;
+enum class ECharacterClass : uint8;
 class UAttributeMenuWidgetController;
 class UOverlayEldenWidgetController;
 /**
@@ -22,5 +24,11 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="EldenAbilitySystemLibrary|WidgetController")
 	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category="EldenAbilitySystemLibrary|Character Class Default")
+	static void InitializeDefaultAttribute(const UObject* WorldContextObject, ECharacterClass CharacterClass,
+										   float Level, UAbilitySystemComponent* ASC);
 	
+	UFUNCTION(BlueprintCallable, Category="EldenAbilitySystemLibrary|Character Class Default")
+	static void GiveStartupAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC);
 };

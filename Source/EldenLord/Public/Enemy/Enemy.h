@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Character/BaseCharacter.h"
 #include "UI/Controller/OverlayEldenWidgetController.h"
 #include "Interface/EnemyInterface.h"
 #include "Enemy.generated.h"
 
+enum class ECharacterClass : uint8;
 class UWidgetComponent;
 class UEldenOverlay;
 class UPawnSensingComponent;
@@ -32,14 +34,26 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnAttribbuteChangedSignature OnMaxHealthChanged;
 
+	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+
+	UPROPERTY(BlueprintReadOnly, Category="Combat")
+	bool bHitReact = false;
+
+	UPROPERTY(BlueprintReadOnly, Category="Combat")
+	float BaseWalkSpeed = 250.f;
+
 protected:
 	virtual void InitAbilityActorInfo() override;
 	virtual void BeginPlay() override;
+	virtual void InitializeDefaultAttribute() const override;
 
 	virtual int32 GetPlayerLevel() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	int32 Level = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;

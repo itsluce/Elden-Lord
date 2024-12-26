@@ -5,7 +5,9 @@
 
 #include "AbilitySystemComponent.h"
 #include "AIController.h"
+#include "EldenGameplayTags.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "AbilitySystem/EldenAttributeSet.h"
 #include "Character/EldenLordCharacter.h"
 #include "Components/AttributeComponent.h"
@@ -54,9 +56,10 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-
-	if(UEldenUserWidget* EldenUserWidget = Cast<UEldenUserWidget>(HealthBar->GetUserWidgetObject()))
+	UEldenAbilitySystemLibrary::GiveStartupAbility(this, AbilitySystemComponent);
+	if (UEldenUserWidget* EldenUserWidget = Cast<UEldenUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		EldenUserWidget->SetWidgetController(this);
 	}
@@ -75,9 +78,26 @@ void AEnemy::BeginPlay()
 				OnMaxHealthChanged.Broadcast(Data.NewValue);
 			}
 		);
-	OnHealthChanged.Broadcast(EldenAS->GetHealth());
-	OnMaxHealthChanged.Broadcast(EldenAS->GetMaxHealth());
+
+		AbilitySystemComponent->RegisterGameplayTagEvent(FEldenGameplayTags::Get().Effect_HitReact,
+		                                                 EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,
+			&AEnemy::HitReactTagChanged
+		);
+		OnHealthChanged.Broadcast(EldenAS->GetHealth());
+		OnMaxHealthChanged.Broadcast(EldenAS->GetMaxHealth());
 	}
+}
+
+void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReact = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReact ? 0.f : BaseWalkSpeed;
+}
+
+void AEnemy::InitializeDefaultAttribute() const
+{
+	UEldenAbilitySystemLibrary::InitializeDefaultAttribute(this, CharacterClass, Level, AbilitySystemComponent);
 }
 
 void AEnemy::HighlightActor()
@@ -90,6 +110,7 @@ void AEnemy::UnHighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 }
+
 
 void AEnemy::InitAbilityActorInfo()
 {

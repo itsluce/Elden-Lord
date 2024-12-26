@@ -24,6 +24,11 @@ ABaseCharacter::ABaseCharacter()
 	GetMesh()->SetGenerateOverlapEvents(true);
 }
 
+UAnimMontage* ABaseCharacter::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
