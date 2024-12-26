@@ -34,6 +34,9 @@ protected:
 	                     int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
+
+	float AEldenProjectile::DirectionalHitReact(const FVector& ImpactPoint);
+	
 	bool bHit = false;
 
 	UPROPERTY(VisibleAnywhere)

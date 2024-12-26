@@ -28,4 +28,7 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
+
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	float GetHitReactAngle();
 };
