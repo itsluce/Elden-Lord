@@ -13,7 +13,6 @@ class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
 class UAbilitySystemComponent;
-enum EDeathPose : int;
 class UAttributeComponent;
 class AWeapon;
 

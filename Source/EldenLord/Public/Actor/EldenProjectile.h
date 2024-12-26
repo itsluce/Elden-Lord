@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayEffectTypes.h"
 #include "GameFramework/Actor.h"
+#include "Interface/CombatInterface.h"
 #include "EldenProjectile.generated.h"
 
 class UNiagaraSystem;
@@ -12,7 +13,7 @@ class UProjectileMovementComponent;
 class USphereComponent;
 
 UCLASS()
-class ELDENLORD_API AEldenProjectile : public AActor
+class ELDENLORD_API AEldenProjectile : public AActor, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -20,12 +21,17 @@ public:
 	AEldenProjectile();
 	virtual void Destroyed() override;
 
+	FVector GetImpactAngle_Implementation() override;;
+
+	FVector HitImpact;
+	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> Projectile;
 
 	UPROPERTY(BlueprintReadWrite, meta=(ExposeOnSpawn=true))
 	FGameplayEffectSpecHandle DamageEffectSpecHandle;
 
+	
 protected:
 	virtual void BeginPlay() override;
 
