@@ -5,13 +5,8 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
-#include "Character/CharacterTypes.h"
-#include "Components/AttributeComponent.h"
-#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "EldenLord/EldenLord.h"
-#include "Item/Weapon/Weapon.h"
-#include "Kismet/GameplayStatics.h"
 
 ABaseCharacter::ABaseCharacter()
 {
