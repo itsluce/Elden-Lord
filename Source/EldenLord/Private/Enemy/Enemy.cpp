@@ -59,6 +59,7 @@ void AEnemy::BeginPlay()
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
 	UEldenAbilitySystemLibrary::GiveStartupAbility(this, AbilitySystemComponent);
+	
 	if (UEldenUserWidget* EldenUserWidget = Cast<UEldenUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		EldenUserWidget->SetWidgetController(this);
