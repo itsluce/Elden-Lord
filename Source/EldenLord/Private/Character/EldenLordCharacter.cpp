@@ -43,10 +43,6 @@ AEldenLordCharacter::AEldenLordCharacter()
 	// GetCharacterMovement()->bConstrainToPlane = true;
 	// GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
-	SpellWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
-	SpellWeapon->SetupAttachment(GetMesh(), FName("Hand_RSocket"));
-	SpellWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 	// bIsWaitingForSecondPress = false;
 	// FirstPressTime = 0.0f;
 	// DoublePressThreshold = 0.3f;
