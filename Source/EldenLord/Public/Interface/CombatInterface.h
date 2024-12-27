@@ -30,5 +30,5 @@ public:
 	UAnimMontage* GetHitReactMontage();
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
-	FVector GetImpactAngle();
+	void GetImpactAngle(const FVector& ImpactPoint,AActor* Hitter);
 };

@@ -13,7 +13,7 @@ class UProjectileMovementComponent;
 class USphereComponent;
 
 UCLASS()
-class ELDENLORD_API AEldenProjectile : public AActor, public ICombatInterface
+class ELDENLORD_API AEldenProjectile : public AActor
 {
 	GENERATED_BODY()
 
@@ -21,10 +21,6 @@ public:
 	AEldenProjectile();
 	virtual void Destroyed() override;
 
-	FVector GetImpactAngle_Implementation() override;;
-
-	FVector HitImpact;
-	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> Projectile;
 
@@ -59,4 +55,5 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UAudioComponent> LoopingSoundComponent;
+	
 };

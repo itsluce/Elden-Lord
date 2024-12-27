@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Interface/CombatInterface.h"
 #include "EldenGameplayAbility.generated.h"
 
 /**
@@ -21,4 +22,5 @@ public:
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Damage")
 	FScalableFloat Damage;
+
 };

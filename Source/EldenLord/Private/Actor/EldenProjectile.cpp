@@ -44,11 +44,6 @@ void AEldenProjectile::Destroyed()
 	Super::Destroyed();
 }
 
-FVector AEldenProjectile::GetImpactAngle_Implementation()
-{
-	return HitImpact;
-}
-
 void AEldenProjectile::BeginPlay()
 {
 	Super::BeginPlay();
@@ -61,12 +56,13 @@ void AEldenProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                        const FHitResult& SweepResult)
 {
-	// ICombatInterface* CombatInterface = Cast<ICombatInterface>(OtherActor);
-	// CombatInterface->Execute_GetImpactAngle(OtherActor, SweepResult.ImpactPoint);
-	HitImpact = SweepResult.ImpactPoint;
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(OtherActor);
+	CombatInterface->Execute_GetImpactAngle(OtherActor, SweepResult.ImpactPoint, OtherActor);
+
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation(), FRotator::ZeroRotator);
 	LoopingSoundComponent->Stop();
+
 	if (HasAuthority())
 	{
 		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
