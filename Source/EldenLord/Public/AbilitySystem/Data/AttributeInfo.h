@@ -39,4 +39,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FEldenAttributeInfo> AttributeInformation;
+
+	
 };

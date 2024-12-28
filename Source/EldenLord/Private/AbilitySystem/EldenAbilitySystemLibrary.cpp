@@ -47,12 +47,9 @@ void UEldenAbilitySystemLibrary::InitializeDefaultAttribute(const UObject* World
                                                             ECharacterClass CharacterClass, float Level,
                                                             UAbilitySystemComponent* ASC)
 {
-	AEldenGameMode* EldenGameMode = Cast<AEldenGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (EldenGameMode == nullptr)return;
-
 	AActor* AvatarActor = ASC->GetAvatarActor();
 
-	FCharacterClassDefaultInfo ClassDefaultInfo = EldenGameMode->CharacterClassInfo->
+	FCharacterClassDefaultInfo ClassDefaultInfo = GetCharacterClassInfo(WorldContextObject)->
 	                                                             GetClassDefaultInfo(CharacterClass);
 
 	FGameplayEffectContextHandle PrimaryEffectContextHandle = ASC->MakeEffectContext();
@@ -76,14 +73,18 @@ void UEldenAbilitySystemLibrary::InitializeDefaultAttribute(const UObject* World
 
 void UEldenAbilitySystemLibrary::GiveStartupAbility(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	AEldenGameMode* EldenGameMode = Cast<AEldenGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (EldenGameMode == nullptr)return;
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 
-	UCharacterClassInfo* CharacterClassInfo = EldenGameMode->CharacterClassInfo;
-	
-	for (TSubclassOf<UGameplayAbility>AbilityClass:CharacterClassInfo->CommonAbility)
+	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbility)
 	{
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		ASC->GiveAbility(AbilitySpec);
 	}
+}
+
+UCharacterClassInfo* UEldenAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	AEldenGameMode* EldenGameMode = Cast<AEldenGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (EldenGameMode == nullptr)return nullptr;
+	return EldenGameMode->CharacterClassInfo;
 }

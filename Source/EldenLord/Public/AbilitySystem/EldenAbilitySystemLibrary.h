@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "EldenAbilitySystemLibrary.generated.h"
 
+class UCharacterClassInfo;
 class UAbilitySystemComponent;
 enum class ECharacterClass : uint8;
 class UAttributeMenuWidgetController;
@@ -31,4 +32,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="EldenAbilitySystemLibrary|Character Class Default")
 	static void GiveStartupAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC);
+
+	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
 };
