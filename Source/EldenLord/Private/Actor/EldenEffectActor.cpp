@@ -27,6 +27,9 @@ void AEldenEffectActor::BeginPlay()
 
 void AEldenEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemy) return;;
+
+
 	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetASC == nullptr) return;
 
@@ -44,10 +47,17 @@ void AEldenEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGa
 	{
 		ActiveEffectHandles.Add(ActiveEffectHandle, TargetASC);
 	}
+	if (bDestroyOnEffectApplication || EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy ==
+		EGameplayEffectDurationType::Instant && TargetActor->ActorHasTag(FName("player")))
+	{
+		Destroy();
+	}
 }
 
 void AEldenEffectActor::OnOverlap(AActor* TargetActor)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemy) return;;
+
 	if (InstanceEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
 		ApplyEffectToTarget(TargetActor, InstanceGameplayEffectClass);
@@ -65,6 +75,8 @@ void AEldenEffectActor::OnOverlap(AActor* TargetActor)
 
 void AEldenEffectActor::OnEndOverlap(AActor* TargetActor)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemy) return;;
+
 	if (InstanceEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
 		ApplyEffectToTarget(TargetActor, InstanceGameplayEffectClass);

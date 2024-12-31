@@ -9,6 +9,8 @@
 #include "Interface/EnemyInterface.h"
 #include "Enemy.generated.h"
 
+class AEldenAIController;
+class UBehaviorTree;
 enum class ECharacterClass : uint8;
 class UWidgetComponent;
 class UEldenOverlay;
@@ -22,6 +24,8 @@ class ELDENLORD_API AEnemy : public ABaseCharacter, public IEnemyInterface
 
 public:
 	AEnemy();
+
+	virtual void PossessedBy(AController* NewController) override;
 	/*
 	 * highlight enemy
 	 */
@@ -37,14 +41,14 @@ public:
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 
 	virtual void Die() override;
-	
+
 	UPROPERTY(BlueprintReadOnly, Category="Combat")
 	bool bHitReact = false;
 
 	UPROPERTY(BlueprintReadOnly, Category="Combat")
 	float BaseWalkSpeed = 250.f;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category="Combat")
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	float LifeSpan = 5.f;
 
 protected:
@@ -62,4 +66,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
+
+	UPROPERTY(EditAnywhere, Category="AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<AEldenAIController> EldenAIController;
 };

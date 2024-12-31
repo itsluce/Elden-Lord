@@ -22,7 +22,8 @@ public class EldenLord : ModuleRules
 			"EnhancedInput",
 			"GameplayTasks",
 			"GameplayAbilities",
-			"Niagara"
+			"Niagara",
+			"AIModule"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });

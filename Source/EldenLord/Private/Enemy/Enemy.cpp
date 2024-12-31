@@ -9,6 +9,9 @@
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "AbilitySystem/EldenAttributeSet.h"
+#include "AI/EldenAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Character/EldenLordCharacter.h"
 #include "Components/AttributeComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -30,7 +33,7 @@ AEnemy::AEnemy()
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-	
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -51,6 +54,20 @@ AEnemy::AEnemy()
 	bUseControllerRotationRoll = false;
 }
 
+void AEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (!HasAuthority())return;
+	EldenAIController = Cast<AEldenAIController>(NewController);
+	EldenAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	EldenAIController->RunBehaviorTree(BehaviorTree);
+
+	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
+	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
+
+}
+
 
 void AEnemy::BeginPlay()
 {
@@ -58,7 +75,7 @@ void AEnemy::BeginPlay()
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
 	UEldenAbilitySystemLibrary::GiveStartupAbility(this, AbilitySystemComponent);
-	
+
 	if (UEldenUserWidget* EldenUserWidget = Cast<UEldenUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		EldenUserWidget->SetWidgetController(this);
@@ -93,6 +110,8 @@ void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	bHitReact = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReact ? 0.f : BaseWalkSpeed;
+	
+	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReact);
 }
 
 void AEnemy::Die()
