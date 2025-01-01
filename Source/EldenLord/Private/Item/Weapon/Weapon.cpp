@@ -7,6 +7,7 @@
 #include "Character/EldenLordCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Components/BoxComponent.h"
+#include "EldenLord/DebugMacros.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -78,6 +79,7 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		ExecuteGetHit(BoxHit);
 		CreateField(BoxHit.ImpactPoint);
 	}
+	DRAW_SPHERE(BoxHit.Location);
 }
 
 bool AWeapon::ActorIsSameType(AActor* OtherActor)

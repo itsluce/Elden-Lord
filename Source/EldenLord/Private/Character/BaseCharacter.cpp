@@ -116,6 +116,20 @@ void ABaseCharacter::InitAbilityActorInfo()
 {
 }
 
+void ABaseCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
+{
+	if (AActor* ChildActor = MeleeWeapon->GetChildActor())
+	{
+		AWeapon* Weapon = Cast<AWeapon>(ChildActor);
+		if (Weapon && Weapon->GetWeaponBox())
+		{
+			Weapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
+			Weapon->IgnoreActors.Empty();
+		}
+	}
+	
+}
+
 void ABaseCharacter::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributeClass, float Level) const
 {
 	checkf(IsValid(GetAbilitySystemComponent()), TEXT("You must initialize a valid GetAbilitySystemComponent"));

@@ -10,8 +10,10 @@
  * 
  */
 UCLASS()
-class ELDENLORD_API UEldenMeleeAttack : public UEldenDamageGameplayAbility
+class ELDENLORD_API UEldenMeleeAttack : public UEldenDamageGameplayAbility,public ICombatInterface
 {
 	GENERATED_BODY()
+public:
 	
+	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
 };

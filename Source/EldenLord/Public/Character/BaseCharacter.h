@@ -48,6 +48,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
 
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
 	/*
 	 * Play Montage Function
 	 */
