@@ -74,7 +74,7 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-	UEldenAbilitySystemLibrary::GiveStartupAbility(this, AbilitySystemComponent);
+	UEldenAbilitySystemLibrary::GiveStartupAbility(this, AbilitySystemComponent,CharacterClass);
 
 	if (UEldenUserWidget* EldenUserWidget = Cast<UEldenUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -134,6 +134,16 @@ void AEnemy::HighlightActor()
 void AEnemy::UnHighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
+}
+
+void AEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AEnemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
 }
 
 

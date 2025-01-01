@@ -67,8 +67,13 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluateParams.SourceTags = SourceTags;
 
 	//Get Damage Set by Caller Magnitude
-
-	float Damage = Spec.GetSetByCallerMagnitude(FEldenGameplayTags::Get().Damage);
+	float Damage = 0.f;
+	
+	for (FGameplayTag DamageTypeTag : FEldenGameplayTags::Get().DamageTypes)
+	{
+	const float	DamageTypeValue = Spec.GetSetByCallerMagnitude(DamageTypeTag);
+		Damage += DamageTypeValue;
+	}
 
 	/*
 	 *  Capture Block Chance on Target
@@ -87,7 +92,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	/*
 	 *  Capture Armor and Armor Penetration on Target
 	*/
-	
+
 	UCharacterClassInfo* CharacterClassInfo = UEldenAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 
 	FRealCurve* ArmorCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(
@@ -140,7 +145,8 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	const float EffectiveCriticalHitResistance = TargetCriticalHitResistance * CriticalHitResistanceCoefficients;
 
-	const bool bCriticalHitChance = FMath::RandRange(1, 100) < (SourceCriticalHitChance - EffectiveCriticalHitResistance);
+	const bool bCriticalHitChance = FMath::RandRange(1, 100) < (SourceCriticalHitChance -
+		EffectiveCriticalHitResistance);
 
 	// Double the Damage, Add CriticalHitDamage, and Subtract CriticalHitResistance
 	Damage = bCriticalHitChance ? (Damage * 2.f) + SourceCriticalHitDamage : Damage;

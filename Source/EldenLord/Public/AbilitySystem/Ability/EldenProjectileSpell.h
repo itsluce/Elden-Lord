@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Ability/EldenGameplayAbility.h"
+#include "EldenDamageGameplayAbility.h"
 #include "EldenProjectileSpell.generated.h"
 
 class AEldenProjectile;
@@ -11,7 +11,7 @@ class AEldenProjectile;
  * 
  */
 UCLASS()
-class ELDENLORD_API UEldenProjectileSpell : public UEldenGameplayAbility
+class ELDENLORD_API UEldenProjectileSpell : public UEldenDamageGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -26,6 +26,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AEldenProjectile> ProjectileClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UGameplayEffect> DamageEffectClass;
+	
 };

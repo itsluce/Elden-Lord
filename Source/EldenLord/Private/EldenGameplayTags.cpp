@@ -135,12 +135,28 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Damage")
 	);
 
+	GameplayTags.Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Fire"),
+		FString("Fire Damage")
+	);
+	
+	GameplayTags.DamageTypes.Add(GameplayTags.Damage);
+
 	/*
-     * Effect Tags
+     *  Effect Tags
      */
 
 	GameplayTags.Effect_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Effect.HitReact"),
 		FString("Effect HitReact")
+	);
+	
+	/*
+     *  Abilities Tags
+     */
+
+	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack"),
+		FString("Attack Ability")
 	);
 }

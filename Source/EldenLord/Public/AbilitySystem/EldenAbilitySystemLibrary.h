@@ -31,7 +31,7 @@ public:
 										   float Level, UAbilitySystemComponent* ASC);
 	
 	UFUNCTION(BlueprintCallable, Category="EldenAbilitySystemLibrary|Character Class Default")
-	static void GiveStartupAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC);
+	static void GiveStartupAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC,ECharacterClass CharacterClass);
 
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
 };

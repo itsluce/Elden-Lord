@@ -6,6 +6,7 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameMode/EldenGameMode.h"
 #include "HUD/EldenHUD.h"
+#include "Interface/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/EldenPlayerState.h"
 #include "UI/Controller/EldenWidgetController.h"
@@ -50,7 +51,7 @@ void UEldenAbilitySystemLibrary::InitializeDefaultAttribute(const UObject* World
 	AActor* AvatarActor = ASC->GetAvatarActor();
 
 	FCharacterClassDefaultInfo ClassDefaultInfo = GetCharacterClassInfo(WorldContextObject)->
-	                                                             GetClassDefaultInfo(CharacterClass);
+		GetClassDefaultInfo(CharacterClass);
 
 	FGameplayEffectContextHandle PrimaryEffectContextHandle = ASC->MakeEffectContext();
 	PrimaryEffectContextHandle.AddSourceObject(AvatarActor);
@@ -71,14 +72,25 @@ void UEldenAbilitySystemLibrary::InitializeDefaultAttribute(const UObject* World
 	ASC->ApplyGameplayEffectSpecToSelf(*VitalAttributeSpecHandle.Data.Get());
 }
 
-void UEldenAbilitySystemLibrary::GiveStartupAbility(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+void UEldenAbilitySystemLibrary::GiveStartupAbility(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
+                                                    ECharacterClass CharacterClass)
 {
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
-
+	if (CharacterClassInfo == nullptr) return;
 	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbility)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		ASC->GiveAbility(AbilitySpec);
+	}
+	const FCharacterClassDefaultInfo& DefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	for (TSubclassOf<UGameplayAbility> AbilityClass : DefaultInfo.StartupAbilities)
+	{
+		ICombatInterface* CombatInterface = Cast<ICombatInterface>(ASC->GetAvatarActor());
+		if (CombatInterface)
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, CombatInterface->GetPlayerLevel());
+			ASC->GiveAbility(AbilitySpec);
+		}
 	}
 }
 
