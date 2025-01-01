@@ -25,7 +25,7 @@ void UEldenProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (CombatInterface)
 	{
-		FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
+		FVector SocketLocation = CombatInterface->Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo());
 		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 
 		FTransform SpawnTransform;

@@ -5,24 +5,30 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Components/CapsuleComponent.h"
 #include "EldenLord/EldenLord.h"
+#include "Components/BoxComponent.h"
+#include "Item/Weapon/Weapon.h"
+#include "Item/Item.h"
 
 ABaseCharacter::ABaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	// PrimaryActorTick.bStartWithTickEnabled = true;
 	// GetMesh()->bReceivesDecals = false;
-	
+
 	SpellWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Spell Weapon");
 	SpellWeapon->SetupAttachment(GetMesh(), FName("Hand_RSocket"));
 	SpellWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-
-	MaleWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Male Weapon");
-	MaleWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
-	MaleWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
+	MeleeWeapon = CreateDefaultSubobject<UChildActorComponent>("Melee Weapon");
+	MeleeWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
+	
+	// MainWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Main Weapon");
+	// MainWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
+	// MainWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
@@ -35,9 +41,9 @@ UAnimMontage* ABaseCharacter::GetHitReactMontage_Implementation()
 
 void ABaseCharacter::Die()
 {
-	if (MaleWeapon)
+	if (MeleeWeapon)
 	{
-		MaleWeapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+		MeleeWeapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	}
 	if (SpellWeapon)
 	{
@@ -46,13 +52,28 @@ void ABaseCharacter::Die()
 	MulticastHandleDeath();
 }
 
+AActor* ABaseCharacter::GetAvatar_Implementation()
+{
+	return this;
+}
+
+bool ABaseCharacter::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+
 void ABaseCharacter::MulticastHandleDeath_Implementation()
 {
-	if (MaleWeapon)
+	if (MeleeWeapon)
 	{
-		MaleWeapon->SetSimulatePhysics(true);
-		MaleWeapon->SetEnableGravity(true);
-		MaleWeapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+		if (AActor* ChildActor = MeleeWeapon->GetChildActor())
+		{
+			AWeapon* Weapon = Cast<AWeapon>(ChildActor);
+			Weapon->GetWeaponMesh()->SetSimulatePhysics(true);
+			Weapon->GetWeaponMesh()->SetEnableGravity(true);
+			Weapon->GetWeaponMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+		}
 	}
 	if (SpellWeapon)
 	{
@@ -69,6 +90,8 @@ void ABaseCharacter::MulticastHandleDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Dissolve();
+	
+	bDead = true;
 }
 
 void ABaseCharacter::BeginPlay()
@@ -76,10 +99,17 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-FVector ABaseCharacter::GetCombatSocketLocation()
+FVector ABaseCharacter::GetCombatSocketLocation_Implementation()
 {
-	check(SpellWeapon);
-	return SpellWeapon->GetSocketLocation(WeaponTipSocketName);
+	if (SpellWeapon && CharacterClass == ECharacterClass::Ranger)
+	{
+		return SpellWeapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	if (MeleeWeapon && CharacterClass == ECharacterClass::Warrior)
+	{
+		return MeleeWeapon->GetSocketLocation(WeaponMeleeTipSocketName);
+	}
+	return FVector();
 }
 
 void ABaseCharacter::InitAbilityActorInfo()
@@ -122,9 +152,16 @@ void ABaseCharacter::Dissolve()
 	}
 	if (IsValid(WeaponDissolveMaterialInstance))
 	{
-		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
+		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(
+			WeaponDissolveMaterialInstance, this);
 		SpellWeapon->SetMaterial(0, DynamicMatInst);
-		MaleWeapon->SetMaterial(0, DynamicMatInst);
+		
+		if (AActor* ChildActor = MeleeWeapon->GetChildActor())
+		{
+			AWeapon* Weapon = Cast<AWeapon>(ChildActor);
+			Weapon->GetWeaponMesh()->SetMaterial(0, DynamicMatInst);
+		}
+		
 
 		StartWeaponDissolveTimeline(DynamicMatInst);
 	}

@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
+#include "Interface/EnemyInterface.h"
 #include "Interface/HitInterface.h"
 #include "BaseCharacter.generated.h"
 
@@ -15,6 +17,7 @@ class UAttributeSet;
 class UAbilitySystemComponent;
 class UAttributeComponent;
 class AWeapon;
+enum class ECharacterClass : uint8;
 
 UCLASS()
 class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface, public IAbilitySystemInterface,
@@ -26,14 +29,20 @@ public:
 	ABaseCharacter();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
+	/*  Combat Interface  */
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
-
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-
 	virtual void Die() override;
-
+	virtual AActor* GetAvatar_Implementation() override;
+	virtual bool IsDead_Implementation() const override;
+	/*  End Combat Interface  */
+	
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 protected:
 	virtual void BeginPlay() override;
@@ -42,25 +51,29 @@ protected:
 	/*
 	 * Play Montage Function
 	 */
-
+	
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UChildActorComponent* MeleeWeapon;
+	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> SpellWeapon;
 
-	UPROPERTY(EditAnywhere, Category="Combat")
-	TObjectPtr<USkeletalMeshComponent> MaleWeapon;
+	// UPROPERTY(EditAnywhere, Category="Combat")
+	// TObjectPtr<USkeletalMeshComponent> MainWeapon;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
 
-	virtual FVector GetCombatSocketLocation() override;
-	/*
-	 * Animation montage
-	 */
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName WeaponMeleeTipSocketName;
 
+	virtual FVector GetCombatSocketLocation_Implementation();
 
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
+	bool bDead = false;
+	
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 

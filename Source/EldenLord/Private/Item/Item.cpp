@@ -9,6 +9,7 @@
 AItem::AItem()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMesh"));
 	ItemMesh->SetCollisionResponseToChannels(ECR_Ignore);
 	ItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
