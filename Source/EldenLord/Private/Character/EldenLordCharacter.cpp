@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "EldenDbug.h"
+#include "EldenGameplayTags.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AttributeComponent.h"

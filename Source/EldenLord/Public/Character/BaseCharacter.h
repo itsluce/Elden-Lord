@@ -33,6 +33,8 @@ public:
 	/*  Combat Interface  */
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	virtual UAnimMontage* GetAttackMontage_Implementation() override;
+	virtual TArray<FName> GetAttackMontageSection_Implementation() override;
 	virtual void Die() override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual bool IsDead_Implementation() const override;
@@ -50,6 +52,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
 	/*
 	 * Play Montage Function
 	 */
@@ -116,4 +121,10 @@ private:
 
 	UPROPERTY(EditAnywhere, Category=Combat)
 	TObjectPtr<UAnimMontage> HitReactMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> AttackMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TArray<FName> AttackMontageSection;
 };

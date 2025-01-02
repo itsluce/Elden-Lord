@@ -39,6 +39,16 @@ UAnimMontage* ABaseCharacter::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
+UAnimMontage* ABaseCharacter::GetAttackMontage_Implementation()
+{
+	return AttackMontage;
+}
+
+TArray<FName> ABaseCharacter::GetAttackMontageSection_Implementation()
+{
+	return AttackMontageSection;
+}
+
 void ABaseCharacter::Die()
 {
 	if (MeleeWeapon)
@@ -116,20 +126,6 @@ void ABaseCharacter::InitAbilityActorInfo()
 {
 }
 
-void ABaseCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
-{
-	if (AActor* ChildActor = MeleeWeapon->GetChildActor())
-	{
-		AWeapon* Weapon = Cast<AWeapon>(ChildActor);
-		if (Weapon && Weapon->GetWeaponBox())
-		{
-			Weapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
-			Weapon->IgnoreActors.Empty();
-		}
-	}
-	
-}
-
 void ABaseCharacter::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributeClass, float Level) const
 {
 	checkf(IsValid(GetAbilitySystemComponent()), TEXT("You must initialize a valid GetAbilitySystemComponent"));
@@ -184,4 +180,25 @@ void ABaseCharacter::Dissolve()
 UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void ABaseCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
+{
+	if (AActor* ChildActor = MeleeWeapon->GetChildActor())
+	{
+		AWeapon* Weapon = Cast<AWeapon>(ChildActor);
+		if (Weapon && Weapon->GetWeaponBox())
+		{
+			Weapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
+			Weapon->IgnoreActors.Empty();
+		}
+	}
+	
+}
+void ABaseCharacter::SetCharacterCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
+{
+		if (GetMesh())
+		{
+			GetMesh()->SetCollisionEnabled(CollisionEnabled);
+		}
 }

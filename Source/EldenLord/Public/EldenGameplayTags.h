@@ -40,6 +40,8 @@ public:
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
+	FGameplayTag Damage_Physical;
+	FGameplayTag Damage_Magic;
 	TArray<FGameplayTag> DamageTypes;
 	
 	FGameplayTag Effect_HitReact;

@@ -31,6 +31,12 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UAnimMontage* GetAttackMontage();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	TArray<FName> GetAttackMontageSection();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void GetImpactAngle(const FVector& ImpactPoint, AActor* Hitter);

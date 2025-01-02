@@ -140,6 +140,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Fire Damage")
 	);
 	
+	GameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Physical"),
+		FString("Physical Damage")
+	);
+	
+	GameplayTags.Damage_Magic = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Magic"),
+		FString("Magic Damage")
+	);
+	
 	GameplayTags.DamageTypes.Add(GameplayTags.Damage);
 
 	/*
