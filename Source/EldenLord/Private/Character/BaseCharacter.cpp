@@ -24,11 +24,11 @@ ABaseCharacter::ABaseCharacter()
 
 	MeleeWeapon = CreateDefaultSubobject<UChildActorComponent>("Melee Weapon");
 	MeleeWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
-	
+
 	// MainWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Main Weapon");
 	// MainWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
 	// MainWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	
+
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
@@ -100,7 +100,7 @@ void ABaseCharacter::MulticastHandleDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Dissolve();
-	
+
 	bDead = true;
 }
 
@@ -165,13 +165,13 @@ void ABaseCharacter::Dissolve()
 		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(
 			WeaponDissolveMaterialInstance, this);
 		SpellWeapon->SetMaterial(0, DynamicMatInst);
-		
+
 		if (AActor* ChildActor = MeleeWeapon->GetChildActor())
 		{
 			AWeapon* Weapon = Cast<AWeapon>(ChildActor);
 			Weapon->GetWeaponMesh()->SetMaterial(0, DynamicMatInst);
 		}
-		
+
 
 		StartWeaponDissolveTimeline(DynamicMatInst);
 	}
@@ -193,12 +193,12 @@ void ABaseCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type Collision
 			Weapon->IgnoreActors.Empty();
 		}
 	}
-	
 }
-void ABaseCharacter::SetCharacterCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
+
+void ABaseCharacter::SetCharacterCollisionResponse(ECollisionResponse CollisionResponse)
 {
-		if (GetMesh())
-		{
-			GetMesh()->SetCollisionEnabled(CollisionEnabled);
-		}
+	if (GetMesh())
+	{
+		GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, CollisionResponse);
+	}
 }

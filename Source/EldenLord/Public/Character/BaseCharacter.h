@@ -54,7 +54,7 @@ protected:
 	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
 
 	UFUNCTION(BlueprintCallable)
-	void SetCharacterCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
+	void SetCharacterCollisionResponse(ECollisionResponse CollisionResponse);
 	/*
 	 * Play Montage Function
 	 */

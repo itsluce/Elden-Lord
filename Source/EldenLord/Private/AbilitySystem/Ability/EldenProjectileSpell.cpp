@@ -23,7 +23,7 @@ void UEldenProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 	if (!bIsServer)return;
 
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
-	if (CombatInterface)
+	if (CombatInterface && !CombatInterface->Execute_IsDead(GetAvatarActorFromActorInfo()))
 	{
 		FVector SocketLocation = CombatInterface->Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo());
 		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
