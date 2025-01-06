@@ -64,7 +64,7 @@ protected:
 	virtual void InitAbilityActorInfo();
 
 	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
+	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled, AWeapon* NewWeapon);
 
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterCollisionResponse(ECollisionResponse CollisionResponse);
@@ -74,9 +74,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> SpellWeapon;
-	
-	UPROPERTY(EditAnywhere, Category="Combat")
-	AWeapon* NewWeapon;
 
 	// UPROPERTY(EditAnywhere, Category="Combat")
 	// TObjectPtr<USkeletalMeshComponent> MainWeapon;

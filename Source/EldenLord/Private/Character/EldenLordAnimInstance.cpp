@@ -4,7 +4,6 @@
 #include "Character/EldenLordAnimInstance.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
-#include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "Character/EldenLordCharacter.h"
 
 void UEldenLordAnimInstance::NativeInitializeAnimation()
