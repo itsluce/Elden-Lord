@@ -21,16 +21,45 @@ class ELDENLORD_API ICombatInterface
 
 public:
 	virtual int32 GetPlayerLevel();
-	virtual FVector GetCombatSocketLocation();
+	virtual void Die() = 0;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	FVector GetCombatSocketLocation();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetFacingTarget(const FVector& Location);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UAnimMontage* GetAttackMontage();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UAnimMontage* GetSummonMontage();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	TArray<FName> GetAttackMontageSection();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void GetImpactAngle(const FVector& ImpactPoint, AActor* Hitter);
 
-	virtual void Die() = 0;
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool IsDead() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	AActor* GetAvatar();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	int32 GetMinionCount();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void UpdateMinionCount(int32 Amount);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	int32 UpdateAttackCount();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void GetHit(const FVector& ImpactPoint,AActor* Hitter);
+	
 };

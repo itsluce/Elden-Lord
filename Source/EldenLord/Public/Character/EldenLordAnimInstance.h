@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharacterTypes.h"
+#include "GameplayTagContainer.h"
 #include "Animation/AnimInstance.h"
 #include "EldenLordAnimInstance.generated.h"
 
@@ -14,6 +15,7 @@ UCLASS()
 class ELDENLORD_API UEldenLordAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
+
 public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
@@ -26,17 +28,20 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = Movement)
 	float GroundSpeed;
-	
+
 	UPROPERTY(BlueprintReadWrite, Category = Movement)
 	bool IsFalling;
 
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	ECharacterState CharacterState;
-	
+
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	EActionState ActionState;
-	
+
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	TEnumAsByte<EDeathPose> DeathPose;
 
+protected:
+	UFUNCTION(BlueprintPure, meta = (BlueprintThreadSafe))
+	bool DoesOwnerHaveTag(FGameplayTag TagToCheck) const;
 };

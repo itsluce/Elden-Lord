@@ -28,10 +28,18 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="EldenAbilitySystemLibrary|Character Class Default")
 	static void InitializeDefaultAttribute(const UObject* WorldContextObject, ECharacterClass CharacterClass,
-										   float Level, UAbilitySystemComponent* ASC);
-	
+	                                       float Level, UAbilitySystemComponent* ASC);
+
 	UFUNCTION(BlueprintCallable, Category="EldenAbilitySystemLibrary|Character Class Default")
-	static void GiveStartupAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC,ECharacterClass CharacterClass);
+	static void GiveStartupAbility(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
+	                               ECharacterClass CharacterClass);
 
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category="EldenAbilitySystemLibrary|GameplayMachanics")
+	static void GetLivePlayerWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors,
+	                                      const TArray<AActor*>& ActorToIgnore, float Radius,
+	                                      const FVector& SphereOrigin);
+	UFUNCTION(BlueprintPure, Category = "AuraAbilitySystemLibrary|GameplayMechanics")
+	static bool IsNotFriend(AActor* FirstActor, AActor* SecondActor);
 };

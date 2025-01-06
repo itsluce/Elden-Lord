@@ -100,3 +100,40 @@ UCharacterClassInfo* UEldenAbilitySystemLibrary::GetCharacterClassInfo(const UOb
 	if (EldenGameMode == nullptr)return nullptr;
 	return EldenGameMode->CharacterClassInfo;
 }
+
+void UEldenAbilitySystemLibrary::GetLivePlayerWithinRadius(const UObject* WorldContextObject,
+                                                           TArray<AActor*>& OutOverlappingActors,
+                                                           const TArray<AActor*>& ActorToIgnore, float Radius,
+                                                           const FVector& SphereOrigin)
+{
+	FCollisionQueryParams SphereParams;
+	SphereParams.AddIgnoredActors(ActorToIgnore);
+
+	TArray<FOverlapResult> OverlapResults;
+	if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		World->OverlapMultiByObjectType(OverlapResults, SphereOrigin, FQuat::Identity,
+		                                FCollisionObjectQueryParams(
+			                                FCollisionObjectQueryParams::InitType::AllDynamicObjects),
+		                                FCollisionShape::MakeSphere(Radius), SphereParams);
+
+		for (FOverlapResult& OverlapResult : OverlapResults)
+		{
+			if (
+				OverlapResult.GetActor()->Implements<UCombatInterface>() &&
+				!ICombatInterface::Execute_IsDead(OverlapResult.GetActor())
+			)
+			{
+				OutOverlappingActors.AddUnique(OverlapResult.GetActor());
+			}
+		}
+	}
+}
+
+bool UEldenAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
+{
+	const bool bBothArePlayers = FirstActor->ActorHasTag(FName("Player")) && SecondActor->ActorHasTag(FName("Player"));
+	const bool bBothAreEnemies = FirstActor->ActorHasTag(FName("Enemy")) && SecondActor->ActorHasTag(FName("Enemy"));
+	const bool bFriends = bBothArePlayers || bBothAreEnemies;
+	return !bFriends;
+}

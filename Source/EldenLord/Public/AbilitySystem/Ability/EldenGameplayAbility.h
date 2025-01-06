@@ -7,6 +7,12 @@
 #include "Interface/CombatInterface.h"
 #include "EldenGameplayAbility.generated.h"
 
+UENUM(BlueprintType)
+enum class EEldenAbilityActivationPolicy : uint8
+{
+	OnTriggered,
+	OnGiven
+};
 /**
  * 
  */
@@ -20,7 +26,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	FGameplayTag StartUpInputTag;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Damage")
-	FScalableFloat Damage;
-
+	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
+	UPROPERTY(EditDefaultsOnly, Category = "WarriorAbility")
+	EEldenAbilityActivationPolicy AbilityActivationPolicy = EEldenAbilityActivationPolicy::OnTriggered;
 };

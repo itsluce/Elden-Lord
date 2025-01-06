@@ -15,6 +15,7 @@ enum class ECharacterClass : uint8
 	Hyper,
 	Warrior,
 	Ranger,
+	Shaman
 };
 
 USTRUCT(BlueprintType)

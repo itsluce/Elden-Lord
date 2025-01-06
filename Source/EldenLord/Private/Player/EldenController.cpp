@@ -36,12 +36,12 @@ void AEldenController::BeginPlay()
 		Subsystem->AddMappingContext(EldenContext, 0);
 	}
 
-	bShowMouseCursor = true;
-	FInputModeGameOnly InputModeData;
-	SetInputMode(InputModeData);
 	// bShowMouseCursor = true;
-	DefaultMouseCursor = EMouseCursor::Default;
-	//
+	// FInputModeGameOnly InputModeData;
+	// SetInputMode(InputModeData);
+	// DefaultMouseCursor = EMouseCursor::Default;
+	
+	// bShowMouseCursor = true;
 	// FInputModeGameAndUI InputModeData;
 	// InputModeData.SetHideCursorDuringCapture(false);
 	// SetInputMode(InputModeData);

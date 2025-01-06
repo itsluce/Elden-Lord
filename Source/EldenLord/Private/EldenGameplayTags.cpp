@@ -125,6 +125,15 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("InputTag.4"),
 		FString("Input Tag for 4 Key")
 	);
+	
+	GameplayTags.InputTag_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.TargetLock"),
+		FString("Input Tag for Target Lock")
+	);
+	GameplayTags.InputTag_Toggleable = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Toggleable"),
+		FString("Input Tag for Toggleable")
+	);
 
 	/*
 	 * Damage Tags
@@ -138,6 +147,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Damage.Fire"),
 		FString("Fire Damage")
+	);
+	
+	GameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Physical"),
+		FString("Physical Damage")
+	);
+	
+	GameplayTags.Damage_Magic = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Magic"),
+		FString("Magic Damage")
 	);
 	
 	GameplayTags.DamageTypes.Add(GameplayTags.Damage);
@@ -158,5 +177,20 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Attack"),
 		FString("Attack Ability")
+	);
+	
+	GameplayTags.Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Summon"),
+		FString("Summon Ability")
+	);
+	
+	GameplayTags.Abilities_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.TargetLock"),
+		FString("Target Lock Ability")
+	);
+	
+	GameplayTags.Animation_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Animation.TargetLock"),
+		FString("Target Lock Animation")
 	);
 }

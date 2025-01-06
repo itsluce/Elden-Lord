@@ -5,23 +5,25 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Components/CapsuleComponent.h"
 #include "EldenLord/EldenLord.h"
+#include "Components/BoxComponent.h"
+#include "Item/Weapon/Weapon.h"
 
 ABaseCharacter::ABaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	// PrimaryActorTick.bStartWithTickEnabled = true;
 	// GetMesh()->bReceivesDecals = false;
-	
+
 	SpellWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Spell Weapon");
 	SpellWeapon->SetupAttachment(GetMesh(), FName("Hand_RSocket"));
 	SpellWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-
-	MaleWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Male Weapon");
-	MaleWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
-	MaleWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// MainWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Main Weapon");
+	// MainWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
+	// MainWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
@@ -33,12 +35,27 @@ UAnimMontage* ABaseCharacter::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
+UAnimMontage* ABaseCharacter::GetAttackMontage_Implementation()
+{
+	return AttackMontage;
+}
+
+UAnimMontage* ABaseCharacter::GetSummonMontage_Implementation()
+{
+	return SummonMontage;
+}
+
+TArray<FName> ABaseCharacter::GetAttackMontageSection_Implementation()
+{
+	return AttackMontageSection;
+}
+
 void ABaseCharacter::Die()
 {
-	if (MaleWeapon)
-	{
-		MaleWeapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
-	}
+	// if (MeleeWeapon)
+	// {
+	// 	MeleeWeapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+	// }
 	if (SpellWeapon)
 	{
 		SpellWeapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
@@ -46,14 +63,44 @@ void ABaseCharacter::Die()
 	MulticastHandleDeath();
 }
 
+AActor* ABaseCharacter::GetAvatar_Implementation()
+{
+	return this;
+}
+
+bool ABaseCharacter::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+int32 ABaseCharacter::GetMinionCount_Implementation()
+{
+	return MinionsCount;
+}
+
+void ABaseCharacter::UpdateMinionCount_Implementation(int32 Amount)
+{
+	MinionsCount += Amount;
+}
+
+int32 ABaseCharacter::UpdateAttackCount_Implementation()
+{
+	return AttackCount;
+}
+
+
 void ABaseCharacter::MulticastHandleDeath_Implementation()
 {
-	if (MaleWeapon)
-	{
-		MaleWeapon->SetSimulatePhysics(true);
-		MaleWeapon->SetEnableGravity(true);
-		MaleWeapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	}
+	// if (MeleeWeapon)
+	// {
+	// 	if (AActor* ChildActor = MeleeWeapon->GetChildActor())
+	// 	{
+	// 		AWeapon* Weapon = Cast<AWeapon>(ChildActor);
+	// 		Weapon->GetWeaponMesh()->SetSimulatePhysics(true);
+	// 		Weapon->GetWeaponMesh()->SetEnableGravity(true);
+	// 		Weapon->GetWeaponMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	// 	}
+	// }
 	if (SpellWeapon)
 	{
 		SpellWeapon->SetSimulatePhysics(true);
@@ -69,6 +116,8 @@ void ABaseCharacter::MulticastHandleDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Dissolve();
+
+	bDead = true;
 }
 
 void ABaseCharacter::BeginPlay()
@@ -76,10 +125,17 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-FVector ABaseCharacter::GetCombatSocketLocation()
+FVector ABaseCharacter::GetCombatSocketLocation_Implementation()
 {
-	check(SpellWeapon);
-	return SpellWeapon->GetSocketLocation(WeaponTipSocketName);
+	if (SpellWeapon && CharacterClass != ECharacterClass::Warrior)
+	{
+		return SpellWeapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	// if (MeleeWeapon && CharacterClass == ECharacterClass::Warrior)
+	// {
+	// 	return MeleeWeapon->GetSocketLocation(WeaponMeleeTipSocketName);
+	// }
+	return FVector();
 }
 
 void ABaseCharacter::InitAbilityActorInfo()
@@ -122,9 +178,16 @@ void ABaseCharacter::Dissolve()
 	}
 	if (IsValid(WeaponDissolveMaterialInstance))
 	{
-		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
+		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(
+			WeaponDissolveMaterialInstance, this);
 		SpellWeapon->SetMaterial(0, DynamicMatInst);
-		MaleWeapon->SetMaterial(0, DynamicMatInst);
+
+		// if (AActor* ChildActor = MeleeWeapon->GetChildActor())
+		// {
+		// 	AWeapon* Weapon = Cast<AWeapon>(ChildActor);
+		// 	Weapon->GetWeaponMesh()->SetMaterial(0, DynamicMatInst);
+		// }
+
 
 		StartWeaponDissolveTimeline(DynamicMatInst);
 	}
@@ -133,4 +196,29 @@ void ABaseCharacter::Dissolve()
 UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void ABaseCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
+{
+	if (NewWeapon)
+	{
+		AWeapon* Weapon = Cast<AWeapon>(NewWeapon);
+		if (Weapon)
+		{
+			if (UBoxComponent* WeaponBox = Weapon->GetWeaponBox())
+			{
+				WeaponBox->SetCollisionEnabled(CollisionEnabled);
+				Weapon->IgnoreActors.Empty();
+			}
+		}
+	}
+}
+
+
+void ABaseCharacter::SetCharacterCollisionResponse(ECollisionResponse CollisionResponse)
+{
+	if (GetMesh())
+	{
+		GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, CollisionResponse);
+	}
 }

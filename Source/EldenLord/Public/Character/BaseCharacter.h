@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
+#include "Interface/EnemyInterface.h"
 #include "Interface/HitInterface.h"
 #include "BaseCharacter.generated.h"
 
@@ -15,6 +17,7 @@ class UAttributeSet;
 class UAbilitySystemComponent;
 class UAttributeComponent;
 class AWeapon;
+enum class ECharacterClass : uint8;
 
 UCLASS()
 class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface, public IAbilitySystemInterface,
@@ -26,41 +29,71 @@ public:
 	ABaseCharacter();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
+	/*  Combat Interface  */
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
-
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-
+	virtual UAnimMontage* GetAttackMontage_Implementation() override;
+	virtual UAnimMontage* GetSummonMontage_Implementation() override;
+	virtual TArray<FName> GetAttackMontageSection_Implementation() override;
 	virtual void Die() override;
-
+	virtual AActor* GetAvatar_Implementation() override;
+	virtual bool IsDead_Implementation() const override;
+	virtual int32 GetMinionCount_Implementation() override;
+	virtual void UpdateMinionCount_Implementation(int32 Amount) override;
+	virtual int32 UpdateAttackCount_Implementation() override;
+	/*  End Combat Interface  */
+	
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool IsAttacking;
+	
+	UPROPERTY(BlueprintReadWrite)
+	bool SaveAttack;
+	
+	UPROPERTY(BlueprintReadWrite)
+	bool AttackCount;
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
 
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterCollisionResponse(ECollisionResponse CollisionResponse);
 	/*
 	 * Play Montage Function
 	 */
-
+	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> SpellWeapon;
-
+	
 	UPROPERTY(EditAnywhere, Category="Combat")
-	TObjectPtr<USkeletalMeshComponent> MaleWeapon;
+	AWeapon* NewWeapon;
+
+	// UPROPERTY(EditAnywhere, Category="Combat")
+	// TObjectPtr<USkeletalMeshComponent> MainWeapon;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
 
-	virtual FVector GetCombatSocketLocation() override;
-	/*
-	 * Animation montage
-	 */
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName WeaponMeleeTipSocketName;
 
+	virtual FVector GetCombatSocketLocation_Implementation();
 
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
+	bool bDead = false;
+	
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 
@@ -95,10 +128,20 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 
+	int32 MinionsCount = 0;
 private:
 	UPROPERTY(EditAnywhere, Category=Abilities)
 	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
 
 	UPROPERTY(EditAnywhere, Category=Combat)
 	TObjectPtr<UAnimMontage> HitReactMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> AttackMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> SummonMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TArray<FName> AttackMontageSection;
 };

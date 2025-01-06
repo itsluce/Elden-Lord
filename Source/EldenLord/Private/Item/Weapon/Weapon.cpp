@@ -3,20 +3,33 @@
 
 #include "Item/Weapon/Weapon.h"
 
+#include "NiagaraComponent.h"
 #include "Character/EldenLordCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Components/BoxComponent.h"
-#include "Interface/HitInterface.h"
+#include "EldenLord/DebugMacros.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 AWeapon::AWeapon()
 {
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
+	WeaponMesh->SetCollisionResponseToChannels(ECR_Ignore);
+	WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RootComponent = WeaponMesh;
+
+	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
+	Sphere->SetupAttachment(GetRootComponent());
+
+	WeaponEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Embers"));
+	WeaponEffect->SetupAttachment(GetRootComponent());
+	
 	WeaponBox = CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponBox"));
 	WeaponBox->SetupAttachment(GetRootComponent());
 	WeaponBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	WeaponBox->SetCollisionResponseToAllChannels(ECR_Overlap);
 	WeaponBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+	
 	BoxTracStart = CreateDefaultSubobject<USceneComponent>(TEXT("Box Trac Start"));
 	BoxTracStart->SetupAttachment(GetRootComponent());
 	BoxTracEnd = CreateDefaultSubobject<USceneComponent>(TEXT("Box Trac End"));
@@ -27,7 +40,6 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	WeaponBox->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnBoxOverlap);
-
 }
 
 void AWeapon::Equip(USceneComponent* InParent, FName InSocketName, AActor* NewOwner, APawn* NewInstigator)
@@ -49,7 +61,7 @@ void AWeapon::DisableSphereCollision()
 void AWeapon::AttachMeshToSocket(USceneComponent* InParent, const FName& InSocketName)
 {
 	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
-	ItemMesh->AttachToComponent(InParent, TransformRules, InSocketName);
+	WeaponMesh->AttachToComponent(InParent, TransformRules, InSocketName);
 }
 
 void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -76,7 +88,7 @@ bool AWeapon::ActorIsSameType(AActor* OtherActor)
 
 void AWeapon::ExecuteGetHit(FHitResult BoxHit)
 {
-	IHitInterface* HitInterface = Cast<IHitInterface>(BoxHit.GetActor());
+	ICombatInterface* HitInterface = Cast<ICombatInterface>(BoxHit.GetActor());
 	if (HitInterface)
 	{
 		HitInterface->Execute_GetHit(BoxHit.GetActor(), BoxHit.ImpactPoint,GetOwner());

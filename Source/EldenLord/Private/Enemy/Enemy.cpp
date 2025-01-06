@@ -64,8 +64,10 @@ void AEnemy::PossessedBy(AController* NewController)
 	EldenAIController->RunBehaviorTree(BehaviorTree);
 
 	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
-	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
-
+	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"),
+	                                                            CharacterClass != ECharacterClass::Warrior);
+	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("ShamanAttacker"),
+	                                                            CharacterClass == ECharacterClass::Shaman);
 }
 
 
@@ -74,7 +76,7 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-	UEldenAbilitySystemLibrary::GiveStartupAbility(this, AbilitySystemComponent,CharacterClass);
+	UEldenAbilitySystemLibrary::GiveStartupAbility(this, AbilitySystemComponent, CharacterClass);
 
 	if (UEldenUserWidget* EldenUserWidget = Cast<UEldenUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -110,7 +112,7 @@ void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	bHitReact = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReact ? 0.f : BaseWalkSpeed;
-	
+
 	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReact);
 }
 

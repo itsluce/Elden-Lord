@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
 
+#include "EldenGameplayTags.h"
 #include "AbilitySystem/Ability/EldenGameplayAbility.h"
 
 void UEldenAbilitySystemComponent::AbilityActorInfoSet()
@@ -31,10 +32,26 @@ void UEldenAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& Input
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 		{
-			AbilitySpecInputPressed(AbilitySpec);
-			if (!AbilitySpec.IsActive())
+			if (InputTag.MatchesTag(FEldenGameplayTags::Get().InputTag_Toggleable))
 			{
-				TryActivateAbility(AbilitySpec.Handle);
+				if (AbilitySpec.IsActive())
+				{
+					AbilitySpecInputPressed(AbilitySpec);
+					CancelAbilityHandle(AbilitySpec.Handle);
+				}
+				else
+				{
+					AbilitySpecInputPressed(AbilitySpec);
+					TryActivateAbility(AbilitySpec.Handle);
+				}
+			}
+			else
+			{
+				AbilitySpecInputPressed(AbilitySpec);
+				if (!AbilitySpec.IsActive())
+				{
+					TryActivateAbility(AbilitySpec.Handle);
+				}
 			}
 		}
 	}

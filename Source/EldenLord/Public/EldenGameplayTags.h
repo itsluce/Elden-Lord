@@ -37,14 +37,23 @@ public:
 	FGameplayTag InputTag_2;
 	FGameplayTag InputTag_3;
 	FGameplayTag InputTag_4;
+	FGameplayTag InputTag_Toggleable;
+	FGameplayTag InputTag_TargetLock;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
+	FGameplayTag Damage_Physical;
+	FGameplayTag Damage_Magic;
 	TArray<FGameplayTag> DamageTypes;
 	
 	FGameplayTag Effect_HitReact;
 	
 	FGameplayTag Abilities_Attack;
+	FGameplayTag Abilities_Summon;
+	FGameplayTag Abilities_TargetLock;
+
+	FGameplayTag Animation_TargetLock;
+
 protected:
 
 private:

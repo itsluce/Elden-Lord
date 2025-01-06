@@ -11,7 +11,7 @@ class UBoxComponent;
  * 
  */
 UCLASS()
-class ELDENLORD_API AWeapon : public AItem
+class ELDENLORD_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 
@@ -36,14 +36,23 @@ protected:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category="Weapon")
+	UStaticMeshComponent* WeaponMesh;
+
+	UPROPERTY(VisibleAnywhere, Category="Weapon")
+	USphereComponent* Sphere;
+	
+	UPROPERTY(VisibleAnywhere, Category="Weapon")
 	UBoxComponent* WeaponBox;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Weapon")
 	USceneComponent* BoxTracStart;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Weapon")
 	USceneComponent* BoxTracEnd;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"), Category="Weapon")
+	UNiagaraComponent* WeaponEffect;
+	
 	UPROPERTY(EditAnywhere)
 	float Damage = 20.f;
 
@@ -58,4 +67,5 @@ private:
 
 public:
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
+	FORCEINLINE UStaticMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 };

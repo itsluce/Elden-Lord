@@ -4,13 +4,9 @@
 #include "Character/EldenLordCharacter.h"
 
 #include "AbilitySystemComponent.h"
-#include "EldenDbug.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Components/AttributeComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "HUD/EldenOverlay.h"
-#include "Item/Weapon/Weapon.h"
 #include "HUD/EldenHUD.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
