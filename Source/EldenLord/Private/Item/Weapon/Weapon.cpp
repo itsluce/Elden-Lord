@@ -79,6 +79,7 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		ExecuteGetHit(BoxHit);
 		CreateField(BoxHit.ImpactPoint);
 	}
+	DRAW_SPHERE(BoxHit.Location);
 }
 
 bool AWeapon::ActorIsSameType(AActor* OtherActor)
