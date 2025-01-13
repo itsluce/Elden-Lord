@@ -40,6 +40,9 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	TArray<FName> GetAttackMontageSection();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	TSubclassOf<AActor> GetWeapon();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void GetImpactAngle(const FVector& ImpactPoint, AActor* Hitter);

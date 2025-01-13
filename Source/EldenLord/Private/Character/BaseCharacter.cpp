@@ -88,6 +88,11 @@ int32 ABaseCharacter::UpdateAttackCount_Implementation()
 	return AttackCount;
 }
 
+TSubclassOf<AActor> ABaseCharacter::GetWeapon_Implementation()
+{
+	return EquippedWeapon;
+}
+
 
 void ABaseCharacter::MulticastHandleDeath_Implementation()
 {

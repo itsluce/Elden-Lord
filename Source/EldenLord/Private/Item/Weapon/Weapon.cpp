@@ -18,8 +18,8 @@ AWeapon::AWeapon()
 	WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RootComponent = WeaponMesh;
 
-	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	Sphere->SetupAttachment(GetRootComponent());
+	// Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
+	// Sphere->SetupAttachment(GetRootComponent());
 
 	WeaponEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Embers"));
 	WeaponEffect->SetupAttachment(GetRootComponent());
@@ -52,10 +52,10 @@ void AWeapon::Equip(USceneComponent* InParent, FName InSocketName, AActor* NewOw
 
 void AWeapon::DisableSphereCollision()
 {
-	if (Sphere)
-	{
-		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
+	// if (Sphere)
+	// {
+	// 	Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// }
 }
 
 void AWeapon::AttachMeshToSocket(USceneComponent* InParent, const FName& InSocketName)

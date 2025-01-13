@@ -37,9 +37,9 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, Category="Weapon")
 	UStaticMeshComponent* WeaponMesh;
-
-	UPROPERTY(VisibleAnywhere, Category="Weapon")
-	USphereComponent* Sphere;
+	//
+	// UPROPERTY(VisibleAnywhere, Category="Weapon")
+	// USphereComponent* Sphere;
 	
 	UPROPERTY(VisibleAnywhere, Category="Weapon")
 	UBoxComponent* WeaponBox;

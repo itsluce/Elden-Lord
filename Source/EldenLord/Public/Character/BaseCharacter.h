@@ -42,6 +42,7 @@ public:
 	virtual int32 GetMinionCount_Implementation() override;
 	virtual void UpdateMinionCount_Implementation(int32 Amount) override;
 	virtual int32 UpdateAttackCount_Implementation() override;
+	virtual TSubclassOf<AActor> GetWeapon_Implementation() override;
 	/*  End Combat Interface  */
 	
 	UFUNCTION(NetMulticast, Reliable)
@@ -83,6 +84,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponMeleeTipSocketName;
+	
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName WeaponSecondMeleeTipSocketName;
+	
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<AActor> EquippedWeapon;
 
 	virtual FVector GetCombatSocketLocation_Implementation();
 
