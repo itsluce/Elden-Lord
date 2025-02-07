@@ -11,6 +11,44 @@
 #include "Player/EldenPlayerState.h"
 #include "UI/Controller/EldenWidgetController.h"
 
+bool UEldenAbilitySystemLibrary::GetImpactPointFromEventData(const FGameplayEventData& EventData, FVector& OutImpactPoint)
+{
+	if (EventData.TargetData.Num() > 0)
+	{
+		for (const TSharedPtr<FGameplayAbilityTargetData>& TargetData : EventData.TargetData.Data)
+		{
+			if (TargetData.IsValid())
+			{
+				// Check for LocationInfo
+				if (TargetData->GetScriptStruct() == FGameplayAbilityTargetData_LocationInfo::StaticStruct())
+				{
+					const FGameplayAbilityTargetData_LocationInfo* LocationData = static_cast<const FGameplayAbilityTargetData_LocationInfo*>(TargetData.Get());
+					OutImpactPoint = LocationData->TargetLocation.LiteralTransform.GetLocation();
+					UE_LOG(LogTemp, Log, TEXT("ImpactPoint from LocationData: %s"), *OutImpactPoint.ToString());
+					return true;
+				}
+				// Check for HitResult
+				else if (TargetData->HasHitResult())
+				{
+					OutImpactPoint = TargetData->GetHitResult()->ImpactPoint;
+					UE_LOG(LogTemp, Log, TEXT("ImpactPoint from HitResult: %s"), *OutImpactPoint.ToString());
+					return true;
+				}
+				// Check for Origin
+				else if (TargetData->HasOrigin())
+				{
+					OutImpactPoint = TargetData->GetOrigin().GetLocation();
+					UE_LOG(LogTemp, Log, TEXT("ImpactPoint from Origin: %s"), *OutImpactPoint.ToString());
+					return true;
+				}
+			}
+		}
+	}
+
+	OutImpactPoint = FVector::ZeroVector;
+	return false;
+}
+
 UOverlayEldenWidgetController* UEldenAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
 {
 	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))

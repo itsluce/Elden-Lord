@@ -53,6 +53,8 @@ public:
 	FGameplayTag Abilities_TargetLock;
 
 	FGameplayTag Animation_TargetLock;
+	
+	FGameplayTag Event_Weapon_Impact;
 
 protected:
 

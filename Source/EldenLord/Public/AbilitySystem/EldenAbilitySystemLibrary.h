@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "EldenAbilitySystemLibrary.generated.h"
 
+struct FGameplayEventData;
 class UCharacterClassInfo;
 class UAbilitySystemComponent;
 enum class ECharacterClass : uint8;
@@ -20,6 +21,9 @@ class ELDENLORD_API UEldenAbilitySystemLibrary : public UBlueprintFunctionLibrar
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category = "GameplayAbility", meta = (DisplayName = "Get ImpactPoint from EventData"))
+	static bool GetImpactPointFromEventData(const FGameplayEventData& EventData, FVector& OutImpactPoint);
+	
 	UFUNCTION(BlueprintPure, Category="EldenAbilitySystemLibrary|WidgetController")
 	static UOverlayEldenWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
 

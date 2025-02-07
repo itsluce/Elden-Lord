@@ -26,7 +26,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, meta=(ExposeOnSpawn=true))
 	FGameplayEffectSpecHandle DamageEffectSpecHandle;
-
+	void PlayHitReactMontage(FName Section );
 	
 protected:
 	virtual void BeginPlay() override;

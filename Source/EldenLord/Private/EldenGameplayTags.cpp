@@ -193,4 +193,13 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Animation.TargetLock"),
 		FString("Target Lock Animation")
 	);
+	
+	/*
+	 *  Event Tags
+	 */
+	
+	GameplayTags.Event_Weapon_Impact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Weapon.Impact"),
+		FString("Weapon Impact")
+	);
 }

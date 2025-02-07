@@ -3,12 +3,12 @@
 
 #include "Item/Weapon/Weapon.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "EldenGameplayTags.h"
 #include "NiagaraComponent.h"
 #include "Character/EldenLordCharacter.h"
-#include "Components/SphereComponent.h"
 #include "Components/BoxComponent.h"
-#include "EldenLord/DebugMacros.h"
-#include "Kismet/GameplayStatics.h"
+#include "EldenDbug.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 AWeapon::AWeapon()
@@ -75,11 +75,32 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	{
 		if (ActorIsSameType(BoxHit.GetActor())) return;
 
-		UGameplayStatics::ApplyDamage(BoxHit.GetActor(), Damage, GetInstigator()->GetController(), this, UDamageType::StaticClass());
-		ExecuteGetHit(BoxHit);
+		UE_LOG(LogTemp, Log, TEXT("BoxHit.ImpactPoint: %s"), *BoxHit.ImpactPoint.ToString());
+
+		FGameplayEventData EventData;
+		EventData.Instigator = GetInstigator();
+		EventData.Target = BoxHit.GetActor();
+		EventData.ContextHandle = FGameplayEffectContextHandle();
+		EventData.EventMagnitude = Damage;
+
+		FGameplayAbilityTargetData_LocationInfo* LocationData = new FGameplayAbilityTargetData_LocationInfo();
+		LocationData->TargetLocation.LocationType = EGameplayAbilityTargetingLocationType::LiteralTransform;
+		LocationData->TargetLocation.LiteralTransform = FTransform(BoxHit.ImpactPoint);
+		EventData.TargetData.Add(LocationData);
+
+		UE_LOG(LogTemp, Log, TEXT("EventData.TargetData.Num(): %d"), EventData.TargetData.Num());
+		for (const TSharedPtr<FGameplayAbilityTargetData>& TargetData : EventData.TargetData.Data)
+		{
+			if (TargetData.IsValid())
+			{
+				UE_LOG(LogTemp, Log, TEXT("TargetData Type: %s"), *TargetData->GetScriptStruct()->GetName());
+			}
+		}
+
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetInstigator(), FGameplayTag::RequestGameplayTag("Event.Weapon.Impact"), EventData);
+
 		CreateField(BoxHit.ImpactPoint);
 	}
-	DRAW_SPHERE(BoxHit.Location);
 }
 
 bool AWeapon::ActorIsSameType(AActor* OtherActor)
