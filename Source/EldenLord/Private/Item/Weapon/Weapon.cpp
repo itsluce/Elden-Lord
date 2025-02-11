@@ -102,7 +102,12 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 		CreateField(BoxHit.ImpactPoint);
 	}
 }
+void AWeapon::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (!OtherActor || OtherActor == this || OtherActor == GetOwner()) return;
 
+	IgnoreActors.Remove(OtherActor);
+}
 bool AWeapon::ActorIsSameType(AActor* OtherActor)
 {
 	return GetOwner()->ActorHasTag(TEXT("Enemy")) && OtherActor->ActorHasTag(TEXT("Enemy"));
