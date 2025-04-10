@@ -4,11 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
-#include "Item/Item.h"
-#include "CharacterTypes.h"
-#include "Interface/EnemyInterface.h"
 #include "EldenLordCharacter.generated.h"
 
+class UEldenCombatComponent;
 class UEldenOverlay;
 class USpringArmComponent;
 class UCameraComponent;
@@ -26,27 +24,26 @@ public:
 	/*
 	 * Combat Interface
 	 */
-	
+
 	virtual int32 GetPlayerLevel() override;
-	
+
 	/*
 	 * End Combat Interface
 	 */
-	
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 protected:
 	virtual void BeginPlay() override;
 	/*
 	 * Input Mapping
 	 */
-	
+
 	/*
 	 * Play Montage Function
 	 */
-	
+
 private:
-	
 	virtual void InitAbilityActorInfo() override;
-	
+
 	/*
 	 * Camera
 	 */
@@ -55,6 +52,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera1;
+
+	UPROPERTY(EditAnywhere)
+	UEldenCombatComponent* EldenCombatComponent;
 
 	/*
 	 * Overlapping Items
@@ -69,5 +69,5 @@ private:
 	 */
 
 public:
-	
+	FORCEINLINE UEldenCombatComponent* GetEldenCombatComponent() const { return EldenCombatComponent; }
 };

@@ -12,6 +12,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/EldenController.h"
 #include "Player/EldenPlayerState.h"
+#include "Components/EldenCombatComponent.h"
 
 AEldenLordCharacter::AEldenLordCharacter()
 {
@@ -34,14 +35,9 @@ AEldenLordCharacter::AEldenLordCharacter()
 	GetMesh()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
 
+	EldenCombatComponent = CreateDefaultSubobject<UEldenCombatComponent>(TEXT("EldenCombatComponent"));
+	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	// GetCharacterMovement()->RotationRate = FRotator(0.f, 400.f, 0.f);
-	// GetCharacterMovement()->bConstrainToPlane = true;
-	// GetCharacterMovement()->bSnapToPlaneAtStart = true;
-
-	// bIsWaitingForSecondPress = false;
-	// FirstPressTime = 0.0f;
-	// DoublePressThreshold = 0.3f;
 }
 
 void AEldenLordCharacter::BeginPlay()
@@ -90,4 +86,9 @@ int32 AEldenLordCharacter::GetPlayerLevel()
 	const AEldenPlayerState* EldenPlayerState = GetPlayerState<AEldenPlayerState>();
 	check(EldenPlayerState);
 	return EldenPlayerState->GetPlayerLevel();
+}
+
+UPawnCombatComponent* AEldenLordCharacter::GetPawnCombatComponent() const
+{
+	return EldenCombatComponent;
 }

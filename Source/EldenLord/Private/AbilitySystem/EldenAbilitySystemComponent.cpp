@@ -59,13 +59,14 @@ void UEldenAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& Input
 
 void UEldenAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
 {
-	if (!InputTag.IsValid()) return;
+	if (!InputTag.IsValid() || !InputTag.MatchesTag(FEldenGameplayTags::Get().InputTag_MustBeHeld_Block)) return;
 
 	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 		{
-			AbilitySpecInputReleased(AbilitySpec);
+			CancelAbilityHandle(AbilitySpec.Handle);
+			// AbilitySpecInputReleased(AbilitySpec);
 		}
 	}
 }

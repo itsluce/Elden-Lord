@@ -47,5 +47,5 @@ void AEldenHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySys
 
 	OverlayWidget->SetWidgetController(EldenWidgetController);
 	EldenWidgetController->BroadcastInitValues();
-	// Widget->AddToViewport();
+	Widget->AddToViewport();
 }

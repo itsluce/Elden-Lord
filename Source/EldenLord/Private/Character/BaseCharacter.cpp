@@ -93,6 +93,11 @@ TSubclassOf<AActor> ABaseCharacter::GetWeapon_Implementation()
 	return EquippedWeapon;
 }
 
+UPawnCombatComponent* ABaseCharacter::GetPawnCombatComponent() const
+{
+	return nullptr;
+}
+
 
 void ABaseCharacter::MulticastHandleDeath_Implementation()
 {
@@ -213,7 +218,6 @@ void ABaseCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type Collision
 			if (UBoxComponent* WeaponBox = Weapon->GetWeaponBox())
 			{
 				WeaponBox->SetCollisionEnabled(CollisionEnabled);
-				Weapon->IgnoreActors.Empty();
 			}
 		}
 	}

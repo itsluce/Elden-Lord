@@ -125,7 +125,7 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("InputTag.4"),
 		FString("Input Tag for 4 Key")
 	);
-	
+
 	GameplayTags.InputTag_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.TargetLock"),
 		FString("Input Tag for Target Lock")
@@ -133,6 +133,20 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.InputTag_Toggleable = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.Toggleable"),
 		FString("Input Tag for Toggleable")
+	);
+	GameplayTags.InputTag_Space = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Space"),
+		FString("Input Tag for Dodge")
+	);
+
+	GameplayTags.InputTag_MustBeHeld = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.MustBeHeld"),
+		FString("Input Tag for Block")
+	);
+
+	GameplayTags.InputTag_MustBeHeld_Block = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.MustBeHeld_Block"),
+		FString("Input Tag for Block")
 	);
 
 	/*
@@ -148,17 +162,17 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Damage.Fire"),
 		FString("Fire Damage")
 	);
-	
+
 	GameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Damage.Physical"),
 		FString("Physical Damage")
 	);
-	
+
 	GameplayTags.Damage_Magic = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Damage.Magic"),
 		FString("Magic Damage")
 	);
-	
+
 	GameplayTags.DamageTypes.Add(GameplayTags.Damage);
 
 	/*
@@ -169,7 +183,7 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Effect.HitReact"),
 		FString("Effect HitReact")
 	);
-	
+
 	/*
      *  Abilities Tags
      */
@@ -178,28 +192,66 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Abilities.Attack"),
 		FString("Attack Ability")
 	);
-	
+
 	GameplayTags.Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Summon"),
 		FString("Summon Ability")
 	);
-	
+
 	GameplayTags.Abilities_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.TargetLock"),
 		FString("Target Lock Ability")
 	);
+
+	GameplayTags.Abilities_Blocking = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Blocking"),
+		FString("Block Ability")
+	);
+
+	GameplayTags.Abilities_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Weapon"),
+		FString("Weapon Ability")
+	);
+
+	/*
+	 *  Status Tags
+	 */
+	
+	GameplayTags.Status_Blocking = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Blocking"),
+		FString("Status Block Ability")
+	);
+	
+	/*
+	 *  Animation Tags
+	 */
 	
 	GameplayTags.Animation_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Animation.TargetLock"),
 		FString("Target Lock Animation")
 	);
-	
+
 	/*
 	 *  Event Tags
 	 */
-	
+
 	GameplayTags.Event_Weapon_Impact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.Weapon.Impact"),
 		FString("Weapon Impact")
+	);
+
+	GameplayTags.Event_SuccessfulBlock = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.SuccessfulBlock"),
+		FString("Block Event")
+	);
+
+	GameplayTags.Event_HitPause = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.HitPause"),
+		FString("HitPause Event")
+	);
+
+	GameplayTags.Event_MeleeHit = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.MeleeHit"),
+		FString("Melee Hit Event")
 	);
 }

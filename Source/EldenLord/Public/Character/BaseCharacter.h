@@ -7,8 +7,8 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
-#include "Interface/EnemyInterface.h"
 #include "Interface/HitInterface.h"
+#include "Interface/IPawnCombatInterface.h"
 #include "BaseCharacter.generated.h"
 
 class UGameplayAbility;
@@ -21,7 +21,7 @@ enum class ECharacterClass : uint8;
 
 UCLASS()
 class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface, public IAbilitySystemInterface,
-                                     public ICombatInterface
+                                     public ICombatInterface, public IIPawnCombatInterface
 {
 	GENERATED_BODY()
 
@@ -44,6 +44,7 @@ public:
 	virtual int32 UpdateAttackCount_Implementation() override;
 	virtual TSubclassOf<AActor> GetWeapon_Implementation() override;
 	/*  End Combat Interface  */
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 	
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();

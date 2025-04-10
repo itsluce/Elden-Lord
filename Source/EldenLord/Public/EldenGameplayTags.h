@@ -39,6 +39,9 @@ public:
 	FGameplayTag InputTag_4;
 	FGameplayTag InputTag_Toggleable;
 	FGameplayTag InputTag_TargetLock;
+	FGameplayTag InputTag_Space;
+	FGameplayTag InputTag_MustBeHeld;
+	FGameplayTag InputTag_MustBeHeld_Block;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
@@ -51,10 +54,17 @@ public:
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_TargetLock;
+	FGameplayTag Abilities_Blocking;
+	FGameplayTag Abilities_Weapon;
 
+	FGameplayTag Status_Blocking;
+	
 	FGameplayTag Animation_TargetLock;
 	
 	FGameplayTag Event_Weapon_Impact;
+	FGameplayTag Event_SuccessfulBlock;
+	FGameplayTag Event_HitPause;
+	FGameplayTag Event_MeleeHit;
 
 protected:
 

@@ -3,10 +3,15 @@
 
 #include "AbilitySystem/EldenAbilitySystemLibrary.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "GenericTeamAgentInterface.h"
+#include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
+#include "Components/PawnCombatComponent.h"
 #include "GameMode/EldenGameMode.h"
 #include "HUD/EldenHUD.h"
 #include "Interface/CombatInterface.h"
+#include "Interface/IPawnCombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/EldenPlayerState.h"
 #include "UI/Controller/EldenWidgetController.h"
@@ -174,4 +179,68 @@ bool UEldenAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondA
 	const bool bBothAreEnemies = FirstActor->ActorHasTag(FName("Enemy")) && SecondActor->ActorHasTag(FName("Enemy"));
 	const bool bFriends = bBothArePlayers || bBothAreEnemies;
 	return !bFriends;
+}
+
+UEldenAbilitySystemComponent* UEldenAbilitySystemLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
+{   
+	check(InActor);
+
+	return CastChecked<UEldenAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor));
+}
+
+bool UEldenAbilitySystemLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck)
+{
+	UEldenAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
+
+	return ASC->HasMatchingGameplayTag(TagToCheck);
+}
+
+bool UEldenAbilitySystemLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefender)
+{   
+	check(InAttacker && InDefender);
+
+	const float DotResult = FVector::DotProduct(InAttacker->GetActorForwardVector(),InDefender->GetActorForwardVector());
+
+	const FString DebugString = FString::Printf(TEXT("Dot Result: %f %s"),DotResult,DotResult<-0.1f? TEXT("Valid Block") : TEXT("InvalidBlock"));
+ 
+	 // Debug::Print(DebugString,DotResult<-0.1f? FColor::Green : FColor::Red);
+
+	return DotResult<-0.1f;
+}
+
+bool UEldenAbilitySystemLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn)
+{   
+	check(QueryPawn && TargetPawn);
+
+	IGenericTeamAgentInterface* QueryTeamAgent = Cast<IGenericTeamAgentInterface>(QueryPawn->GetController());
+	IGenericTeamAgentInterface* TargetTeamAgent = Cast<IGenericTeamAgentInterface>(TargetPawn->GetController());
+
+	if (QueryTeamAgent && TargetTeamAgent)
+	{
+		return QueryTeamAgent->GetGenericTeamId() != TargetTeamAgent->GetGenericTeamId();
+	}
+
+	return false;
+}
+
+UPawnCombatComponent* UEldenAbilitySystemLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
+{   
+	check(InActor);
+
+	if (IIPawnCombatInterface* PawnCombatInterface = Cast<IIPawnCombatInterface>(InActor))
+	{
+		return PawnCombatInterface->GetPawnCombatComponent();
+	}
+
+	return nullptr;
+}
+
+UPawnCombatComponent* UEldenAbilitySystemLibrary::BP_GetPawnCombatComponentFromActor(AActor* InActor,
+	EWarriorValidType& OutValidType)
+{
+	UPawnCombatComponent* CombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
+
+	OutValidType = CombatComponent? EWarriorValidType::Valid : EWarriorValidType::Invalid;
+
+	return CombatComponent;
 }
