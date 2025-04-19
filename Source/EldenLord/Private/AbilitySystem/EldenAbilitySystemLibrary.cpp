@@ -2,10 +2,9 @@
 
 
 #include "AbilitySystem/EldenAbilitySystemLibrary.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
-#include "GenericTeamAgentInterface.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "GenericTeamAgentInterface.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Components/PawnCombatComponent.h"
 #include "GameMode/EldenGameMode.h"
@@ -182,15 +181,43 @@ bool UEldenAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondA
 }
 
 UEldenAbilitySystemComponent* UEldenAbilitySystemLibrary::NativeGetWarriorASCFromActor(AActor* InActor)
+{
+	check(InActor);
+
+	return CastChecked<UEldenAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor));
+
+}
+
+UEldenAbilitySystemComponent* UEldenAbilitySystemLibrary::NativeGetEldenASCFromActor(AActor* InActor)
 {   
 	check(InActor);
 
 	return CastChecked<UEldenAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor));
 }
 
+void UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGameplayTag TagToAdd)
+{
+	UEldenAbilitySystemComponent* ASC = NativeGetEldenASCFromActor(InActor);
+
+	if (!ASC->HasMatchingGameplayTag(TagToAdd))
+	{
+		ASC->AddLooseGameplayTag(TagToAdd);
+	}
+}
+
+void UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(AActor* InActor, FGameplayTag TagToRemove)
+{
+	UEldenAbilitySystemComponent* ASC = NativeGetEldenASCFromActor(InActor);
+
+	if (ASC->HasMatchingGameplayTag(TagToRemove))
+	{
+		ASC->RemoveLooseGameplayTag(TagToRemove);
+	}
+}
+
 bool UEldenAbilitySystemLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck)
 {
-	UEldenAbilitySystemComponent* ASC = NativeGetWarriorASCFromActor(InActor);
+	UEldenAbilitySystemComponent* ASC = NativeGetEldenASCFromActor(InActor);
 
 	return ASC->HasMatchingGameplayTag(TagToCheck);
 }
@@ -241,6 +268,23 @@ UPawnCombatComponent* UEldenAbilitySystemLibrary::BP_GetPawnCombatComponentFromA
 	UPawnCombatComponent* CombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
 
 	OutValidType = CombatComponent? EWarriorValidType::Valid : EWarriorValidType::Invalid;
-
+	
 	return CombatComponent;
+}
+
+bool UEldenAbilitySystemLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor,
+	const FGameplayEffectSpecHandle& InSpecHandle)
+{
+	UEldenAbilitySystemComponent* SourceASC = NativeGetWarriorASCFromActor(InInstigator);
+	UEldenAbilitySystemComponent* TargetASC = NativeGetWarriorASCFromActor(InTargetActor);
+
+	FActiveGameplayEffectHandle ActiveGameplayEffectHandle = SourceASC->ApplyGameplayEffectSpecToTarget(*InSpecHandle.Data,TargetASC);
+
+	return ActiveGameplayEffectHandle.WasSuccessfullyApplied();
+}
+
+void UEldenAbilitySystemLibrary::BP_DoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck,
+                                                     EWarriorConfirmType& OutConfirmType)
+{
+	OutConfirmType = NativeDoesActorHaveTag(InActor,TagToCheck)? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
 }

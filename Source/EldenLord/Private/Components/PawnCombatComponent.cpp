@@ -3,8 +3,11 @@
 
 #include "Components/PawnCombatComponent.h"
 
+#include "AbilitySystem/EldenAbilitySystemLibrary.h"
+#include "Character/EldenLordCharacter.h"
 #include "Item/Weapon/Weapon.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 
 void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegister, AWeapon* InWeaponToRegister,
                                                  bool bRegisterAsEquippedWeapon)
@@ -68,6 +71,20 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDama
 	}
 
 	//TODO:Handle body collision boxes
+}
+
+void UPawnCombatComponent::ToggleCharacterCollision(bool bShouldEnable)
+{
+	AEldenLordCharacter* EldenLordCharacter = Cast<AEldenLordCharacter>(GetOwningPawn());
+	if (bShouldEnable)
+	{
+		EldenLordCharacter->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	else
+	{
+		EldenLordCharacter->GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+	
 }
 
 void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)

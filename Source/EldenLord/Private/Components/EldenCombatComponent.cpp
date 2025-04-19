@@ -8,6 +8,7 @@
 #include "EldenGameplayTags.h"
 #include "EldenDbug.h"
 #include "Abilities/GameplayAbilityTypes.h"
+#include "Item/Weapon/Weapon.h"
 
 //
 // AWeapon* UEldenCombatComponent::GetHeroCarriedWeaponByTag(FGameplayTag InWeaponTag) const
@@ -25,6 +26,12 @@
 // 	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
 // }
 
+
+AWeapon* UEldenCombatComponent::GetHeroCurrentEquippedWeapon() const
+{	
+	return Cast<AWeapon>(GetCharacterCurrentEquippedWeapon());
+}
+
 void UEldenCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
 	if (OverlappedActors.Contains(HitActor))
@@ -38,18 +45,17 @@ void UEldenCombatComponent::OnHitTargetActor(AActor* HitActor)
 	Data.Instigator = GetOwningPawn();
 	Data.Target = HitActor;
 
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
-		GetOwningPawn(),
-		FEldenGameplayTags::Get().Event_HitPause,
-		Data
-	);
+	// UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+	// 	GetOwningPawn(),
+	// 	FEldenGameplayTags::Get().Event_HitPause,
+	// 	Data
+	// );
 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 		GetOwningPawn(),
 		FEldenGameplayTags::Get().Event_MeleeHit,
-		FGameplayEventData()
+		Data
 	);
-	Debug::Print(TEXT("Start") + HitActor->GetName());
 }
 
 void UEldenCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
@@ -59,6 +65,4 @@ void UEldenCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActo
 		FEldenGameplayTags::Get().Event_HitPause,
 		FGameplayEventData()
 	);
-	Debug::Print(TEXT("End") + InteractedActor->GetName());
-
 }

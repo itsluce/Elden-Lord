@@ -17,6 +17,9 @@ public:
 	FGameplayTag Attributes_Primary_Vigor;
 	FGameplayTag Attributes_Primary_Mind;
 	FGameplayTag Attributes_Primary_Endurance;
+	FGameplayTag Attributes_Primary_Dex;
+	FGameplayTag Attributes_Primary_Rage;
+	FGameplayTag Attributes_Primary_MaxRage;
 	FGameplayTag Attributes_Primary_Strength;
 	FGameplayTag Attributes_Primary_Intelligence;
 	FGameplayTag Attributes_Primary_Resilience;
@@ -42,6 +45,8 @@ public:
 	FGameplayTag InputTag_Space;
 	FGameplayTag InputTag_MustBeHeld;
 	FGameplayTag InputTag_MustBeHeld_Block;
+	FGameplayTag InputTag_Equip;
+	FGameplayTag InputTag_Rage;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
@@ -50,14 +55,24 @@ public:
 	TArray<FGameplayTag> DamageTypes;
 	
 	FGameplayTag Effect_HitReact;
+	FGameplayTag Effect_Invincible;
 	
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_TargetLock;
 	FGameplayTag Abilities_Blocking;
 	FGameplayTag Abilities_Weapon;
+	FGameplayTag Abilities_Rage;
+	
+	FGameplayTag Enemy_Ability_Melee;
 
+	FGameplayTag Player_Weapon;
+	
 	FGameplayTag Status_Blocking;
+	FGameplayTag Status_Rage_Activating;
+	FGameplayTag Status_Rage_Active;
+	FGameplayTag Status_Rage_Full;
+	FGameplayTag Status_Rage_None;
 	
 	FGameplayTag Animation_TargetLock;
 	
@@ -65,6 +80,10 @@ public:
 	FGameplayTag Event_SuccessfulBlock;
 	FGameplayTag Event_HitPause;
 	FGameplayTag Event_MeleeHit;
+	FGameplayTag Event_Equip;
+	FGameplayTag Event_UnEquip;
+	FGameplayTag Event_Activate_Rage;
+	FGameplayTag Event_Spawn_Projectile;
 
 protected:
 

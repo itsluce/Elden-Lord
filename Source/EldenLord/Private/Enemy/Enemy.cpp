@@ -16,6 +16,7 @@
 #include "Components/AttributeComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/EnemyCombatComponent.h"
 #include "EldenLord/EldenLord.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HUD/HealthBarComponent.h"
@@ -48,6 +49,8 @@ AEnemy::AEnemy()
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
 
+	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>(TEXT("EldenCombatComponent"));
+	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -146,6 +149,11 @@ void AEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
 AActor* AEnemy::GetCombatTarget_Implementation() const
 {
 	return CombatTarget;
+}
+
+UPawnCombatComponent* AEnemy::GetPawnCombatComponent() const
+{
+	return EnemyCombatComponent;
 }
 
 

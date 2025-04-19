@@ -12,6 +12,9 @@ void UOverlayEldenWidgetController::BroadcastInitValues()
 
 	OnHealthChanged.Broadcast(EldenAttributeSet->GetHealth());
 	OnMaxHealthChanged.Broadcast(EldenAttributeSet->GetMaxHealth());
+	
+	OnRageChanged.Broadcast(EldenAttributeSet->GetRage());
+	OnMaxRageChanged.Broadcast(EldenAttributeSet->GetMaxRage());
 
 	OnManaChanged.Broadcast(EldenAttributeSet->GetMana());
 	OnMaxManaChanged.Broadcast(EldenAttributeSet->GetMaxMana());
@@ -66,6 +69,21 @@ void UOverlayEldenWidgetController::BindCallbacksToDependencies()
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnMaxStaminaChanged.Broadcast(Data.NewValue);
+		}
+	);
+	
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		EldenAttributeSet->GetRageAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnRageChanged.Broadcast(Data.NewValue);
+		}
+	);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		EldenAttributeSet->GetMaxRageAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxRageChanged.Broadcast(Data.NewValue);
 		}
 	);
 

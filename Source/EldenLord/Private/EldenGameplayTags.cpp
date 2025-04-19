@@ -27,6 +27,21 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Increases Stamina")
 	);
 
+	GameplayTags.Attributes_Primary_Dex = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Primary.Dex"),
+		FString("Increases Dex")
+	);
+
+	GameplayTags.Attributes_Primary_Rage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Primary.Rage"),
+		FString("Increases Rage")
+	);
+
+	GameplayTags.Attributes_Primary_MaxRage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Primary.MaxRage"),
+		FString("Increases Max Rage")
+	);
+
 	GameplayTags.Attributes_Primary_Strength = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Primary.Strength"),
 		FString("Increases physical damage")
@@ -149,6 +164,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Input Tag for Block")
 	);
 
+	GameplayTags.InputTag_Equip = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Equip"),
+		FString("Input Tag for Equip Weapon")
+	);
+
+	GameplayTags.InputTag_Rage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Rage"),
+		FString("Input Tag for Rage")
+	);
+
 	/*
 	 * Damage Tags
 	 */
@@ -183,6 +208,10 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Effect.HitReact"),
 		FString("Effect HitReact")
 	);
+	GameplayTags.Effect_Invincible = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effect.Invincible"),
+		FString("Effect Invincible")
+	);
 
 	/*
      *  Abilities Tags
@@ -213,19 +242,63 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Weapon Ability")
 	);
 
+	GameplayTags.Abilities_Rage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Rage"),
+		FString("Rage Ability")
+	);
+
+	/*
+	*  Enemy Tags
+	*/
+
+	GameplayTags.Enemy_Ability_Melee = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Enemy.Ability.Melee"),
+		FString("Enemy Melee Attack")
+	);
+
+	GameplayTags.Enemy_Ability_Melee = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Enemy.Ability.Melee"),
+		FString("Enemy Melee Attack")
+	);
+
 	/*
 	 *  Status Tags
 	 */
-	
+
 	GameplayTags.Status_Blocking = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Status.Blocking"),
 		FString("Status Block Ability")
 	);
-	
+
+	GameplayTags.Status_Rage_Activating = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Rage.Activating"),
+		FString("Status Rage Activating Ability")
+	);
+
+	GameplayTags.Status_Rage_Active = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Rage.Active"),
+		FString("Status Rage Activate Ability")
+	);
+
+	GameplayTags.Status_Rage_Full = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Rage.Full"),
+		FString("Status Rage Full Ability")
+	);
+
+	GameplayTags.Status_Rage_None = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Rage.None"),
+		FString("Status Rage None Ability")
+	);
+
+	GameplayTags.Player_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Weapon"),
+		FString("Player Weapon")
+	);
+
 	/*
 	 *  Animation Tags
 	 */
-	
+
 	GameplayTags.Animation_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Animation.TargetLock"),
 		FString("Target Lock Animation")
@@ -253,5 +326,25 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Event_MeleeHit = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.MeleeHit"),
 		FString("Melee Hit Event")
+	);
+
+	GameplayTags.Event_Equip = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Equip"),
+		FString("Equip Weapon Event")
+	);
+
+	GameplayTags.Event_UnEquip = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.UnEquip"),
+		FString("UnEquip Weapon Event")
+	);
+
+	GameplayTags.Event_Activate_Rage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Activate.Rage"),
+		FString("Activate Rage Event")
+	);
+
+	GameplayTags.Event_Spawn_Projectile = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Spawn.Projectile"),
+		FString("Spawn Projectile Event")
 	);
 }

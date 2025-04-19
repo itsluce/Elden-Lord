@@ -18,8 +18,8 @@ public:
 	// UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	// AWeapon* GetHeroCarriedWeaponByTag(FGameplayTag InWeaponTag) const;
 	//
-	// UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
-	// AWeapon* GetHeroCurrentEquippedWeapon() const;
+	UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
+	AWeapon* GetHeroCurrentEquippedWeapon() const;
 	//
 	// UFUNCTION(BlueprintCallable, Category = "Warrior|Combat")
 	// float GetHeroCurrentEquippWeaponDamageAtLevel(float InLevel) const;

@@ -4,20 +4,25 @@
 #include "AbilitySystem/EldenAttributeSet.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "EldenDbug.h"
 #include "EldenGameplayTags.h"
 #include "GameFramework/Character.h"
 #include "GameplayEffectExtension.h"
+#include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "Interface/CombatInterface.h"
 #include "Net/UnrealNetwork.h"
 
 UEldenAttributeSet::UEldenAttributeSet()
 {
 	const FEldenGameplayTags& GameplayTags = FEldenGameplayTags::Get();
-
+	InitRage(1.f);
+	InitMaxRage(1.f);
 	// Primary Attribute
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Vigor, GetVigorAttribute);
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Mind, GetMindAttribute);
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Endurance, GetEnduranceAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_Rage, GetRageAttribute);
+	TagToAttribute.Add(GameplayTags.Attributes_Primary_MaxRage, GetMaxRageAttribute);
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Strength, GetStrengthAttribute);
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Intelligence, GetIntelligenceAttribute);
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Resilience, GetResilienceAttribute);
@@ -44,8 +49,11 @@ void UEldenAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Resilience, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Vigor, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Dex, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Mind, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Endurance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, Rage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEldenAttributeSet, MaxRage, COND_None, REPNOTIFY_Always);
 
 	// Secondary Attribute
 
@@ -132,10 +140,49 @@ void UEldenAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+		if (GetMana() == GetMaxMana())
+		{
+			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
+																	FEldenGameplayTags::Get().Status_Rage_Full);
+		}
+		else if (GetMana() == 0.f)
+		{
+			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
+																	FEldenGameplayTags::Get().Status_Rage_None);
+		}
+		else
+		{
+			UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(
+				Data.Target.GetAvatarActor(), FEldenGameplayTags::Get().Status_Rage_Full);
+			UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(
+				Data.Target.GetAvatarActor(), FEldenGameplayTags::Get().Status_Rage_None);
+		}
 	}
 	if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
 	{
 		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
+	}
+	if (Data.EvaluatedData.Attribute == GetRageAttribute())
+	{
+		SetRage(FMath::Clamp(GetRage(), 0.f, GetMaxRage()));
+
+		if (GetRage() == GetMaxRage())
+		{
+			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
+			                                                        FEldenGameplayTags::Get().Status_Rage_Full);
+		}
+		else if (GetRage() == 0.f)
+		{
+			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
+			                                                        FEldenGameplayTags::Get().Status_Rage_None);
+		}
+		else
+		{
+			UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(
+				Data.Target.GetAvatarActor(), FEldenGameplayTags::Get().Status_Rage_Full);
+			UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(
+				Data.Target.GetAvatarActor(), FEldenGameplayTags::Get().Status_Rage_None);
+		}
 	}
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
@@ -168,6 +215,16 @@ void UEldenAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 void UEldenAttributeSet::OnRep_Health(const FGameplayAttributeData OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Health, OldHealth);
+}
+
+void UEldenAttributeSet::OnRep_Rage(const FGameplayAttributeData OldRage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Rage, OldRage);
+}
+
+void UEldenAttributeSet::OnRep_MaxRage(const FGameplayAttributeData OldMaxRage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, MaxRage, OldMaxRage);
 }
 
 void UEldenAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData OldMaxHealth) const
@@ -213,6 +270,11 @@ void UEldenAttributeSet::OnRep_Resilience(const FGameplayAttributeData OldResili
 void UEldenAttributeSet::OnRep_Vigor(const FGameplayAttributeData OldVigor) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Vigor, OldVigor)
+}
+
+void UEldenAttributeSet::OnRep_Dex(const FGameplayAttributeData OldDex) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEldenAttributeSet, Dex, OldDex)
 }
 
 void UEldenAttributeSet::OnRep_Mind(const FGameplayAttributeData OldMind) const

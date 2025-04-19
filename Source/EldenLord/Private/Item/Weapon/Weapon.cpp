@@ -35,7 +35,7 @@ void AWeapon::OnCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponen
 
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (UEldenAbilitySystemLibrary::IsTargetPawnHostile(WeaponOwningPawn,HitPawn))
+		if (WeaponOwningPawn != HitPawn)
 		{
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
@@ -50,7 +50,7 @@ void AWeapon::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedComponent,
 
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (UEldenAbilitySystemLibrary::IsTargetPawnHostile(WeaponOwningPawn,HitPawn))
+		if (WeaponOwningPawn != HitPawn)
 		{
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}

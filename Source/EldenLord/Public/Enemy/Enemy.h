@@ -9,6 +9,7 @@
 #include "Interface/EnemyInterface.h"
 #include "Enemy.generated.h"
 
+class UEnemyCombatComponent;
 class AEldenAIController;
 class UBehaviorTree;
 class UWidgetComponent;
@@ -32,7 +33,8 @@ public:
 	virtual void UnHighlightActor() override;
 	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
 	virtual AActor* GetCombatTarget_Implementation() const override;
-
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnAttribbuteChangedSignature OnHealthChanged;
 
@@ -75,4 +77,9 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<AEldenAIController> EldenAIController;
+	
+	UPROPERTY(EditAnywhere)
+	UEnemyCombatComponent* EnemyCombatComponent;
+public:
+	FORCEINLINE UEnemyCombatComponent* GetEnemyCombatComponent() const { return EnemyCombatComponent; }
 };

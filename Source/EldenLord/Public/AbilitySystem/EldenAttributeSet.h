@@ -62,6 +62,9 @@ class ELDENLORD_API UEldenAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
+	/**
+	 * 
+	 */
 	UEldenAttributeSet();
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -90,6 +93,10 @@ public:
 	FGameplayAttributeData Vigor;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Vigor);
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Dex, Category= "Primary Attributes")
+	FGameplayAttributeData Dex;
+	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Dex);
+
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Mind, Category= "Primary Attributes")
 	FGameplayAttributeData Mind;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Mind);
@@ -97,6 +104,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Endurance, Category= "Primary Attributes")
 	FGameplayAttributeData Endurance;
 	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Endurance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_Rage, Category= "Primary Attributes")
+	FGameplayAttributeData Rage;
+	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, Rage);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_MaxRage, Category= "Primary Attributes")
+	FGameplayAttributeData MaxRage;
+	ATTRIBUTE_ACCESSORS(UEldenAttributeSet, MaxRage);
 
 	/*
 	 * Secondary Attributes
@@ -172,9 +187,16 @@ public:
 
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData OldHealth) const;
-
+	
 	UFUNCTION()
 	void OnRep_MaxHealth(const FGameplayAttributeData OldMaxHealth) const;
+	
+	UFUNCTION()
+	void OnRep_Rage(const FGameplayAttributeData OldRage) const;
+
+	UFUNCTION()
+	void OnRep_MaxRage(const FGameplayAttributeData OldMaxRage) const;
+	
 	UFUNCTION()
 	void OnRep_Mana(const FGameplayAttributeData OldMana) const;
 
@@ -197,6 +219,9 @@ public:
 
 	UFUNCTION()
 	void OnRep_Vigor(const FGameplayAttributeData OldVigor) const;
+	
+	UFUNCTION()
+	void OnRep_Dex(const FGameplayAttributeData OldDex) const;
 
 	UFUNCTION()
 	void OnRep_Mind(const FGameplayAttributeData OldMind) const;

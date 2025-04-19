@@ -48,6 +48,12 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
 	FOnAttribbuteChangedSignature OnMaxHealthChanged;
+	
+	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
+	FOnAttribbuteChangedSignature OnRageChanged;
+
+	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
+	FOnAttribbuteChangedSignature OnMaxRageChanged;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
 	FOnAttribbuteChangedSignature OnManaChanged;
