@@ -71,6 +71,8 @@ void AEnemy::PossessedBy(AController* NewController)
 	                                                            CharacterClass != ECharacterClass::Warrior);
 	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("ShamanAttacker"),
 	                                                            CharacterClass == ECharacterClass::Shaman);
+	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("InvisibleAttacker"),
+	                                                            CharacterClass == ECharacterClass::Invisible);
 }
 
 

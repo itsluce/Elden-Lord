@@ -47,6 +47,8 @@ public:
 	FGameplayTag InputTag_MustBeHeld_Block;
 	FGameplayTag InputTag_Equip;
 	FGameplayTag InputTag_Rage;
+	FGameplayTag InputTag_SpecialWeaponAbility_Light;
+	FGameplayTag InputTag_SpecialWeaponAbility_Heavy;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
@@ -59,14 +61,19 @@ public:
 	
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
+	FGameplayTag Abilities_Invisible;
 	FGameplayTag Abilities_TargetLock;
 	FGameplayTag Abilities_Blocking;
 	FGameplayTag Abilities_Weapon;
 	FGameplayTag Abilities_Rage;
+	FGameplayTag Abilities_SpecialWeaponAbility_Light;
+	FGameplayTag Abilities_SpecialWeaponAbility_Heavy;
 	
 	FGameplayTag Enemy_Ability_Melee;
 
 	FGameplayTag Player_Weapon;
+	FGameplayTag Player_Cooldown_SpecialWeaponAbility_Light;
+	FGameplayTag Player_Cooldown_SpecialWeaponAbility_Heavy;
 	
 	FGameplayTag Status_Blocking;
 	FGameplayTag Status_Rage_Activating;
@@ -84,6 +91,8 @@ public:
 	FGameplayTag Event_UnEquip;
 	FGameplayTag Event_Activate_Rage;
 	FGameplayTag Event_Spawn_Projectile;
+	FGameplayTag Event_AOE;
+	FGameplayTag Event_HitReact;
 
 protected:
 

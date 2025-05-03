@@ -21,10 +21,10 @@
 // 	return Cast<AWeapon>(GetCharacterCurrentEquippedWeapon());
 // }
 //
-// float UEldenCombatComponent::GetHeroCurrentEquippWeaponDamageAtLevel(float InLevel) const
-// {
-// 	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
-// }
+float UEldenCombatComponent::GetHeroCurrentEquipWeaponDamageAtLevel(float InLevel) const
+{
+	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
+}
 
 
 AWeapon* UEldenCombatComponent::GetHeroCurrentEquippedWeapon() const

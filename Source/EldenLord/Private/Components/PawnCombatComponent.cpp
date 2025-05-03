@@ -94,3 +94,20 @@ void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
 void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
 {
 }
+
+void UPawnCombatComponent::ToggleEnemyVisibility(AEnemy* Enemy, bool bIsVisible)
+{
+	if (Enemy)
+	{
+		Enemy->GetMesh()->SetVisibility(bIsVisible);
+	}
+}
+
+void UPawnCombatComponent::ToggleWeaponVisibility(AWeapon* Weapon, bool bIsVisible)
+{
+	if (Weapon)
+	{
+		Weapon->GetWeaponMesh()->SetVisibility(bIsVisible);
+	}
+}
+

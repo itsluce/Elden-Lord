@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Components/PawnExtentionComponentBase.h"
+#include "Enemy/Enemy.h"
 #include "PawnCombatComponent.generated.h"
 
 /**
@@ -50,6 +51,11 @@ public:
 	virtual void OnHitTargetActor(AActor* HitActor);
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
 
+	UFUNCTION(BlueprintCallable, Category = "Elden|Combat")
+	void ToggleEnemyVisibility(AEnemy* Enemy,bool bIsVisible);
+
+	UFUNCTION(BlueprintCallable, Category = "Elden|Combat")
+	void ToggleWeaponVisibility(AWeapon* Weapon,bool bIsVisible);
 protected:
 	TArray<AActor*> OverlappedActors;
 

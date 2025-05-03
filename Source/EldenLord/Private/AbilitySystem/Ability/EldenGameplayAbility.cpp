@@ -2,9 +2,13 @@
 
 
 #include "AbilitySystem/Ability/EldenGameplayAbility.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "EldenGameplayTags.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "Components/PawnCombatComponent.h"
 #include "Character/EldenLordCharacter.h"
+#include "Enemy/Enemy.h"
 #include "Player/EldenController.h"
 
 
@@ -21,7 +25,10 @@ void UEldenGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* Actor
 	}
 }
 
-void UEldenGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+void UEldenGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle,
+                                       const FGameplayAbilityActorInfo* ActorInfo,
+                                       const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility,
+                                       bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
@@ -35,7 +42,7 @@ void UEldenGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle, 
 }
 
 UPawnCombatComponent* UEldenGameplayAbility::GetPawnCombatComponentFromActorInfo() const
-{	
+{
 	return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
 }
 
@@ -50,8 +57,8 @@ AEldenLordCharacter* UEldenGameplayAbility::GetHeroCharacterFromActorInfo()
 	{
 		CachedWarriorHeroCharacter = Cast<AEldenLordCharacter>(CurrentActorInfo->AvatarActor);
 	}
-   
-	return CachedWarriorHeroCharacter.IsValid()? CachedWarriorHeroCharacter.Get() : nullptr;
+
+	return CachedWarriorHeroCharacter.IsValid() ? CachedWarriorHeroCharacter.Get() : nullptr;
 }
 
 AEldenController* UEldenGameplayAbility::GetHeroControllerFromActorInfo()
@@ -61,10 +68,99 @@ AEldenController* UEldenGameplayAbility::GetHeroControllerFromActorInfo()
 		CachedWarriorHeroController = Cast<AEldenController>(CurrentActorInfo->PlayerController);
 	}
 
-	return CachedWarriorHeroController.IsValid()? CachedWarriorHeroController.Get() : nullptr;
+	return CachedWarriorHeroController.IsValid() ? CachedWarriorHeroController.Get() : nullptr;
+}
+
+AEnemy* UEldenGameplayAbility::GetEnemyCharacterFromActorInfo()
+{
+	if (!CachedEnemyCharacter.IsValid())
+	{
+		CachedEnemyCharacter = Cast<AEnemy>(CurrentActorInfo->AvatarActor);
+	}
+
+	return CachedEnemyCharacter.IsValid() ? CachedEnemyCharacter.Get() : nullptr;
 }
 
 UEldenCombatComponent* UEldenGameplayAbility::GetHeroCombatComponentFromActorInfo()
 {
 	return GetHeroCharacterFromActorInfo()->GetEldenCombatComponent();
+}
+
+FGameplayEffectSpecHandle UEldenGameplayAbility::MakeHeroDamageEffectSpecHandle(
+	TSubclassOf<UGameplayEffect> EffectClass, float InWeaponBaseDamage, FGameplayTag InCurrentAttackTypeTag,
+	int32 InUsedComboCount)
+{
+	check(EffectClass);
+
+	FGameplayEffectContextHandle ContextHandle = GetWarriorAbilitySystemComponentFromActorInfo()->MakeEffectContext();
+	ContextHandle.SetAbility(this);
+	ContextHandle.AddSourceObject(GetAvatarActorFromActorInfo());
+	ContextHandle.AddInstigator(GetAvatarActorFromActorInfo(), GetAvatarActorFromActorInfo());
+
+	FGameplayEffectSpecHandle EffectSpecHandle = GetWarriorAbilitySystemComponentFromActorInfo()->MakeOutgoingSpec(
+		EffectClass,
+		GetAbilityLevel(),
+		ContextHandle
+	);
+
+	EffectSpecHandle.Data->SetSetByCallerMagnitude(
+		FEldenGameplayTags::Get().Damage,
+		InWeaponBaseDamage
+	);
+
+	if (InCurrentAttackTypeTag.IsValid())
+	{
+		EffectSpecHandle.Data->SetSetByCallerMagnitude(InCurrentAttackTypeTag, InUsedComboCount);
+	}
+
+	return EffectSpecHandle;
+}
+
+FActiveGameplayEffectHandle UEldenGameplayAbility::NativeApplyEffectSpecHandleToTarget(AActor* TargetActor,
+	const FGameplayEffectSpecHandle& InSpecHandle)
+{
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+
+	check(TargetASC && InSpecHandle.IsValid());
+
+	return GetWarriorAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(
+		*InSpecHandle.Data,
+		TargetASC
+	);
+}
+
+void UEldenGameplayAbility::ApplyGameplayEffectSpecHandleToHitResults(const FGameplayEffectSpecHandle& InSpecHandle,
+                                                                      const TArray<FHitResult>& InHitResults)
+{
+	if (InHitResults.IsEmpty())
+	{
+		return;
+	}
+
+	APawn* OwningPawn = CastChecked<APawn>(GetAvatarActorFromActorInfo());
+
+	for (const FHitResult& Hit : InHitResults)
+	{
+		if (APawn* HitPawn = Cast<APawn>(Hit.GetActor()))
+		{
+			if (OwningPawn != HitPawn)
+			{
+				FActiveGameplayEffectHandle ActiveGameplayEffectHandle = NativeApplyEffectSpecHandleToTarget(
+					HitPawn, InSpecHandle);
+
+				if (ActiveGameplayEffectHandle.WasSuccessfullyApplied())
+				{
+					FGameplayEventData Data;
+					Data.Instigator = OwningPawn;
+					Data.Target = HitPawn;
+
+					UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+						HitPawn,
+						FEldenGameplayTags::Get().Event_HitReact,
+						Data
+					);
+				}
+			}
+		}
+	}
 }

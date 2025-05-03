@@ -174,6 +174,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Input Tag for Rage")
 	);
 
+	GameplayTags.InputTag_SpecialWeaponAbility_Light = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.SpecialWeaponAbility.Light"),
+		FString("Input Tag for Special Weapon Ability Light Attack")
+	);
+
+	GameplayTags.InputTag_SpecialWeaponAbility_Heavy = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.SpecialWeaponAbility.Heavy"),
+		FString("Input Tag for Special Weapon Ability Heavy Attack")
+	);
+
 	/*
 	 * Damage Tags
 	 */
@@ -227,6 +237,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Summon Ability")
 	);
 
+	GameplayTags.Abilities_Invisible = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Invisible"),
+		FString("Invisible Ability")
+	);
+
 	GameplayTags.Abilities_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.TargetLock"),
 		FString("Target Lock Ability")
@@ -245,6 +260,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Abilities_Rage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Rage"),
 		FString("Rage Ability")
+	);
+
+	GameplayTags.Abilities_SpecialWeaponAbility_Light = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.SpecialWeaponAbility.Light"),
+		FString("Special WeaponAbility Light Attack Ability")
+	);
+
+	GameplayTags.Abilities_SpecialWeaponAbility_Heavy = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.SpecialWeaponAbility.Heavy"),
+		FString("Special WeaponAbility Heavy Attack Ability")
 	);
 
 	/*
@@ -293,6 +318,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Player_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Player.Weapon"),
 		FString("Player Weapon")
+	);
+
+	GameplayTags.Player_Cooldown_SpecialWeaponAbility_Light = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Cooldown.SpecialWeaponAbility.Light"),
+		FString("Player Special Weapon Ability Light Cooldown")
+	);
+
+	GameplayTags.Player_Cooldown_SpecialWeaponAbility_Heavy = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.Cooldown.SpecialWeaponAbility.Heavy"),
+		FString("Player Special Weapon Ability Heavy Cooldown")
 	);
 
 	/*
@@ -346,5 +381,15 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Event_Spawn_Projectile = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.Spawn.Projectile"),
 		FString("Spawn Projectile Event")
+	);
+
+	GameplayTags.Event_AOE = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.AOE"),
+		FString("AOE Attack Event")
+	);
+
+	GameplayTags.Event_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.HitReact"),
+		FString("Hit React Event")
 	);
 }

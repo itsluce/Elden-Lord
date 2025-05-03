@@ -15,8 +15,8 @@
 UEldenAttributeSet::UEldenAttributeSet()
 {
 	const FEldenGameplayTags& GameplayTags = FEldenGameplayTags::Get();
-	InitRage(1.f);
-	InitMaxRage(1.f);
+	InitRage(60.f);
+	InitMaxRage(60.f);
 	// Primary Attribute
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Vigor, GetVigorAttribute);
 	TagToAttribute.Add(GameplayTags.Attributes_Primary_Mind, GetMindAttribute);
@@ -143,12 +143,12 @@ void UEldenAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 		if (GetMana() == GetMaxMana())
 		{
 			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
-																	FEldenGameplayTags::Get().Status_Rage_Full);
+			                                                        FEldenGameplayTags::Get().Status_Rage_Full);
 		}
 		else if (GetMana() == 0.f)
 		{
 			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
-																	FEldenGameplayTags::Get().Status_Rage_None);
+			                                                        FEldenGameplayTags::Get().Status_Rage_None);
 		}
 		else
 		{
@@ -162,27 +162,9 @@ void UEldenAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 	{
 		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
 	}
-	if (Data.EvaluatedData.Attribute == GetRageAttribute())
+	if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
 	{
-		SetRage(FMath::Clamp(GetRage(), 0.f, GetMaxRage()));
-
-		if (GetRage() == GetMaxRage())
-		{
-			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
-			                                                        FEldenGameplayTags::Get().Status_Rage_Full);
-		}
-		else if (GetRage() == 0.f)
-		{
-			UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),
-			                                                        FEldenGameplayTags::Get().Status_Rage_None);
-		}
-		else
-		{
-			UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(
-				Data.Target.GetAvatarActor(), FEldenGameplayTags::Get().Status_Rage_Full);
-			UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(
-				Data.Target.GetAvatarActor(), FEldenGameplayTags::Get().Status_Rage_None);
-		}
+		SetStamina(FMath::Clamp(GetStamina(), 0.f, GetMaxStamina()));
 	}
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{

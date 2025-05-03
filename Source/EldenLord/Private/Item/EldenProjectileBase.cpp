@@ -103,7 +103,7 @@ void AEldenProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* Overlap
 		Data.Instigator = GetInstigator();
 		Data.Target = HitPawn;
 
-		if (UEldenAbilitySystemLibrary::IsTargetPawnHostile(GetInstigator(),HitPawn))
+		if (GetInstigator()!=HitPawn)
 		{
 			HandleApplyProjectileDamage(HitPawn,Data);
 		}

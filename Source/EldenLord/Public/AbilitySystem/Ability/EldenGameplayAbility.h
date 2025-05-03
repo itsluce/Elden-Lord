@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Enemy/Enemy.h"
 #include "Interface/CombatInterface.h"
 #include "EldenGameplayAbility.generated.h"
 
@@ -48,14 +49,28 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Elden|Ability")
 	AEldenLordCharacter* GetHeroCharacterFromActorInfo();
-
+	
 	UFUNCTION(BlueprintPure, Category = "Elden|Ability")
 	AEldenController* GetHeroControllerFromActorInfo();
+	
+	UFUNCTION(BlueprintPure, Category = "Elden|Ability")
+	AEnemy* GetEnemyCharacterFromActorInfo();
 
 	UFUNCTION(BlueprintPure, Category = "Elden|Ability")
 	UEldenCombatComponent* GetHeroCombatComponentFromActorInfo();
+	
+	UFUNCTION(BlueprintPure, Category = "Elden|Ability")
+	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> EffectClass,float InWeaponBaseDamage,FGameplayTag InCurrentAttackTypeTag,int32 InUsedComboCount);
+
+	FActiveGameplayEffectHandle NativeApplyEffectSpecHandleToTarget(AActor* TargetActor,const FGameplayEffectSpecHandle& InSpecHandle);
+	
+	UFUNCTION(BlueprintCallable, Category = "Elden|Ability")
+	void ApplyGameplayEffectSpecHandleToHitResults(const FGameplayEffectSpecHandle& InSpecHandle,const TArray<FHitResult>& InHitResults);
 
 private:
 	TWeakObjectPtr<AEldenLordCharacter> CachedWarriorHeroCharacter;
 	TWeakObjectPtr<AEldenController> CachedWarriorHeroController;
+	
+	TWeakObjectPtr<AEnemy> CachedEnemyCharacter;
+
 };
