@@ -93,6 +93,8 @@ public:
 	FGameplayTag Event_Spawn_Projectile;
 	FGameplayTag Event_AOE;
 	FGameplayTag Event_HitReact;
+	FGameplayTag Event_SaveAttack;
+	FGameplayTag Event_ResetCombo;
 
 protected:
 

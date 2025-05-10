@@ -14,12 +14,18 @@
 AEldenController::AEldenController()
 {
 	bReplicates = true;
+	HeroTeamID = FGenericTeamId(0);
 }
 
 void AEldenController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	CursorTrace();
+}
+
+FGenericTeamId AEldenController::GetGenericTeamId() const
+{
+	return HeroTeamID;
 }
 
 void AEldenController::BeginPlay()

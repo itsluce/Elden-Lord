@@ -392,4 +392,14 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Event.HitReact"),
 		FString("Hit React Event")
 	);
+
+	GameplayTags.Event_SaveAttack = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.SaveAttack"),
+		FString("Save Attack Event")
+	);
+
+	GameplayTags.Event_ResetCombo = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.ResetCombo"),
+		FString("Reset Combo Event")
+	);
 }

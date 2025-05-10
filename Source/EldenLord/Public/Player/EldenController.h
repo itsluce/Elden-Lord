@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "GameplayTagContainer.h"
+#include "GenericTeamAgentInterface.h"
 #include "EldenController.generated.h"
 
 class UEldenAbilitySystemComponent;
@@ -17,14 +18,14 @@ class UInputMappingContext;
  * 
  */
 UCLASS()
-class ELDENLORD_API AEldenController : public APlayerController
+class ELDENLORD_API AEldenController : public APlayerController, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
 public:
 	AEldenController();
 	virtual void Tick(float DeltaSeconds) override;
-
+	virtual FGenericTeamId GetGenericTeamId() const override;
 protected:
 	void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -62,4 +63,6 @@ private:
 	TObjectPtr<UEldenAbilitySystemComponent>EldenAbilitySystemComponent;
 
 	UEldenAbilitySystemComponent* GetASC();
+
+	FGenericTeamId HeroTeamID;
 };
