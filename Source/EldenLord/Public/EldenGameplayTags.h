@@ -68,8 +68,11 @@ public:
 	FGameplayTag Abilities_Rage;
 	FGameplayTag Abilities_SpecialWeaponAbility_Light;
 	FGameplayTag Abilities_SpecialWeaponAbility_Heavy;
+	FGameplayTag Abilities_KnockDown;
 	
 	FGameplayTag Enemy_Ability_Melee;
+	FGameplayTag Enemy_Status_Strafing;
+	FGameplayTag Enemy_Status_KnockedDown;
 
 	FGameplayTag Player_Weapon;
 	FGameplayTag Player_Cooldown_SpecialWeaponAbility_Light;
@@ -85,6 +88,7 @@ public:
 	
 	FGameplayTag Event_Weapon_Impact;
 	FGameplayTag Event_SuccessfulBlock;
+	FGameplayTag Event_KnockDown;
 	FGameplayTag Event_HitPause;
 	FGameplayTag Event_MeleeHit;
 	FGameplayTag Event_Equip;

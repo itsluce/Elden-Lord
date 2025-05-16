@@ -44,4 +44,5 @@ public:
 protected:
 	UFUNCTION(BlueprintPure, meta = (BlueprintThreadSafe))
 	bool DoesOwnerHaveTag(FGameplayTag TagToCheck) const;
+	
 };

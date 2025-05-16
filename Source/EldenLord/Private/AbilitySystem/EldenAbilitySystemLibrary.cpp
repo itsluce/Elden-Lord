@@ -189,10 +189,11 @@ UEldenAbilitySystemComponent* UEldenAbilitySystemLibrary::NativeGetWarriorASCFro
 }
 
 UEldenAbilitySystemComponent* UEldenAbilitySystemLibrary::NativeGetEldenASCFromActor(AActor* InActor)
-{   
+{
 	check(InActor);
 
-	return CastChecked<UEldenAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor));
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor);
+	return Cast<UEldenAbilitySystemComponent>(ASC);  // safe cast
 }
 
 void UEldenAbilitySystemLibrary::AddGameplayTagToActorIfNone(AActor* InActor, FGameplayTag TagToAdd)
@@ -217,9 +218,13 @@ void UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(AActor* InAct
 
 bool UEldenAbilitySystemLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck)
 {
-	UEldenAbilitySystemComponent* ASC = NativeGetEldenASCFromActor(InActor);
-
-	return ASC->HasMatchingGameplayTag(TagToCheck);
+	if (UEldenAbilitySystemComponent* EldenASC = NativeGetEldenASCFromActor(InActor))
+	{
+		return EldenASC->HasMatchingGameplayTag(TagToCheck);
+	}
+	// Optionally log a warning here:
+	UE_LOG(LogTemp, Warning, TEXT("Actor %s has no EldenAbilitySystemComponent!"), *GetNameSafe(InActor));
+	return false;
 }
 
 bool UEldenAbilitySystemLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefender)

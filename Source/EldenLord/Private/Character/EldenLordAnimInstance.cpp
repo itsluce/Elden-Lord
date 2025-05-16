@@ -4,6 +4,7 @@
 #include "Character/EldenLordAnimInstance.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "Character/EldenLordCharacter.h"
 
 void UEldenLordAnimInstance::NativeInitializeAnimation()
@@ -27,13 +28,10 @@ void UEldenLordAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 bool UEldenLordAnimInstance::DoesOwnerHaveTag(FGameplayTag TagToCheck) const
 {
-	// if (APawn* OwningPawn = TryGetPawnOwner())
-	// {
-	// 	UEldenAbilitySystemComponent* ASC = CastChecked<UEldenAbilitySystemComponent>(
-	// 		UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(EldenLordCharacter));
-	//
-	// 	return ASC->HasMatchingGameplayTag(TagToCheck);
-	// }
-	//
+	if (APawn* OwningPawn = TryGetPawnOwner())
+	{
+		return UEldenAbilitySystemLibrary::NativeDoesActorHaveTag(OwningPawn,TagToCheck);
+	}
+
 	return false;
 }

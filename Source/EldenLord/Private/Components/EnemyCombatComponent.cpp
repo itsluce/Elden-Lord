@@ -40,6 +40,11 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 			FEldenGameplayTags::Get().Event_SuccessfulBlock,
 			EventData
 		);
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			GetOwningPawn(),
+			FEldenGameplayTags::Get().Event_KnockDown,
+			EventData
+		);
 	}
 	else
 	{

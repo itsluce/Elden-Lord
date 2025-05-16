@@ -88,7 +88,7 @@ public:
 		meta = (DisplayName = "Get Pawn Combat Component From Actor", ExpandEnumAsExecs = "OutValidType"))
 	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActor(AActor* InActor, EWarriorValidType& OutValidType);
 
-	UFUNCTION(BlueprintCallable,Category = "Warrior|FunctionLibrary")
+	UFUNCTION(BlueprintCallable,Category = "EldenAbilitySystemLibrary|FunctionLibrary")
 	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator,AActor* InTargetActor,const FGameplayEffectSpecHandle& InSpecHandle);
 
 	UFUNCTION(BlueprintCallable, Category = "EldenAbilitySystemLibrary|GameplayMechanics", meta = (DisplayName = "Does Actor Have Tag", ExpandEnumAsExecs = "OutConfirmType"))

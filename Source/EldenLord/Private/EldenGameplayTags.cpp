@@ -271,6 +271,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Abilities.SpecialWeaponAbility.Heavy"),
 		FString("Special WeaponAbility Heavy Attack Ability")
 	);
+	
+	GameplayTags.Abilities_KnockDown = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.KnockDown"),
+		FString("Knock Down Ability")
+	);
 
 	/*
 	*  Enemy Tags
@@ -281,9 +286,14 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Enemy Melee Attack")
 	);
 
-	GameplayTags.Enemy_Ability_Melee = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Enemy.Ability.Melee"),
-		FString("Enemy Melee Attack")
+	GameplayTags.Enemy_Status_Strafing = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Enemy.Status.Strafing"),
+		FString("Enemy Status Strafing")
+	);
+
+	GameplayTags.Enemy_Status_KnockedDown = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Enemy.Status.KnockedDown"),
+		FString("Enemy Status Knocked Down")
 	);
 
 	/*
@@ -351,6 +361,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Event_SuccessfulBlock = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.SuccessfulBlock"),
 		FString("Block Event")
+	);
+
+	GameplayTags.Event_KnockDown = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.KnockDown"),
+		FString("Knock Down Event")
 	);
 
 	GameplayTags.Event_HitPause = UGameplayTagsManager::Get().AddNativeGameplayTag(

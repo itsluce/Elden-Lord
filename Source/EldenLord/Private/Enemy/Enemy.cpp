@@ -73,6 +73,7 @@ void AEnemy::PossessedBy(AController* NewController)
 	                                                            CharacterClass == ECharacterClass::Shaman);
 	EldenAIController->GetBlackboardComponent()->SetValueAsBool(FName("InvisibleAttacker"),
 	                                                            CharacterClass == ECharacterClass::Invisible);
+	EldenAIController->GetBlackboardComponent()->SetValueAsFloat(FName("DefaultMaxWalkSpeed"),GetCharacterMovement()->MaxWalkSpeed);
 }
 
 
