@@ -183,6 +183,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("InputTag.SpecialWeaponAbility.Heavy"),
 		FString("Input Tag for Special Weapon Ability Heavy Attack")
 	);
+	
+	GameplayTags.InputTag_PickUp = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.PickUp"),
+		FString("Input Tag for Pick Up")
+	);
 
 	/*
 	 * Damage Tags
@@ -276,6 +281,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Abilities.KnockDown"),
 		FString("Knock Down Ability")
 	);
+	
+	GameplayTags.Abilities_PickUp = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.PickUp"),
+		FString("Pick Up Ability")
+	);
 
 	/*
 	*  Enemy Tags
@@ -284,6 +294,10 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Enemy_Ability_Melee = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Enemy.Ability.Melee"),
 		FString("Enemy Melee Attack")
+	);
+	GameplayTags.Enemy_Ability_SpawnStone = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Enemy.Ability.SpawnStone"),
+		FString("Enemy Spawn Stone Ability")
 	);
 
 	GameplayTags.Enemy_Status_Strafing = UGameplayTagsManager::Get().AddNativeGameplayTag(
@@ -416,5 +430,10 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Event_ResetCombo = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.ResetCombo"),
 		FString("Reset Combo Event")
+	);
+
+	GameplayTags.Event_ConsumeStones = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.ConsumeStones"),
+		FString("Consume Stones Event")
 	);
 }

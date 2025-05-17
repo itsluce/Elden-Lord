@@ -84,7 +84,7 @@ void AEldenProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, AA
 		HandleApplyProjectileDamage(HitPawn,Data);
 	}
 
-	// Destroy();
+	Destroy();
 }
 
 void AEldenProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

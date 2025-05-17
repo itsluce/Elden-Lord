@@ -49,6 +49,7 @@ public:
 	FGameplayTag InputTag_Rage;
 	FGameplayTag InputTag_SpecialWeaponAbility_Light;
 	FGameplayTag InputTag_SpecialWeaponAbility_Heavy;
+	FGameplayTag InputTag_PickUp;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
@@ -69,8 +70,10 @@ public:
 	FGameplayTag Abilities_SpecialWeaponAbility_Light;
 	FGameplayTag Abilities_SpecialWeaponAbility_Heavy;
 	FGameplayTag Abilities_KnockDown;
+	FGameplayTag Abilities_PickUp;
 	
 	FGameplayTag Enemy_Ability_Melee;
+	FGameplayTag Enemy_Ability_SpawnStone;
 	FGameplayTag Enemy_Status_Strafing;
 	FGameplayTag Enemy_Status_KnockedDown;
 
@@ -99,6 +102,7 @@ public:
 	FGameplayTag Event_HitReact;
 	FGameplayTag Event_SaveAttack;
 	FGameplayTag Event_ResetCombo;
+	FGameplayTag Event_ConsumeStones;
 
 protected:
 

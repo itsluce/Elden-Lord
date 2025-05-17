@@ -32,6 +32,8 @@ class ELDENLORD_API UEldenInputConfig : public UDataAsset
 public:
 
 	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound = false) const;
+
+	const UInputAction* FindNativeInputActionByTag(const FGameplayTag& InInputTag) const;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FEldenInputAction> AbilityInputActions;

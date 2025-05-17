@@ -21,3 +21,16 @@ const UInputAction* UEldenInputConfig::FindAbilityInputActionForTag(const FGamep
 	}
 	return nullptr;
 }
+
+const UInputAction* UEldenInputConfig::FindNativeInputActionByTag(const FGameplayTag& InInputTag) const
+{
+	for (const FEldenInputAction& Action : AbilityInputActions)
+	{
+		if (Action.InputTag == InInputTag && Action.InputAction)
+		{
+			return Action.InputAction;
+		}
+	}
+
+	return nullptr;
+}

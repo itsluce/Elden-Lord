@@ -11,6 +11,7 @@
 #include "Interface/IPawnCombatInterface.h"
 #include "BaseCharacter.generated.h"
 
+class UEldenAbilitySystemComponent;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
@@ -149,4 +150,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category=Combat)
 	TArray<FName> AttackMontageSection;
+
+public:
+	FORCEINLINE UAbilitySystemComponent* GetEldenAbilitySystemComponent() const {return AbilitySystemComponent;}
 };

@@ -125,6 +125,8 @@ void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 void AEnemy::Die()
 {
 	SetLifeSpan(LifeSpan);
+	UEldenAbilitySystemComponent* EldenASC = Cast<UEldenAbilitySystemComponent>(AbilitySystemComponent);
+	EldenASC->TryActivateAbilityByTag(FEldenGameplayTags::Get().Enemy_Ability_SpawnStone);
 	Super::Die();
 }
 

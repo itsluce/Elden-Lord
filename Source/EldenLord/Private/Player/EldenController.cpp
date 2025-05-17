@@ -5,9 +5,12 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "EldenDbug.h"
+#include "EldenGameplayTags.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "Input/EldenInputComponent.h"
 #include "Interface/EnemyInterface.h"
 
@@ -46,7 +49,7 @@ void AEldenController::BeginPlay()
 	// FInputModeGameOnly InputModeData;
 	// SetInputMode(InputModeData);
 	// DefaultMouseCursor = EMouseCursor::Default;
-	
+
 	// bShowMouseCursor = true;
 	// FInputModeGameAndUI InputModeData;
 	// InputModeData.SetHideCursorDuringCapture(false);
@@ -95,6 +98,11 @@ void AEldenController::SetupInputComponent()
 	EldenInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEldenController::Move);
 	EldenInputComponent->BindAction(LookAxis, ETriggerEvent::Triggered, this, &AEldenController::Look);
 	EldenInputComponent->BindAction(TurnAxis, ETriggerEvent::Triggered, this, &AEldenController::Turn);
+
+	EldenInputComponent->BindNativeInputAction(InputConfig, FEldenGameplayTags::Get().InputTag_PickUp,
+	                                           ETriggerEvent::Completed, this,
+	                                           &AEldenController::Input_PickUpStonesAbility);
+
 	EldenInputComponent->BindAbilitiesAction(InputConfig, this, &ThisClass::AbilityInputTagPressed,
 	                                         &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
@@ -157,9 +165,23 @@ void AEldenController::CursorTrace()
 	}
 }
 
+void AEldenController::Input_PickUpStonesAbility(const FInputActionValue& InputActionValue)
+{
+	FGameplayEventData Data;
+	
+	APawn* ControlledPawn  = GetPawn();
+	if (ControlledPawn)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			ControlledPawn,
+			FEldenGameplayTags::Get().Event_ConsumeStones,
+			Data
+		);
+	}
+}
+
 void AEldenController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	
 }
 
 void AEldenController::AbilityInputTagReleased(FGameplayTag InputTag)

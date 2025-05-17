@@ -33,13 +33,6 @@ public:
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 protected:
 	virtual void BeginPlay() override;
-	/*
-	 * Input Mapping
-	 */
-
-	/*
-	 * Play Montage Function
-	 */
 
 private:
 	virtual void InitAbilityActorInfo() override;
@@ -47,6 +40,7 @@ private:
 	/*
 	 * Camera
 	 */
+	
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArm1;
 
@@ -56,17 +50,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	UEldenCombatComponent* EldenCombatComponent;
 
-	/*
-	 * Overlapping Items
-	 */
-
-	/*
-	 * Enum State
-	 */
-
-	/*
-	 * Animation montage
-	 */
 
 public:
 	FORCEINLINE UEldenCombatComponent* GetEldenCombatComponent() const { return EldenCombatComponent; }

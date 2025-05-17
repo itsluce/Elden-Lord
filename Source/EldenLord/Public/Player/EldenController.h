@@ -51,6 +51,8 @@ private:
 	IEnemyInterface* LastActor;
 	IEnemyInterface* ThisActor;
 
+	void Input_PickUpStonesAbility(const FInputActionValue& InputActionValue);
+	
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
