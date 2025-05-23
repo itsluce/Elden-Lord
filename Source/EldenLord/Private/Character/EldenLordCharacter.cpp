@@ -4,6 +4,8 @@
 #include "Character/EldenLordCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "EldenDbug.h"
+#include "EldenGameplayTags.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -13,6 +15,7 @@
 #include "Player/EldenController.h"
 #include "Player/EldenPlayerState.h"
 #include "Components/EldenCombatComponent.h"
+#include "Components/SphereComponent.h"
 
 AEldenLordCharacter::AEldenLordCharacter()
 {
@@ -35,8 +38,19 @@ AEldenLordCharacter::AEldenLordCharacter()
 	GetMesh()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
 
-	EldenCombatComponent = CreateDefaultSubobject<UEldenCombatComponent>(TEXT("EldenCombatComponent"));
+	// EldenCollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("PickUpCollisionSphere"));
+	// EldenCollisionSphere->SetupAttachment(GetRootComponent());
+	// EldenCollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	// EldenCollisionSphere->SetCollisionObjectType(ECC_WorldDynamic);
+	// EldenCollisionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
+	// EldenCollisionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	// EldenCollisionSphere->SetGenerateOverlapEvents(true);
+	// EldenCollisionSphere->InitSphereRadius(100.f);
+	// EldenCollisionSphere->OnComponentBeginOverlap.AddUniqueDynamic(this,&ThisClass::OnEldenCollisionSphereBeginOverlap);
+
 	
+	EldenCombatComponent = CreateDefaultSubobject<UEldenCombatComponent>(TEXT("EldenCombatComponent"));
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
@@ -58,7 +72,7 @@ void AEldenLordCharacter::InitAbilityActorInfo()
 	{
 		if (AEldenHUD* EldenHUD = Cast<AEldenHUD>(EldenController->GetHUD()))
 		{
-			EldenHUD->InitOverlay(EldenController, EldenPlayerState, AbilitySystemComponent, AttributeSet);
+			// EldenHUD->InitOverlay(EldenController, EldenPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
 	InitializeDefaultAttribute();
@@ -79,6 +93,20 @@ void AEldenLordCharacter::OnRep_PlayerState()
 
 	// Init ability actor info for the server
 	InitAbilityActorInfo();
+}
+
+void AEldenLordCharacter::OnEldenCollisionSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent,
+                                                             AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                                                             int32 OtherBodyIndex, bool bFromSweep,
+                                                             const FHitResult& SweepResult)
+{
+	Debug::Print(TEXT("ELden Activate"));
+	UEldenAbilitySystemComponent* EldenASC = Cast<UEldenAbilitySystemComponent>(
+		GetAbilitySystemComponent());
+	if (EldenASC)
+	{
+		EldenASC->TryActivateAbilityByTag(FEldenGameplayTags::Get().Abilities_EldenAssassination);
+	}
 }
 
 int32 AEldenLordCharacter::GetPlayerLevel()

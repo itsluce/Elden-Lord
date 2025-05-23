@@ -6,6 +6,7 @@
 #include "BaseCharacter.h"
 #include "EldenLordCharacter.generated.h"
 
+class USphereComponent;
 class UEldenCombatComponent;
 class UEldenOverlay;
 class USpringArmComponent;
@@ -20,6 +21,9 @@ public:
 	AEldenLordCharacter();
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+
+	UFUNCTION()
+	void OnEldenCollisionSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	/*
 	 * Combat Interface
@@ -47,6 +51,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera1;
 
+	// UPROPERTY(EditAnywhere)
+	// USphereComponent* EldenCollisionSphere;
+	
 	UPROPERTY(EditAnywhere)
 	UEldenCombatComponent* EldenCombatComponent;
 

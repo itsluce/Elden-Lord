@@ -188,6 +188,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("InputTag.PickUp"),
 		FString("Input Tag for Pick Up")
 	);
+	
+	GameplayTags.InputTag_Assassination = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Assassination"),
+		FString("Input Tag for Assassination")
+	);
 
 	/*
 	 * Damage Tags
@@ -223,6 +228,12 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Effect.HitReact"),
 		FString("Effect HitReact")
 	);
+	
+	GameplayTags.Event_HitReact_ThrowAway = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effect.HitReact.ThrowAway"),
+		FString("Effect HitReact Throw Away")
+	);
+	
 	GameplayTags.Effect_Invincible = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Effect.Invincible"),
 		FString("Effect Invincible")
@@ -286,6 +297,26 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Abilities.PickUp"),
 		FString("Pick Up Ability")
 	);
+	
+	GameplayTags.Abilities_AreaHeal = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.AreaHeal"),
+		FString("Area Heal Ability")
+	);
+	
+	GameplayTags.Abilities_ThrowAway = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.ThrowAway"),
+		FString("Throw Away Ability")
+	);
+	
+	GameplayTags.Abilities_EldenAssassination = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.EldenAssassination"),
+		FString("Elden Assassination Ability")
+	);
+	
+	GameplayTags.Abilities_EnemyAssassination = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.EnemyAssassination"),
+		FString("Enemy Assassination Ability")
+	);
 
 	/*
 	*  Enemy Tags
@@ -308,6 +339,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Enemy_Status_KnockedDown = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Enemy.Status.KnockedDown"),
 		FString("Enemy Status Knocked Down")
+	);
+	
+	GameplayTags.Enemy_Status_ThrowAway = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Enemy.Status.ThrowAway"),
+		FString("Enemy Status Throw Away")
 	);
 
 	/*
@@ -436,4 +472,19 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Event.ConsumeStones"),
 		FString("Consume Stones Event")
 	);
+
+	GameplayTags.Event_Assassination_Success = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Assassination.Success"),
+		FString("Success Assassination Event")
+	);
+
+	GameplayTags.Event_Assassination_Fail = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Assassination.Fail"),
+		FString("Fail Assassination Event")
+	);
+
+	/*
+	 *  Data Tags 
+	 */
+
 }

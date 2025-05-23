@@ -159,6 +159,12 @@ void UEldenGameplayAbility::ApplyGameplayEffectSpecHandleToHitResults(const FGam
 						FEldenGameplayTags::Get().Event_HitReact,
 						Data
 					);
+					
+					UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+						HitPawn,
+						FEldenGameplayTags::Get().Abilities_ThrowAway,
+						Data
+					);
 				}
 			}
 		}

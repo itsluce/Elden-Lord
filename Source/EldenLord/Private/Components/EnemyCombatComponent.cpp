@@ -45,6 +45,11 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 			FEldenGameplayTags::Get().Event_KnockDown,
 			EventData
 		);
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			HitActor,
+			FEldenGameplayTags::Get().Event_KnockDown,
+			EventData
+		);
 	}
 	else
 	{

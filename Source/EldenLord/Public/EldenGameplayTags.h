@@ -50,6 +50,7 @@ public:
 	FGameplayTag InputTag_SpecialWeaponAbility_Light;
 	FGameplayTag InputTag_SpecialWeaponAbility_Heavy;
 	FGameplayTag InputTag_PickUp;
+	FGameplayTag InputTag_Assassination;
 
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
@@ -71,12 +72,17 @@ public:
 	FGameplayTag Abilities_SpecialWeaponAbility_Heavy;
 	FGameplayTag Abilities_KnockDown;
 	FGameplayTag Abilities_PickUp;
+	FGameplayTag Abilities_ThrowAway;
+	FGameplayTag Abilities_EldenAssassination;
+	FGameplayTag Abilities_EnemyAssassination;
+	FGameplayTag Abilities_AreaHeal;
 	
 	FGameplayTag Enemy_Ability_Melee;
 	FGameplayTag Enemy_Ability_SpawnStone;
 	FGameplayTag Enemy_Status_Strafing;
 	FGameplayTag Enemy_Status_KnockedDown;
-
+	FGameplayTag Enemy_Status_ThrowAway;
+	
 	FGameplayTag Player_Weapon;
 	FGameplayTag Player_Cooldown_SpecialWeaponAbility_Light;
 	FGameplayTag Player_Cooldown_SpecialWeaponAbility_Heavy;
@@ -100,10 +106,13 @@ public:
 	FGameplayTag Event_Spawn_Projectile;
 	FGameplayTag Event_AOE;
 	FGameplayTag Event_HitReact;
+	FGameplayTag Event_HitReact_ThrowAway;
 	FGameplayTag Event_SaveAttack;
 	FGameplayTag Event_ResetCombo;
 	FGameplayTag Event_ConsumeStones;
-
+	FGameplayTag Event_Assassination_Success;
+	FGameplayTag Event_Assassination_Fail;
+	
 protected:
 
 private:
