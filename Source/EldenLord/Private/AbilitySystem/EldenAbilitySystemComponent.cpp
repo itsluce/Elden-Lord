@@ -24,6 +24,28 @@ void UEldenAbilitySystemComponent::AddCharacterAttributes(const TArray<TSubclass
 	}
 }
 
+void UEldenAbilitySystemComponent::AbilityInputTagPreesed(const FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid())
+	{
+		return;
+	}
+
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if(!AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag)) continue;
+
+		if (InputTag.MatchesTag(FEldenGameplayTags::Get().InputTag_Toggleable) && AbilitySpec.IsActive())
+		{
+			CancelAbilityHandle(AbilitySpec.Handle);
+		}
+		else
+		{
+			TryActivateAbility(AbilitySpec.Handle);
+		}
+	}
+}
+
 void UEldenAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
@@ -59,14 +81,16 @@ void UEldenAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& Input
 
 void UEldenAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
 {
-	if (!InputTag.IsValid() || !InputTag.MatchesTag(FEldenGameplayTags::Get().InputTag_MustBeHeld_Block)) return;
-
-	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	if (!InputTag.IsValid() || !InputTag.MatchesTag(FEldenGameplayTags::Get().InputTag_MustBeHeld))
 	{
-		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		return;
+	}
+
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{  
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag) && AbilitySpec.IsActive())
 		{
 			CancelAbilityHandle(AbilitySpec.Handle);
-			// AbilitySpecInputReleased(AbilitySpec);
 		}
 	}
 }

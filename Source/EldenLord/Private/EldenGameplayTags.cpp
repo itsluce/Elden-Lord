@@ -140,15 +140,17 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("InputTag.4"),
 		FString("Input Tag for 4 Key")
 	);
-
-	GameplayTags.InputTag_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("InputTag.TargetLock"),
-		FString("Input Tag for Target Lock")
-	);
+	
 	GameplayTags.InputTag_Toggleable = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.Toggleable"),
 		FString("Input Tag for Toggleable")
 	);
+	
+	GameplayTags.InputTag_Toggleable_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Toggleable.TargetLock"),
+		FString("Input Tag for Target Lock")
+	);
+	
 	GameplayTags.InputTag_Space = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.Space"),
 		FString("Input Tag for Dodge")
@@ -156,11 +158,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 
 	GameplayTags.InputTag_MustBeHeld = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.MustBeHeld"),
-		FString("Input Tag for Block")
+		FString("Input Tag for Must Be Held")
 	);
 
 	GameplayTags.InputTag_MustBeHeld_Block = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("InputTag.MustBeHeld_Block"),
+		FName("InputTag.MustBeHeld.Block"),
 		FString("Input Tag for Block")
 	);
 
@@ -169,8 +171,8 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Input Tag for Equip Weapon")
 	);
 
-	GameplayTags.InputTag_Rage = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("InputTag.Rage"),
+	GameplayTags.InputTag_Toggleable_Rage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.Toggleable.Rage"),
 		FString("Input Tag for Rage")
 	);
 
@@ -192,6 +194,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.InputTag_Assassination = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.Assassination"),
 		FString("Input Tag for Assassination")
+	);
+	
+	GameplayTags.InputTag_SwitchTarget = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.SwitchTarget"),
+		FString("Input Tag for Switch Target")
 	);
 
 	/*
@@ -317,6 +324,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FName("Abilities.EnemyAssassination"),
 		FString("Enemy Assassination Ability")
 	);
+	
+	GameplayTags.Abilities_Dodge = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Dodge"),
+		FString("Dodge Ability")
+	);
 
 	/*
 	*  Enemy Tags
@@ -344,6 +356,11 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Enemy_Status_ThrowAway = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Enemy.Status.ThrowAway"),
 		FString("Enemy Status Throw Away")
+	);
+	
+	GameplayTags.Enemy_Status_Dead = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Enemy.Status.Dead"),
+		FString("Enemy Status Dead")
 	);
 
 	/*
@@ -375,6 +392,25 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Status Rage None Ability")
 	);
 
+	GameplayTags.Status_Dead = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Dead"),
+		FString("Status Dead")
+	);
+
+	GameplayTags.Status_Attacking = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Attacking"),
+		FString("Status Attacking")
+	);
+
+	GameplayTags.Status_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.TargetLock"),
+		FString("Status Target Lock")
+	);
+
+	/*
+	 * Player Tags 
+	 */
+
 	GameplayTags.Player_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Player.Weapon"),
 		FString("Player Weapon")
@@ -388,15 +424,6 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Player_Cooldown_SpecialWeaponAbility_Heavy = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Player.Cooldown.SpecialWeaponAbility.Heavy"),
 		FString("Player Special Weapon Ability Heavy Cooldown")
-	);
-
-	/*
-	 *  Animation Tags
-	 */
-
-	GameplayTags.Animation_TargetLock = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Animation.TargetLock"),
-		FString("Target Lock Animation")
 	);
 
 	/*
@@ -481,6 +508,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Event_Assassination_Fail = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.Assassination.Fail"),
 		FString("Fail Assassination Event")
+	);
+
+	GameplayTags.Event_SwitchTarget_Left = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.SwitchTarget.Left"),
+		FString("Switch Target Left Event")
+	);
+
+	GameplayTags.Event_SwitchTarget_Right = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.SwitchTarget.Right"),
+		FString("Switch Target Right Event")
 	);
 
 	/*

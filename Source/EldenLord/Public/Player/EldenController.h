@@ -26,6 +26,7 @@ public:
 	AEldenController();
 	virtual void Tick(float DeltaSeconds) override;
 	virtual FGenericTeamId GetGenericTeamId() const override;
+
 protected:
 	void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -43,16 +44,20 @@ private:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> TurnAxis;
 
+	UPROPERTY()
+	FVector2D SwitchDirection = FVector2D::ZeroVector;
+
 	void Move(const FInputActionValue& InputActionValue);
-	void Turn(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
+	void Input_PickUpStonesAbility(const FInputActionValue& InputActionValue);
+	void Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue);
+	void Input_SwitchTargetComplete(const FInputActionValue& InputActionValue);
 
 	void CursorTrace();
 	IEnemyInterface* LastActor;
 	IEnemyInterface* ThisActor;
 
-	void Input_PickUpStonesAbility(const FInputActionValue& InputActionValue);
-	
+
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
@@ -62,7 +67,7 @@ private:
 	TObjectPtr<UEldenInputConfig> InputConfig;
 
 	UPROPERTY()
-	TObjectPtr<UEldenAbilitySystemComponent>EldenAbilitySystemComponent;
+	TObjectPtr<UEldenAbilitySystemComponent> EldenAbilitySystemComponent;
 
 	UEldenAbilitySystemComponent* GetASC();
 

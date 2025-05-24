@@ -3,7 +3,9 @@
 
 #include "Character/BaseCharacter.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "EldenGameplayTags.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Components/CapsuleComponent.h"
@@ -14,16 +16,10 @@
 ABaseCharacter::ABaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	// PrimaryActorTick.bStartWithTickEnabled = true;
-	// GetMesh()->bReceivesDecals = false;
 
 	SpellWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Spell Weapon");
 	SpellWeapon->SetupAttachment(GetMesh(), FName("Hand_RSocket"));
 	SpellWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	// MainWeapon = CreateDefaultSubobject<USkeletalMeshComponent>("Main Weapon");
-	// MainWeapon->SetupAttachment(GetMesh(), FName("Hand_LSocket"));
-	// MainWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
@@ -35,6 +31,21 @@ UAnimMontage* ABaseCharacter::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
+UAnimMontage* ABaseCharacter::GetThrowAwayMontage_Implementation()
+{
+	return ThrowAwayMontage;
+}
+
+UAnimMontage* ABaseCharacter::GetStandUpMontage_Implementation()
+{
+	return StandUpMontage;
+}
+
+UAnimMontage* ABaseCharacter::GetKnockDownMontage_Implementation()
+{
+	return KnockDownMontage;
+}
+
 UAnimMontage* ABaseCharacter::GetAttackMontage_Implementation()
 {
 	return AttackMontage;
@@ -43,6 +54,11 @@ UAnimMontage* ABaseCharacter::GetAttackMontage_Implementation()
 UAnimMontage* ABaseCharacter::GetSummonMontage_Implementation()
 {
 	return SummonMontage;
+}
+
+UAnimMontage* ABaseCharacter::GetCarryMontage_Implementation()
+{
+	return CarryMontage;
 }
 
 TArray<FName> ABaseCharacter::GetAttackMontageSection_Implementation()
@@ -126,7 +142,9 @@ void ABaseCharacter::MulticastHandleDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Dissolve();
-
+	FGameplayEventData Data;
+	Data.Instigator = GetOwner();
+	
 	bDead = true;
 }
 

@@ -23,6 +23,7 @@ public:
 
 	void AddCharacterAttributes(const TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities);
 
+	void AbilityInputTagPreesed(const FGameplayTag& InputTag);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 

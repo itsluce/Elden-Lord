@@ -8,7 +8,7 @@
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
 #include "Interface/HitInterface.h"
-#include "Interface/IPawnCombatInterface.h"
+#include "Interface/PawnCombatInterface.h"
 #include "BaseCharacter.generated.h"
 
 class UEldenAbilitySystemComponent;
@@ -22,7 +22,7 @@ enum class ECharacterClass : uint8;
 
 UCLASS()
 class ELDENLORD_API ABaseCharacter : public ACharacter, public IHitInterface, public IAbilitySystemInterface,
-                                     public ICombatInterface, public IIPawnCombatInterface
+                                     public ICombatInterface, public IPawnCombatInterface
 {
 	GENERATED_BODY()
 
@@ -34,8 +34,12 @@ public:
 	/*  Combat Interface  */
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; };
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	virtual UAnimMontage* GetThrowAwayMontage_Implementation() override;
+	virtual UAnimMontage* GetStandUpMontage_Implementation() override;
+	virtual UAnimMontage* GetKnockDownMontage_Implementation() override;
 	virtual UAnimMontage* GetAttackMontage_Implementation() override;
 	virtual UAnimMontage* GetSummonMontage_Implementation() override;
+	virtual UAnimMontage* GetCarryMontage_Implementation() override;
 	virtual TArray<FName> GetAttackMontageSection_Implementation() override;
 	virtual void Die() override;
 	virtual AActor* GetAvatar_Implementation() override;
@@ -71,15 +75,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterCollisionResponse(ECollisionResponse CollisionResponse);
-	/*
-	 * Play Montage Function
-	 */
 	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> SpellWeapon;
-
-	// UPROPERTY(EditAnywhere, Category="Combat")
-	// TObjectPtr<USkeletalMeshComponent> MainWeapon;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
@@ -139,6 +137,10 @@ private:
 	UPROPERTY(EditAnywhere, Category=Abilities)
 	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
 
+	/*
+	 * Montages To Play
+	 */
+	
 	UPROPERTY(EditAnywhere, Category=Combat)
 	TObjectPtr<UAnimMontage> HitReactMontage;
 	
@@ -147,6 +149,18 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category=Combat)
 	TObjectPtr<UAnimMontage> SummonMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> ThrowAwayMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> StandUpMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> KnockDownMontage;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TObjectPtr<UAnimMontage> CarryMontage;
 	
 	UPROPERTY(EditAnywhere, Category=Combat)
 	TArray<FName> AttackMontageSection;

@@ -73,20 +73,17 @@ void AEldenController::Move(const FInputActionValue& InputActionValue)
 
 void AEldenController::Look(const FInputActionValue& InputActionValue)
 {
-	const float Value = InputActionValue.Get<float>();
+	const FVector2D LookAxisVector = InputActionValue.Get<FVector2D>();
+	
+	if (LookAxisVector.X != 0.f)
+	{
+		AddYawInput(LookAxisVector.X);
+	}
 
-	// if (GEngine)
-	// {
-	// 	GEngine->AddOnScreenDebugMessage(8, 5.f, FColor::Purple, FString::Printf(TEXT("InputActionValue: %f"), Value));
-	// }
-
-	AddPitchInput(Value);
-}
-
-void AEldenController::Turn(const FInputActionValue& InputActionValue)
-{
-	const float Value = InputActionValue.Get<float>();
-	AddYawInput(Value);
+	if (LookAxisVector.Y != 0.f)
+	{
+		AddPitchInput(LookAxisVector.Y);
+	}
 }
 
 void AEldenController::SetupInputComponent()
@@ -97,14 +94,16 @@ void AEldenController::SetupInputComponent()
 
 	EldenInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEldenController::Move);
 	EldenInputComponent->BindAction(LookAxis, ETriggerEvent::Triggered, this, &AEldenController::Look);
-	EldenInputComponent->BindAction(TurnAxis, ETriggerEvent::Triggered, this, &AEldenController::Turn);
 
 	EldenInputComponent->BindNativeInputAction(InputConfig, FEldenGameplayTags::Get().InputTag_PickUp,
 	                                           ETriggerEvent::Completed, this,
 	                                           &AEldenController::Input_PickUpStonesAbility);
+	EldenInputComponent->BindNativeInputAction(InputConfig, FEldenGameplayTags::Get().InputTag_SwitchTarget,
+	                                           ETriggerEvent::Triggered, this, &ThisClass::Input_SwitchTargetTriggered);
+	EldenInputComponent->BindNativeInputAction(InputConfig, FEldenGameplayTags::Get().InputTag_SwitchTarget,
+	                                           ETriggerEvent::Completed, this, &ThisClass::Input_SwitchTargetComplete);
 
-	EldenInputComponent->BindAbilitiesAction(InputConfig, this, &ThisClass::AbilityInputTagPressed,
-	                                         &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
+	EldenInputComponent->BindAbilityInputAction(InputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased);
 }
 
 void AEldenController::CursorTrace()
@@ -168,8 +167,8 @@ void AEldenController::CursorTrace()
 void AEldenController::Input_PickUpStonesAbility(const FInputActionValue& InputActionValue)
 {
 	FGameplayEventData Data;
-	
-	APawn* ControlledPawn  = GetPawn();
+
+	APawn* ControlledPawn = GetPawn();
 	if (ControlledPawn)
 	{
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
@@ -180,8 +179,31 @@ void AEldenController::Input_PickUpStonesAbility(const FInputActionValue& InputA
 	}
 }
 
+void AEldenController::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
+{
+	SwitchDirection = InputActionValue.Get<FVector2D>();
+}
+
+void AEldenController::Input_SwitchTargetComplete(const FInputActionValue& InputActionValue)
+{
+	FGameplayEventData Data;
+	APawn* ControlledPawn = GetPawn();
+	if (ControlledPawn)
+	{
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			ControlledPawn,
+			SwitchDirection.X > 0.f
+				? FEldenGameplayTags::Get().Event_SwitchTarget_Right
+				: FEldenGameplayTags::Get().Event_SwitchTarget_Left,
+			Data
+		);
+	}
+}
+
 void AEldenController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
+	if (GetASC() == nullptr)return;
+	GetASC()->AbilityInputTagPreesed(InputTag);
 }
 
 void AEldenController::AbilityInputTagReleased(FGameplayTag InputTag)

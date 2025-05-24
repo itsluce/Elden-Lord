@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "IPawnCombatInterface.generated.h"
+#include "PawnCombatInterface.generated.h"
 
 class UPawnCombatComponent;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UIPawnCombatInterface : public UInterface
+class UPawnCombatInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,7 +17,7 @@ class UIPawnCombatInterface : public UInterface
 /**
  * 
  */
-class ELDENLORD_API IIPawnCombatInterface
+class ELDENLORD_API IPawnCombatInterface
 {
 	GENERATED_BODY()
 

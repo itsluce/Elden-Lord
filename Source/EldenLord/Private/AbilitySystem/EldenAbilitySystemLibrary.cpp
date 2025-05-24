@@ -10,7 +10,7 @@
 #include "GameMode/EldenGameMode.h"
 #include "HUD/EldenHUD.h"
 #include "Interface/CombatInterface.h"
-#include "Interface/IPawnCombatInterface.h"
+#include "Interface/PawnCombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/EldenPlayerState.h"
 #include "UI/Controller/EldenWidgetController.h"
@@ -259,7 +259,7 @@ UPawnCombatComponent* UEldenAbilitySystemLibrary::NativeGetPawnCombatComponentFr
 {   
 	check(InActor);
 
-	if (IIPawnCombatInterface* PawnCombatInterface = Cast<IIPawnCombatInterface>(InActor))
+	if (IPawnCombatInterface* PawnCombatInterface = Cast<IPawnCombatInterface>(InActor))
 	{
 		return PawnCombatInterface->GetPawnCombatComponent();
 	}

@@ -23,6 +23,9 @@ public:
 	template<class UserObject,typename CallbackFunc>
 	void BindNativeInputAction(const UEldenInputConfig* InInputConfig,const FGameplayTag& InInputTag,ETriggerEvent TriggerEvent,UserObject* ContextObject,CallbackFunc Func);
 
+	template<class UserObject,typename CallbackFunc>
+	void BindAbilityInputAction(const UEldenInputConfig* InInputConfig,UserObject* ContextObject,CallbackFunc InputPressedFunc,CallbackFunc InputRelasedFunc);
+
 };
 
 template <class UserClass, typename PressedFuncType, typename ReleasedFuncType, typename HeldFuncType>
@@ -63,5 +66,17 @@ inline void UEldenInputComponent::BindNativeInputAction(const UEldenInputConfig*
 	if (const UInputAction* FoundAction = InputConfig->FindNativeInputActionByTag(InInputTag))
 	{
 		BindAction(FoundAction,TriggerEvent,ContextObject,Func);
+	}
+}
+
+template<class UserObject, typename CallbackFunc>
+inline void UEldenInputComponent::BindAbilityInputAction(const UEldenInputConfig* InInputConfig, UserObject* ContextObject, CallbackFunc InputPressedFunc, CallbackFunc InputRelasedFunc)
+{
+	checkf(InInputConfig,TEXT("Input config data asset is null,can not proceed with binding"));
+
+	for (const FEldenInputAction& AbilityInputActionConfig : InInputConfig->AbilityInputActions)
+	{
+		BindAction(AbilityInputActionConfig.InputAction,ETriggerEvent::Started,ContextObject,InputPressedFunc,AbilityInputActionConfig.InputTag);
+		BindAction(AbilityInputActionConfig.InputAction,ETriggerEvent::Completed,ContextObject,InputRelasedFunc,AbilityInputActionConfig.InputTag);
 	}
 }
