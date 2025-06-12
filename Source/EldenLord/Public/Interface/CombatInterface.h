@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "CombatInterface.generated.h"
 
+class AWeapon;
 class UPawnCombatComponent;
 
 UINTERFACE(MinimalAPI, BlueprintType)
@@ -56,7 +57,13 @@ public:
 	TArray<FName> GetAttackMontageSection();
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	FName GetWeaponSocket();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	TSubclassOf<AActor> GetWeapon();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	TSubclassOf<AWeapon> SpawnedWeaponClass();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void GetImpactAngle(const FVector& ImpactPoint, AActor* Hitter);

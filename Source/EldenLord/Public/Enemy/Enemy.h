@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Character/BaseCharacter.h"
 #include "UI/Controller/OverlayEldenWidgetController.h"
 #include "Interface/EnemyInterface.h"

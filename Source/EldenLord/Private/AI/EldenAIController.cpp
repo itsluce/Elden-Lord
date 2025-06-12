@@ -77,11 +77,11 @@ void AEldenAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Sti
 {		
 	if (UBlackboardComponent* BlackboardComponent = GetBlackboardComponent())
 	{
-		if (!BlackboardComponent->GetValueAsObject(FName("TargetActor")))
+		if (!BlackboardComponent->GetValueAsObject(FName("TargetToFollow")))
 		{
 			if (Stimulus.WasSuccessfullySensed() && Actor)
 			{
-				BlackboardComponent->SetValueAsObject(FName("TargetActor"),Actor);
+				BlackboardComponent->SetValueAsObject(FName("TargetToFollow"),Actor);
 			}
 		}
 	}

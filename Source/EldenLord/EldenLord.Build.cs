@@ -23,7 +23,8 @@ public class EldenLord : ModuleRules
 			"GameplayTasks",
 			"GameplayAbilities",
 			"Niagara",
-			"AIModule"
+			"AIModule",
+			"MotionWarping"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });

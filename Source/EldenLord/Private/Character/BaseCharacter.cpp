@@ -3,15 +3,13 @@
 
 #include "Character/BaseCharacter.h"
 
-#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "EldenGameplayTags.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
-#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/EldenCombatComponent.h"
 #include "EldenLord/EldenLord.h"
-#include "Components/BoxComponent.h"
 #include "Item/Weapon/Weapon.h"
+#include "MotionWarpingComponent.h"
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -24,6 +22,8 @@ ABaseCharacter::ABaseCharacter()
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
+
+	 MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 UAnimMontage* ABaseCharacter::GetHitReactMontage_Implementation()
@@ -61,10 +61,21 @@ UAnimMontage* ABaseCharacter::GetCarryMontage_Implementation()
 	return CarryMontage;
 }
 
+TSubclassOf<AWeapon> ABaseCharacter::SpawnedWeaponClass_Implementation()
+{
+	return WeaponClass;
+}
+
 TArray<FName> ABaseCharacter::GetAttackMontageSection_Implementation()
 {
 	return AttackMontageSection;
 }
+
+FName ABaseCharacter::GetWeaponSocket_Implementation()
+{
+	return WeaponSocket;
+}
+
 
 void ABaseCharacter::Die()
 {
@@ -97,16 +108,6 @@ int32 ABaseCharacter::GetMinionCount_Implementation()
 void ABaseCharacter::UpdateMinionCount_Implementation(int32 Amount)
 {
 	MinionsCount += Amount;
-}
-
-int32 ABaseCharacter::UpdateAttackCount_Implementation()
-{
-	return AttackCount;
-}
-
-TSubclassOf<AActor> ABaseCharacter::GetWeapon_Implementation()
-{
-	return EquippedWeapon;
 }
 
 UPawnCombatComponent* ABaseCharacter::GetPawnCombatComponent() const
@@ -225,22 +226,6 @@ UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
-
-void ABaseCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled, AWeapon* NewWeapon)
-{
-	if (NewWeapon)
-	{
-		AWeapon* Weapon = Cast<AWeapon>(NewWeapon);
-		if (Weapon)
-		{
-			if (UBoxComponent* WeaponBox = Weapon->GetWeaponBox())
-			{
-				WeaponBox->SetCollisionEnabled(CollisionEnabled);
-			}
-		}
-	}
-}
-
 
 void ABaseCharacter::SetCharacterCollisionResponse(ECollisionResponse CollisionResponse)
 {

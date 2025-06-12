@@ -18,6 +18,8 @@ class UAttributeSet;
 class UAbilitySystemComponent;
 class UAttributeComponent;
 class AWeapon;
+class UMotionWarpingComponent;
+
 enum class ECharacterClass : uint8;
 
 UCLASS()
@@ -40,14 +42,14 @@ public:
 	virtual UAnimMontage* GetAttackMontage_Implementation() override;
 	virtual UAnimMontage* GetSummonMontage_Implementation() override;
 	virtual UAnimMontage* GetCarryMontage_Implementation() override;
+	virtual TSubclassOf<AWeapon> SpawnedWeaponClass_Implementation() override;
 	virtual TArray<FName> GetAttackMontageSection_Implementation() override;
+	virtual FName GetWeaponSocket_Implementation() override;
 	virtual void Die() override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual bool IsDead_Implementation() const override;
 	virtual int32 GetMinionCount_Implementation() override;
 	virtual void UpdateMinionCount_Implementation(int32 Amount) override;
-	virtual int32 UpdateAttackCount_Implementation() override;
-	virtual TSubclassOf<AActor> GetWeapon_Implementation() override;
 	/*  End Combat Interface  */
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
 	
@@ -69,30 +71,16 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
-
-	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled, AWeapon* NewWeapon);
-
+	virtual FVector GetCombatSocketLocation_Implementation();
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterCollisionResponse(ECollisionResponse CollisionResponse);
 	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> SpellWeapon;
-
+	
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
-
-	UPROPERTY(EditAnywhere, Category = "Combat")
-	FName WeaponMeleeTipSocketName;
 	
-	UPROPERTY(EditAnywhere, Category = "Combat")
-	FName WeaponSecondMeleeTipSocketName;
-	
-	UPROPERTY(EditAnywhere, Category = "Combat")
-	TSubclassOf<AActor> EquippedWeapon;
-
-	virtual FVector GetCombatSocketLocation_Implementation();
-
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
@@ -131,7 +119,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
+	UMotionWarpingComponent* MotionWarpingComponent;
+	
 	int32 MinionsCount = 0;
 private:
 	UPROPERTY(EditAnywhere, Category=Abilities)
@@ -164,6 +155,12 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category=Combat)
 	TArray<FName> AttackMontageSection;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	TSubclassOf<AWeapon> WeaponClass;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	FName WeaponSocket = TEXT("Hand_LSocket");
 
 public:
 	FORCEINLINE UAbilitySystemComponent* GetEldenAbilitySystemComponent() const {return AbilitySystemComponent;}

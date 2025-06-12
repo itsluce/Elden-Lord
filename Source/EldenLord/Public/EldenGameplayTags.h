@@ -63,6 +63,9 @@ public:
 	FGameplayTag Effect_Invincible;
 	
 	FGameplayTag Abilities_Attack;
+	FGameplayTag Abilities_Attack1;
+	FGameplayTag Abilities_Attack2;
+	FGameplayTag Abilities_Attack3;
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_Invisible;
 	FGameplayTag Abilities_TargetLock;
@@ -89,6 +92,8 @@ public:
 	FGameplayTag Player_Weapon;
 	FGameplayTag Player_Cooldown_SpecialWeaponAbility_Light;
 	FGameplayTag Player_Cooldown_SpecialWeaponAbility_Heavy;
+	FGameplayTag Player_ComboWindow;
+	FGameplayTag Player_ComboWindow2;
 	
 	FGameplayTag Status_Blocking;
 	FGameplayTag Status_Rage_Activating;
@@ -99,6 +104,8 @@ public:
 	FGameplayTag Status_Attacking;
 	FGameplayTag Status_Dodging;
 	FGameplayTag Status_TargetLock;
+	FGameplayTag Status_Invisible;
+	FGameplayTag Status_Visible;
 	
 	FGameplayTag Event_Weapon_Impact;
 	FGameplayTag Event_SuccessfulBlock;
@@ -108,7 +115,9 @@ public:
 	FGameplayTag Event_Equip;
 	FGameplayTag Event_UnEquip;
 	FGameplayTag Event_Activate_Rage;
-	FGameplayTag Event_Spawn_Projectile;
+	FGameplayTag Event_Spawn_Projectile_1;
+	FGameplayTag Event_Spawn_Projectile_2;
+	FGameplayTag Event_Spawn_Projectile_3;
 	FGameplayTag Event_AOE;
 	FGameplayTag Event_HitReact;
 	FGameplayTag Event_HitReact_ThrowAway;
@@ -119,6 +128,8 @@ public:
 	FGameplayTag Event_Assassination_Fail;
 	FGameplayTag Event_SwitchTarget_Left;
 	FGameplayTag Event_SwitchTarget_Right;
+	FGameplayTag Event_Combo_Save;
+	FGameplayTag Event_Combo_Reset;
 	
 protected:
 

@@ -13,16 +13,12 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/EldenLordCharacter.h"
-#include "Components/AttributeComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/EnemyCombatComponent.h"
 #include "EldenLord/EldenLord.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HUD/HealthBarComponent.h"
-#include "Item/Weapon/Weapon.h"
-#include "Navigation/PathFollowingComponent.h"
-#include "Perception/PawnSensingComponent.h"
 #include "HUD/EldenOverlay.h"
 #include "UI/Widget/EldenUserWidget.h"
 
@@ -35,11 +31,16 @@ AEnemy::AEnemy()
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 
-	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
+	
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f,180.f,0.f);
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 1000.f;
+	
 	AbilitySystemComponent = CreateDefaultSubobject<UEldenAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
@@ -51,10 +52,6 @@ AEnemy::AEnemy()
 
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>(TEXT("EldenCombatComponent"));
 	
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
 }
 
 void AEnemy::PossessedBy(AController* NewController)

@@ -8,6 +8,8 @@
 #include "EldenGameplayTags.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "AbilitySystem/EldenAbilitySystemLibrary.h"
+#include "Components/BoxComponent.h"
+#include "Enemy/FrostGiant_Enemy.h"
 
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
@@ -58,5 +60,36 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 			FEldenGameplayTags::Get().Event_MeleeHit,
 			EventData
 		);
+	}
+}
+
+void UEnemyCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+{
+	AFrostGiant_Enemy* OwningEnemyCharacter = GetOwningPawn<AFrostGiant_Enemy>();
+
+	check(OwningEnemyCharacter);
+
+	UBoxComponent* LeftHandCollisionBox = OwningEnemyCharacter->GetWeaponBoxL();
+	UBoxComponent* RightHandCollisionBox = OwningEnemyCharacter->GetWeaponBoxR();
+
+	check(LeftHandCollisionBox && RightHandCollisionBox);
+
+	switch (ToggleDamageType)
+	{
+	case EToggleDamageType::LeftHand:
+		LeftHandCollisionBox->SetCollisionEnabled(bShouldEnable? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+
+	case EToggleDamageType::RightHand:
+		RightHandCollisionBox->SetCollisionEnabled(bShouldEnable? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+		break;
+
+	default:
+		break;
+	}
+
+	if (!bShouldEnable)
+	{
+		OverlappedActors.Empty();
 	}
 }

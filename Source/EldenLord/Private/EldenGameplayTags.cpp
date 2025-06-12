@@ -249,10 +249,25 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	/*
      *  Abilities Tags
      */
-
+	
 	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Attack"),
 		FString("Attack Ability")
+	);
+
+	GameplayTags.Abilities_Attack1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack.1"),
+		FString("Attack 1 Ability")
+	);
+
+	GameplayTags.Abilities_Attack2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack.2"),
+		FString("Attack 2 Ability")
+	);
+
+	GameplayTags.Abilities_Attack3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.Attack.3"),
+		FString("Attack 3 Ability")
 	);
 
 	GameplayTags.Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(
@@ -407,6 +422,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Status Target Lock")
 	);
 
+	GameplayTags.Status_Invisible = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Invisible"),
+		FString("Status Invisible")
+	);
+
+	GameplayTags.Status_Visible = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Status.Visible"),
+		FString("Status Visible")
+	);
+
 	/*
 	 * Player Tags 
 	 */
@@ -424,6 +449,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Player_Cooldown_SpecialWeaponAbility_Heavy = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Player.Cooldown.SpecialWeaponAbility.Heavy"),
 		FString("Player Special Weapon Ability Heavy Cooldown")
+	);
+
+	GameplayTags.Player_ComboWindow = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.ComboWindow"),
+		FString("Player Combo Window")
+	);
+
+	GameplayTags.Player_ComboWindow2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Player.ComboWindow2"),
+		FString("Player Combo Window 2")
 	);
 
 	/*
@@ -470,9 +505,19 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 		FString("Activate Rage Event")
 	);
 
-	GameplayTags.Event_Spawn_Projectile = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Event.Spawn.Projectile"),
-		FString("Spawn Projectile Event")
+	GameplayTags.Event_Spawn_Projectile_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Spawn.Projectile.1"),
+		FString("Spawn Projectile 1 Event")
+	);
+
+	GameplayTags.Event_Spawn_Projectile_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Spawn.Projectile.2"),
+		FString("Spawn Projectile 2 Event")
+	);
+
+	GameplayTags.Event_Spawn_Projectile_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Spawn.Projectile.3"),
+		FString("Spawn Projectile 3 Event")
 	);
 
 	GameplayTags.Event_AOE = UGameplayTagsManager::Get().AddNativeGameplayTag(
@@ -518,6 +563,16 @@ void FEldenGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Event_SwitchTarget_Right = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.SwitchTarget.Right"),
 		FString("Switch Target Right Event")
+	);
+	
+	GameplayTags.Event_Combo_Save = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Combo.Save"),
+		FString("Combo Save Event")
+	);
+	
+	GameplayTags.Event_Combo_Reset = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Combo.Reset"),
+		FString("Combo Reset Event")
 	);
 
 	/*

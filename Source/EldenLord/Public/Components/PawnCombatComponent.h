@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Elden|Combat")
 	void ToggleWeaponVisibility(AWeapon* Weapon,bool bIsVisible);
 protected:
+	virtual void ToggleCurrentEquippedWeaponCollision(bool bShouldEnable);
+	virtual void ToggleBodyCollisionBoxCollision(bool bShouldEnable,EToggleDamageType ToggleDamageType);
+	
 	TArray<AActor*> OverlappedActors;
 
 private:

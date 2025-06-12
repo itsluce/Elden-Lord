@@ -17,7 +17,8 @@ enum class ECharacterClass : uint8
 	Ranger,
 	Shaman,
 	Invisible,
-	Healer
+	Healer,
+	Boss
 };
 
 USTRUCT(BlueprintType)
