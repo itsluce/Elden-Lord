@@ -10,6 +10,8 @@
 #include "Components/SphereComponent.h"
 #include "EldenLord/EldenLord.h"
 #include "Enemy/Enemy.h"
+#include "EldenGameplayTags.h"
+#include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Interface/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -77,8 +79,58 @@ void AEldenProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
 		}
 	}
 
+	// Check for blocking before applying damage
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		const bool bIsPlayerBlocking = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitPawn) && 
+			UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitPawn)->HasMatchingGameplayTag(FEldenGameplayTags::Get().Status_Blocking);
+
+		if (bIsPlayerBlocking)
+		{
+			const bool bIsValidBlock = UEldenAbilitySystemLibrary::IsValidBlock(this, HitPawn);
+			
+			if (bIsValidBlock)
+			{
+				// Send successful block event instead of damage
+				FGameplayEventData BlockData;
+				BlockData.Instigator = this;
+				BlockData.Target = HitPawn;
+				
+				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+					HitPawn,
+					FEldenGameplayTags::Get().Event_SuccessfulBlock,
+					BlockData
+				);
+				
+				// Play effects and destroy projectile
+				ICombatInterface* CombatInterface = Cast<ICombatInterface>(OtherActor);
+				if (CombatInterface)
+				{
+					CombatInterface->Execute_GetImpactAngle(OtherActor, SweepResult.ImpactPoint, OtherActor);
+				}
+
+				UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation(), FRotator::ZeroRotator);
+				LoopingSoundComponent->Stop();
+				
+				if (HasAuthority())
+				{
+					Destroy();
+				}
+				else
+				{
+					bHit = true;
+				}
+				return;
+			}
+		}
+	}
+
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(OtherActor);
-	CombatInterface->Execute_GetImpactAngle(OtherActor, SweepResult.ImpactPoint, OtherActor);
+	if (CombatInterface)
+	{
+		CombatInterface->Execute_GetImpactAngle(OtherActor, SweepResult.ImpactPoint, OtherActor);
+	}
 
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation(), FRotator::ZeroRotator);
