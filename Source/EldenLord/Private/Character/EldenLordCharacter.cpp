@@ -72,7 +72,7 @@ void AEldenLordCharacter::InitAbilityActorInfo()
 	{
 		if (AEldenHUD* EldenHUD = Cast<AEldenHUD>(EldenController->GetHUD()))
 		{
-			// EldenHUD->InitOverlay(EldenController, EldenPlayerState, AbilitySystemComponent, AttributeSet);
+			 EldenHUD->InitOverlay(EldenController, EldenPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
 	InitializeDefaultAttribute();
