@@ -10,6 +10,7 @@
 #include "Components/BoxComponent.h"
 #include "EldenDbug.h"
 #include "AbilitySystem/EldenAbilitySystemLibrary.h"
+#include "Enemy/Enemy.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 AWeapon::AWeapon()
@@ -37,6 +38,16 @@ void AWeapon::OnCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	{
 		if (WeaponOwningPawn != HitPawn)
 		{
+			// Prevent enemy-to-enemy damage
+			AEnemy* OwnerEnemy = Cast<AEnemy>(WeaponOwningPawn);
+			AEnemy* HitEnemy = Cast<AEnemy>(HitPawn);
+			
+			// If both are enemies, don't allow damage
+			if (OwnerEnemy && HitEnemy)
+			{
+				return;
+			}
+			
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
 	}
@@ -52,6 +63,16 @@ void AWeapon::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		if (WeaponOwningPawn != HitPawn)
 		{
+			// Prevent enemy-to-enemy damage
+			AEnemy* OwnerEnemy = Cast<AEnemy>(WeaponOwningPawn);
+			AEnemy* HitEnemy = Cast<AEnemy>(HitPawn);
+			
+			// If both are enemies, don't allow damage
+			if (OwnerEnemy && HitEnemy)
+			{
+				return;
+			}
+			
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
 	}

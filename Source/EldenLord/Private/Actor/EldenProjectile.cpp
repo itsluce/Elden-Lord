@@ -9,6 +9,7 @@
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "EldenLord/EldenLord.h"
+#include "Enemy/Enemy.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Interface/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -56,6 +57,26 @@ void AEldenProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                        const FHitResult& SweepResult)
 {
+	// Prevent enemy-to-enemy damage
+	APawn* ProjectileOwner = GetInstigator<APawn>();
+	if (ProjectileOwner && OtherActor)
+	{
+		AEnemy* OwnerEnemy = Cast<AEnemy>(ProjectileOwner);
+		AEnemy* HitEnemy = Cast<AEnemy>(OtherActor);
+		
+		// If both are enemies, don't allow damage
+		if (OwnerEnemy && HitEnemy)
+		{
+			return;
+		}
+		
+		// Don't hit self
+		if (ProjectileOwner == OtherActor)
+		{
+			return;
+		}
+	}
+
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(OtherActor);
 	CombatInterface->Execute_GetImpactAngle(OtherActor, SweepResult.ImpactPoint, OtherActor);
 
