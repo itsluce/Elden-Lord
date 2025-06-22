@@ -61,10 +61,21 @@ void AEldenProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, AA
 	bool bIsValidBlock = false;
 
 	const bool bIsPlayerBlocking = UEldenAbilitySystemLibrary::NativeDoesActorHaveTag(HitPawn,FEldenGameplayTags::Get().Status_Blocking);
+	const float ProjectileBlockStaminaCost = 15.f;
 
 	if (bIsPlayerBlocking)
 	{
-		bIsValidBlock = UEldenAbilitySystemLibrary::IsValidBlock(this,HitPawn);
+		// Check if target has enough stamina to block
+		if (UEldenAbilitySystemLibrary::HasEnoughStamina(HitPawn, ProjectileBlockStaminaCost))
+		{
+			bIsValidBlock = UEldenAbilitySystemLibrary::IsValidBlock(this,HitPawn);
+		}
+		else
+		{
+			// Cancel blocking ability due to insufficient stamina
+			UEldenAbilitySystemLibrary::CancelBlockingAbilityIfInsufficientStamina(HitPawn, ProjectileBlockStaminaCost);
+			bIsValidBlock = false;
+		}
 	}
 
 	FGameplayEventData Data;
@@ -73,6 +84,9 @@ void AEldenProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, AA
 
 	if (bIsValidBlock)
 	{
+		// Consume stamina for blocking projectile (stamina cost already defined above)
+		UEldenAbilitySystemLibrary::ConsumeStamina(HitPawn, ProjectileBlockStaminaCost);
+		
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 			HitPawn,
 			FEldenGameplayTags::Get().Event_SuccessfulBlock,

@@ -67,6 +67,10 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite)
 	bool AttackCount;
+
+	// Stamina regeneration functions
+	UFUNCTION(BlueprintCallable)
+	void StartStaminaRegenTimer();
 	
 protected:
 	virtual void BeginPlay() override;
@@ -74,6 +78,12 @@ protected:
 	virtual FVector GetCombatSocketLocation_Implementation();
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterCollisionResponse(ECollisionResponse CollisionResponse);
+	
+	UFUNCTION()
+	void BeginStaminaRegeneration();
+	
+	UFUNCTION()
+	void StaminaRegenTick();
 	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> SpellWeapon;
@@ -122,6 +132,19 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
 	UMotionWarpingComponent* MotionWarpingComponent;
+	
+	// Stamina regeneration properties
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina")
+	float StaminaRegenDelay = 2.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina")
+	float StaminaRegenRate = 20.0f; // Per second
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina")
+	float StaminaRegenTickRate = 0.1f; // How often to regenerate (every 0.1 seconds)
+	
+	FTimerHandle StaminaRegenDelayTimer;
+	FTimerHandle StaminaRegenTimer;
 	
 	int32 MinionsCount = 0;
 private:

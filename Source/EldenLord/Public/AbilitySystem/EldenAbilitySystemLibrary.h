@@ -93,4 +93,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "EldenAbilitySystemLibrary|GameplayMechanics", meta = (DisplayName = "Does Actor Have Tag", ExpandEnumAsExecs = "OutConfirmType"))
 	static void BP_DoesActorHaveTag(AActor* InActor,FGameplayTag TagToCheck,EWarriorConfirmType& OutConfirmType);
+
+	UFUNCTION(BlueprintCallable, Category = "EldenAbilitySystemLibrary|Stamina")
+	static bool ConsumeStamina(AActor* InActor, float StaminaCost);
+
+	UFUNCTION(BlueprintCallable, Category = "EldenAbilitySystemLibrary|Stamina")
+	static bool HasEnoughStamina(AActor* InActor, float StaminaCost);
+
+	UFUNCTION(BlueprintCallable, Category = "EldenAbilitySystemLibrary|Stamina")
+	static void StartStaminaRegeneration(AActor* InActor);
+
+	UFUNCTION(BlueprintCallable, Category = "EldenAbilitySystemLibrary|Blocking")
+	static void CancelBlockingAbilityIfInsufficientStamina(AActor* InActor, float StaminaCost);
 };

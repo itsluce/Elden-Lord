@@ -4,6 +4,10 @@
 #include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/EldenAttributeSet.h"
+#include "Character/BaseCharacter.h"
+#include "EldenDbug.h"
+#include "EldenGameplayTags.h"
 #include "GenericTeamAgentInterface.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Components/PawnCombatComponent.h"
@@ -233,7 +237,7 @@ bool UEldenAbilitySystemLibrary::IsValidBlock(AActor* InAttacker, AActor* InDefe
 
 	const float DotResult = FVector::DotProduct(InAttacker->GetActorForwardVector(),InDefender->GetActorForwardVector());
 
-	const FString DebugString = FString::Printf(TEXT("Dot Result: %f %s"),DotResult,DotResult<-0.1f? TEXT("Valid Block") : TEXT("InvalidBlock"));
+	//const FString DebugString = FString::Printf(TEXT("Dot Result: %f %s"),DotResult,DotResult<-0.1f? TEXT("Valid Block") : TEXT("InvalidBlock"));
  
 	 // Debug::Print(DebugString,DotResult<-0.1f? FColor::Green : FColor::Red);
 
@@ -292,4 +296,105 @@ void UEldenAbilitySystemLibrary::BP_DoesActorHaveTag(AActor* InActor, FGameplayT
                                                      EWarriorConfirmType& OutConfirmType)
 {
 	OutConfirmType = NativeDoesActorHaveTag(InActor,TagToCheck)? EWarriorConfirmType::Yes : EWarriorConfirmType::No;
+}
+
+bool UEldenAbilitySystemLibrary::ConsumeStamina(AActor* InActor, float StaminaCost)
+{
+	if (!InActor || StaminaCost <= 0.f)
+	{
+		return false;
+	}
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor);
+	if (!ASC)
+	{
+		return false;
+	}
+
+	// Check if we have enough stamina
+	if (!HasEnoughStamina(InActor, StaminaCost))
+	{
+		return false;
+	}
+
+	// Directly modify stamina
+	FGameplayAttribute StaminaAttribute = UEldenAttributeSet::GetStaminaAttribute();
+	const float CurrentStamina = ASC->GetNumericAttribute(StaminaAttribute);
+	const float NewStamina = FMath::Max(0.f, CurrentStamina - StaminaCost);
+	ASC->SetNumericAttributeBase(StaminaAttribute, NewStamina);
+
+	// Debug print stamina consumption
+	//Debug::Print(FString::Printf(TEXT("Stamina Consumed: %.1f | Current: %.1f -> %.1f"), StaminaCost, CurrentStamina, NewStamina), FColor::Yellow);
+
+	// Start stamina regeneration timer
+	StartStaminaRegeneration(InActor);
+
+	return true;
+}
+
+bool UEldenAbilitySystemLibrary::HasEnoughStamina(AActor* InActor, float StaminaCost)
+{
+	if (!InActor || StaminaCost <= 0.f)
+	{
+		return true;
+	}
+
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InActor);
+	if (!ASC)
+	{
+		return false;
+	}
+
+	const float CurrentStamina = ASC->GetNumericAttribute(UEldenAttributeSet::GetStaminaAttribute());
+	const bool bHasEnough = CurrentStamina >= StaminaCost;
+	
+	if (!bHasEnough)
+	{
+		//Debug::Print(FString::Printf(TEXT("Insufficient Stamina! Required: %.1f | Available: %.1f"), StaminaCost, CurrentStamina), FColor::Red);
+	}
+	
+	return bHasEnough;
+}
+
+void UEldenAbilitySystemLibrary::StartStaminaRegeneration(AActor* InActor)
+{
+	if (!InActor)
+	{
+		return;
+	}
+
+	// Try to cast to BaseCharacter to access stamina regeneration functions
+	if (ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(InActor))
+	{
+		BaseCharacter->StartStaminaRegenTimer();
+	}
+}
+
+void UEldenAbilitySystemLibrary::CancelBlockingAbilityIfInsufficientStamina(AActor* InActor, float StaminaCost)
+{
+	if (!InActor)
+	{
+		return;
+	}
+
+	// Check if actor has insufficient stamina
+	if (!HasEnoughStamina(InActor, StaminaCost))
+	{
+		UEldenAbilitySystemComponent* ASC = NativeGetEldenASCFromActor(InActor);
+		if (!ASC)
+		{
+			return;
+		}
+
+		// Find and cancel blocking abilities
+		FGameplayTagContainer BlockingTags;
+		BlockingTags.AddTag(FEldenGameplayTags::Get().Abilities_Blocking);
+		
+		ASC->CancelAbilities(&BlockingTags);
+		
+		// Remove blocking status tag
+		RemoveGameplayTagFromActorIfFound(InActor, FEldenGameplayTags::Get().Status_Blocking);
+		
+		//Debug::Print(TEXT("Blocking ability cancelled due to insufficient stamina!"), FColor::Red);
+	}
 }

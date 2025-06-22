@@ -84,13 +84,29 @@ void AEldenProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		const bool bIsPlayerBlocking = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitPawn) && 
 			UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(HitPawn)->HasMatchingGameplayTag(FEldenGameplayTags::Get().Status_Blocking);
+		const float ProjectileBlockStaminaCost = 15.f;
 
 		if (bIsPlayerBlocking)
 		{
-			const bool bIsValidBlock = UEldenAbilitySystemLibrary::IsValidBlock(this, HitPawn);
+			bool bIsValidBlock = false;
+			
+			// Check if target has enough stamina to block
+			if (UEldenAbilitySystemLibrary::HasEnoughStamina(HitPawn, ProjectileBlockStaminaCost))
+			{
+				bIsValidBlock = UEldenAbilitySystemLibrary::IsValidBlock(this, HitPawn);
+			}
+			else
+			{
+				// Cancel blocking ability due to insufficient stamina
+				UEldenAbilitySystemLibrary::CancelBlockingAbilityIfInsufficientStamina(HitPawn, ProjectileBlockStaminaCost);
+				bIsValidBlock = false;
+			}
 			
 			if (bIsValidBlock)
 			{
+				// Consume stamina for blocking projectile (stamina cost already defined above)
+				UEldenAbilitySystemLibrary::ConsumeStamina(HitPawn, ProjectileBlockStaminaCost);
+				
 				// Send successful block event instead of damage
 				FGameplayEventData BlockData;
 				BlockData.Instigator = this;

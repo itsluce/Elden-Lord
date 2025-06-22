@@ -13,5 +13,7 @@ UCLASS()
 class ELDENLORD_API UEldenMeleeAttack : public UEldenDamageGameplayAbility
 {
 	GENERATED_BODY()
-	
+
+public:
+	UEldenMeleeAttack();
 };

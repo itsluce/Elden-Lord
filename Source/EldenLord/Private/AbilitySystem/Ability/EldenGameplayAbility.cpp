@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EldenGameplayTags.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/EldenAbilitySystemLibrary.h"
 #include "Components/PawnCombatComponent.h"
 #include "Character/EldenLordCharacter.h"
 #include "Enemy/Enemy.h"
@@ -169,4 +170,39 @@ void UEldenGameplayAbility::ApplyGameplayEffectSpecHandleToHitResults(const FGam
 			}
 		}
 	}
+}
+
+bool UEldenGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+	{
+		return false;
+	}
+
+	// Check stamina cost if this ability uses stamina
+	if (bUseStamina && StaminaCost > 0.0f)
+	{
+		if (ActorInfo && ActorInfo->AvatarActor.IsValid())
+		{
+			return UEldenAbilitySystemLibrary::HasEnoughStamina(ActorInfo->AvatarActor.Get(), StaminaCost);
+		}
+		return false;
+	}
+
+	return true;
+}
+
+void UEldenGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+{
+	// Consume stamina if this ability uses stamina
+	if (bUseStamina && StaminaCost > 0.0f)
+	{
+		if (ActorInfo && ActorInfo->AvatarActor.IsValid())
+		{
+			UEldenAbilitySystemLibrary::ConsumeStamina(ActorInfo->AvatarActor.Get(), StaminaCost);
+		}
+	}
+
+	// Call parent implementation
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }

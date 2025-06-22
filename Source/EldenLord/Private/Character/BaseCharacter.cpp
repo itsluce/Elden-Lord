@@ -5,8 +5,10 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/EldenAbilitySystemComponent.h"
+#include "AbilitySystem/EldenAttributeSet.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/EldenCombatComponent.h"
+#include "EldenDbug.h"
 #include "EldenLord/EldenLord.h"
 #include "Item/Weapon/Weapon.h"
 #include "MotionWarpingComponent.h"
@@ -233,4 +235,53 @@ void ABaseCharacter::SetCharacterCollisionResponse(ECollisionResponse CollisionR
 	{
 		GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, CollisionResponse);
 	}
+}
+
+void ABaseCharacter::StartStaminaRegenTimer()
+{
+	// Clear any existing timers
+	GetWorld()->GetTimerManager().ClearTimer(StaminaRegenDelayTimer);
+	GetWorld()->GetTimerManager().ClearTimer(StaminaRegenTimer);
+	
+	//Debug::Print(FString::Printf(TEXT("Starting stamina regeneration timer (%.1f sec delay)"), StaminaRegenDelay), FColor::Cyan);
+	
+	// Start the delay timer (2 seconds before regen begins)
+	GetWorld()->GetTimerManager().SetTimer(StaminaRegenDelayTimer, this, &ABaseCharacter::BeginStaminaRegeneration, StaminaRegenDelay, false);
+}
+
+void ABaseCharacter::BeginStaminaRegeneration()
+{
+	//Debug::Print(TEXT("Stamina regeneration starting!"), FColor::Green);
+	
+	// Start the regeneration timer
+	GetWorld()->GetTimerManager().SetTimer(StaminaRegenTimer, this, &ABaseCharacter::StaminaRegenTick, StaminaRegenTickRate, true);
+}
+
+void ABaseCharacter::StaminaRegenTick()
+{
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+	
+	const float CurrentStamina = AbilitySystemComponent->GetNumericAttribute(UEldenAttributeSet::GetStaminaAttribute());
+	const float MaxStamina = AbilitySystemComponent->GetNumericAttribute(UEldenAttributeSet::GetMaxStaminaAttribute());
+	
+	// Stop regeneration if stamina is already at max
+	if (CurrentStamina >= MaxStamina)
+	{
+		//Debug::Print(FString::Printf(TEXT("Stamina regeneration complete! Stamina: %.1f/%.1f"), CurrentStamina, MaxStamina), FColor::Green);
+		GetWorld()->GetTimerManager().ClearTimer(StaminaRegenTimer);
+		return;
+	}
+	
+	// Calculate regeneration amount per tick
+	const float RegenAmount = StaminaRegenRate * StaminaRegenTickRate;
+	const float NewStamina = FMath::Min(MaxStamina, CurrentStamina + RegenAmount);
+	
+	// Apply the regeneration
+	AbilitySystemComponent->SetNumericAttributeBase(UEldenAttributeSet::GetStaminaAttribute(), NewStamina);
+	
+	// Debug print regeneration tick
+	//Debug::Print(FString::Printf(TEXT("Stamina regen: %.1f -> %.1f (%.1f/%.1f)"), CurrentStamina, NewStamina, NewStamina, MaxStamina), FColor::Blue);
 }

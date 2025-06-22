@@ -25,10 +25,21 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 
 	const bool bIsPlayerBlocking = UEldenAbilitySystemLibrary::NativeDoesActorHaveTag(HitActor,FEldenGameplayTags::Get().Status_Blocking);
 	const bool bIsMyAttackUnblockable = false;
+	const float BlockStaminaCost = 20.f;
 
 	if (bIsPlayerBlocking && !bIsMyAttackUnblockable)
 	{
-		bIsValidBlock = UEldenAbilitySystemLibrary::IsValidBlock(GetOwningPawn(),HitActor);
+		// Check if target has enough stamina to block
+		if (UEldenAbilitySystemLibrary::HasEnoughStamina(HitActor, BlockStaminaCost))
+		{
+			bIsValidBlock = UEldenAbilitySystemLibrary::IsValidBlock(GetOwningPawn(),HitActor);
+		}
+		else
+		{
+			// Cancel blocking ability due to insufficient stamina
+			UEldenAbilitySystemLibrary::CancelBlockingAbilityIfInsufficientStamina(HitActor, BlockStaminaCost);
+			bIsValidBlock = false;
+		}
 	}
 
 	FGameplayEventData EventData;
@@ -37,6 +48,9 @@ void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 
 	if (bIsValidBlock)
 	{
+		// Consume stamina for blocking (stamina cost already defined above)
+		UEldenAbilitySystemLibrary::ConsumeStamina(HitActor, BlockStaminaCost);
+		
 		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 			HitActor,
 			FEldenGameplayTags::Get().Event_SuccessfulBlock,
