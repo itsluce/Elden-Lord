@@ -15,6 +15,7 @@ UBTService_Patrolling::UBTService_Patrolling()
 	bPatrolPointsInitialized = false;
 	CurrentTargetPoint = FVector::ZeroVector;
 	LastReachedPoint = FVector::ZeroVector;
+	SpawnLocation = FVector::ZeroVector;
 }
 
 void UBTService_Patrolling::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -86,6 +87,9 @@ void UBTService_Patrolling::InitializePatrolPoints(APawn* OwningPawn)
 		return;
 	}
 
+	// Store the spawn location for distance checks
+	SpawnLocation = OwningPawn->GetActorLocation();
+
 	// Find all actors with "PatrolPoint" tag
 	TArray<AActor*> PatrolPointActors;
 	UGameplayStatics::GetAllActorsWithTag(OwningPawn, FName("PatrolPoint"), PatrolPointActors);
@@ -98,8 +102,14 @@ void UBTService_Patrolling::InitializePatrolPoints(APawn* OwningPawn)
 		if (IsValid(PatrolActor))
 		{
 			FVector PatrolLocation = PatrolActor->GetActorLocation();
-			AllPatrolPoints.Add(PatrolLocation);
-			AvailablePatrolPoints.Add(PatrolLocation);
+			
+			// Only add patrol points within the maximum patrol distance
+			float DistanceFromSpawn = FVector::Dist(SpawnLocation, PatrolLocation);
+			if (DistanceFromSpawn <= MaxPatrolDistance)
+			{
+				AllPatrolPoints.Add(PatrolLocation);
+				AvailablePatrolPoints.Add(PatrolLocation);
+			}
 		}
 	}
 
@@ -108,14 +118,14 @@ void UBTService_Patrolling::InitializePatrolPoints(APawn* OwningPawn)
 	// If no patrol points found, use some default points around the NPC
 	if (AllPatrolPoints.Num() == 0)
 	{
-		FVector NPCLocation = OwningPawn->GetActorLocation();
-		float PatrolRadius = 500.0f;
+		// Use smaller radius to ensure default points stay within MaxPatrolDistance
+		float PatrolRadius = FMath::Min(MaxPatrolDistance * 0.5f, 500.0f);
 		
-		// Create 4 default patrol points in a square pattern
-		AllPatrolPoints.Add(NPCLocation + FVector(PatrolRadius, PatrolRadius, 0.0f));
-		AllPatrolPoints.Add(NPCLocation + FVector(PatrolRadius, -PatrolRadius, 0.0f));
-		AllPatrolPoints.Add(NPCLocation + FVector(-PatrolRadius, -PatrolRadius, 0.0f));
-		AllPatrolPoints.Add(NPCLocation + FVector(-PatrolRadius, PatrolRadius, 0.0f));
+		// Create 4 default patrol points in a square pattern around spawn location
+		AllPatrolPoints.Add(SpawnLocation + FVector(PatrolRadius, PatrolRadius, 0.0f));
+		AllPatrolPoints.Add(SpawnLocation + FVector(PatrolRadius, -PatrolRadius, 0.0f));
+		AllPatrolPoints.Add(SpawnLocation + FVector(-PatrolRadius, -PatrolRadius, 0.0f));
+		AllPatrolPoints.Add(SpawnLocation + FVector(-PatrolRadius, PatrolRadius, 0.0f));
 		
 		AvailablePatrolPoints = AllPatrolPoints;
 	}

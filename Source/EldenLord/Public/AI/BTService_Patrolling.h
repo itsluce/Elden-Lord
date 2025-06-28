@@ -31,11 +31,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Patrol", meta = (ClampMin = "50.0"))
 	float ReachDistance = 100.0f;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Patrol", meta = (ClampMin = "100.0"))
+	float MaxPatrolDistance = 1000.0f;
+
 private:
 	TArray<FVector> AllPatrolPoints;
 	TArray<FVector> AvailablePatrolPoints;
 	FVector CurrentTargetPoint;
 	FVector LastReachedPoint;
+	FVector SpawnLocation;
 	float WaitTimer;
 	bool bIsWaiting;
 	bool bPatrolPointsInitialized;

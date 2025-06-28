@@ -54,6 +54,12 @@ struct FEldenHeroWeaponData
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FScalableFloat WeaponBaseDamage;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FScalableFloat WeaponSpecialHeavyDamage;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FScalableFloat WeaponSpecialLightDamage;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TSoftObjectPtr<UTexture2D> SoftWeaponIconTexture;

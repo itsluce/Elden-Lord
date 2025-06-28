@@ -27,6 +27,16 @@ float UEldenCombatComponent::GetHeroCurrentEquipWeaponDamageAtLevel(float InLeve
 	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
 }
 
+float UEldenCombatComponent::GetHeroCurrentEquipWeaponSpecialHeavyAtLevel(float InLevel) const
+{
+	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponSpecialHeavyDamage.GetValueAtLevel(InLevel);
+}
+
+float UEldenCombatComponent::GetHeroCurrentEquipWeaponSpecialLightAtLevel(float InLevel) const
+{
+	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponSpecialLightDamage.GetValueAtLevel(InLevel);
+}
+
 
 AWeapon* UEldenCombatComponent::GetHeroCurrentEquippedWeapon() const
 {	

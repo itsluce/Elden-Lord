@@ -37,7 +37,7 @@ TArray<FVector> UEldenSummonAbility::GetSummonLocation()
         if (GetWorld()->LineTraceSingleByChannel(Hit, ChosenSpawnLocation + FVector(0, 0, 400.f),
                                                  ChosenSpawnLocation - FVector(0, 0, 400.f), ECC_Visibility))
         {
-            ChosenSpawnLocation = Hit.ImpactPoint;
+            ChosenSpawnLocation = Hit.ImpactPoint + FVector(0.f, 0.f, 100.f);
         }
 
         if (!ChosenSpawnLocation.ContainsNaN())
