@@ -222,12 +222,15 @@ void UEldenAbilitySystemLibrary::RemoveGameplayTagFromActorIfFound(AActor* InAct
 
 bool UEldenAbilitySystemLibrary::NativeDoesActorHaveTag(AActor* InActor, FGameplayTag TagToCheck)
 {
+	if (!IsValid(InActor) || InActor->IsActorBeingDestroyed())
+	{
+		return false;
+	}
+	
 	if (UEldenAbilitySystemComponent* EldenASC = NativeGetEldenASCFromActor(InActor))
 	{
 		return EldenASC->HasMatchingGameplayTag(TagToCheck);
 	}
-	// Optionally log a warning here:
-	UE_LOG(LogTemp, Warning, TEXT("Actor %s has no EldenAbilitySystemComponent!"), *GetNameSafe(InActor));
 	return false;
 }
 

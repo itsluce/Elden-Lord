@@ -72,6 +72,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartStaminaRegenTimer();
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
+	UMotionWarpingComponent* MotionWarpingComponent;
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
@@ -129,9 +131,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
-	UMotionWarpingComponent* MotionWarpingComponent;
 	
 	// Stamina regeneration properties
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina")
